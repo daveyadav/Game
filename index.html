@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <style>
-/* ===================================================== RESET & ROOT ===================================================== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
   --gold: #FFD700; --gold-dim: #c9a227; --gold-soft: rgba(255,215,0,0.15); --gold-glow: rgba(255,215,0,0.4);
@@ -20,8 +18,6 @@
   --wrong: #ff1744; --wrong-bg: rgba(255,23,68,0.12);
   --highlight: #3d6fd4; --text: rgba(255,255,255,0.92); --text-dim: rgba(255,255,255,0.5);
   --border: rgba(255,215,0,0.2); --border-glow: rgba(255,215,0,0.5);
-  --cat-general: #3d6fd4; --cat-movies: #d43d9a; --cat-sports: #3dd47c;
-  --cat-politics: #d47c3d; --cat-world: #3dd4d4;
 }
 html { height: 100%; }
 body {
@@ -35,8 +31,6 @@ body::before {
     radial-gradient(ellipse 60% 40% at 80% 50%, rgba(26,58,138,0.12) 0%, transparent 60%);
   pointer-events: none; z-index: 0;
 }
-
-/* ===================================================== AUDIO CONTROLS ===================================================== */
 .audio-controls {
   position: fixed; top: 14px; right: 14px; z-index: 900;
   display: flex; gap: 8px;
@@ -50,12 +44,8 @@ body::before {
 }
 .audio-toggle:hover { border-color: var(--gold); background: rgba(255,215,0,0.15); color: var(--gold); }
 .audio-toggle.muted { opacity: 0.35; }
-
-/* ===================================================== SCREEN MANAGEMENT ===================================================== */
 .screen { display: none; min-height: 100vh; position: relative; z-index: 1; flex-direction: column; }
 .screen.active { display: flex; }
-
-/* ===================================================== HOME SCREEN ===================================================== */
 #homeScreen { align-items: center; justify-content: center; text-align: center; padding: 30px 20px; }
 .flag-row { font-size: clamp(3rem,8vw,5rem); margin-bottom:10px; animation:flagFloat 3s ease-in-out infinite; filter:drop-shadow(0 0 20px rgba(255,100,0,0.4)); }
 @keyframes flagFloat { 0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-8px) rotate(2deg);} }
@@ -75,8 +65,6 @@ body::before {
 .cat-badge.world    { background:rgba(61,212,212,0.15); border:1px solid rgba(61,212,212,0.4); color:#7cf4f4; }
 .divider { width:180px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:0 auto 30px; }
 .home-menu { display:flex; flex-direction:column; gap:16px; width:100%; max-width:320px; }
-
-/* ===================================================== BUTTONS ===================================================== */
 .btn {
   font-family:'Cinzel',serif; font-weight:700; font-size:0.95rem; letter-spacing:2px;
   text-transform:uppercase; padding:16px 36px; border-radius:50px; cursor:pointer;
@@ -92,16 +80,12 @@ body::before {
 .btn-sm { padding:10px 22px; font-size:0.8rem; letter-spacing:1px; }
 .btn-danger { border-color:var(--wrong); color:var(--wrong); }
 .btn-danger:hover { box-shadow:0 0 25px rgba(255,23,68,0.4); }
-
-/* ===================================================== CARD ===================================================== */
 .card {
   background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%); border:1px solid var(--border);
   border-radius:20px; padding:36px; width:100%; max-width:460px;
   box-shadow:0 20px 60px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);
 }
 .card-title { font-family:'Cinzel',serif; font-weight:700; font-size:clamp(1.3rem,3vw,1.7rem); color:var(--gold); text-align:center; margin-bottom:28px; }
-
-/* ===================================================== FORM ===================================================== */
 .form-group { margin-bottom:20px; }
 .form-label { display:block; color:rgba(255,215,0,0.75); font-size:0.85rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px; font-family:'Cinzel',serif; }
 .input-field { width:100%; padding:14px 18px; background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,215,0,0.25); border-radius:10px; color:white; font-size:1rem; font-family:'Rajdhani',sans-serif; font-weight:500; outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
@@ -122,8 +106,6 @@ body::before {
 .cat-check-btn.active.sports   { background:rgba(61,212,124,0.25); border-color:#7cf4a8; }
 .cat-check-btn.active.politics { background:rgba(212,124,61,0.25); border-color:#f4a87c; }
 .cat-check-btn.active.world    { background:rgba(61,212,212,0.25); border-color:#7cf4f4; }
-
-/* ===================================================== MODE/PAGE ===================================================== */
 .centered-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:30px 20px; gap:24px; }
 .page-title { font-family:'Cinzel',serif; font-size:clamp(1.4rem,3.5vw,2rem); color:var(--gold); text-align:center; font-weight:700; }
 .mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:560px; width:100%; }
@@ -133,16 +115,12 @@ body::before {
 .mode-icon { font-size:3rem; display:block; margin-bottom:12px; }
 .mode-title { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--gold); margin-bottom:8px; font-weight:700; }
 .mode-desc { font-size:0.88rem; color:var(--text-dim); line-height:1.5; }
-
-/* ===================================================== WAITING ROOM ===================================================== */
 .room-code-box { font-family:'Cinzel Decorative',serif; font-size:clamp(2rem,8vw,3.5rem); font-weight:900; color:var(--gold); letter-spacing:10px; text-align:center; padding:22px 30px; background:rgba(255,215,0,0.04); border:2px dashed rgba(255,215,0,0.35); border-radius:16px; margin:16px 0; filter:drop-shadow(0 0 12px rgba(255,215,0,0.3)); }
 .waiting-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:12px; margin:16px 0; }
 .waiting-player-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.15); border-radius:12px; padding:14px 8px; text-align:center; }
 .wp-avatar { font-size:2rem; display:block; margin-bottom:6px; }
 .wp-name { font-size:0.82rem; color:rgba(255,255,255,0.8); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .wp-badge { font-size:0.65rem; color:var(--gold); font-family:'Cinzel',serif; display:block; margin-top:3px; }
-
-/* ===================================================== GAME SCREEN ===================================================== */
 #gameScreen { flex-direction:row; min-height:100vh; }
 .prize-ladder { width:195px; flex-shrink:0; background:rgba(0,0,0,0.35); border-right:1px solid rgba(255,215,0,0.12); padding:16px 8px; overflow-y:auto; display:flex; flex-direction:column; gap:3px; }
 .prize-ladder-title { font-family:'Cinzel',serif; font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; letter-spacing:2px; text-transform:uppercase; padding-bottom:10px; margin-bottom:6px; border-bottom:1px solid rgba(255,215,0,0.1); }
@@ -201,8 +179,6 @@ body::before {
 .p-score { font-size:0.72rem; color:var(--gold); font-family:'Cinzel',serif; }
 .p-dot { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.2); flex-shrink:0; transition:background 0.3s; }
 .p-dot.answered { background:var(--correct); box-shadow:0 0 6px rgba(0,230,118,0.6); }
-
-/* ===================================================== RESULTS ===================================================== */
 #resultScreen { align-items:center; justify-content:center; text-align:center; padding:30px 20px; }
 .result-trophy { font-size:clamp(4rem,12vw,6rem); margin-bottom:16px; animation:trophyBounce 0.8s ease; }
 @keyframes trophyBounce { 0%{transform:scale(0) rotate(-10deg);}60%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0);} }
@@ -215,8 +191,6 @@ body::before {
 .lb-rank { font-family:'Cinzel',serif; font-size:1.1rem; min-width:28px; }
 .lb-name { flex:1; text-align:left; font-size:0.95rem; font-weight:600; }
 .lb-pts { font-family:'Cinzel',serif; color:var(--gold); font-size:0.9rem; }
-
-/* ===================================================== OVERLAYS ===================================================== */
 .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.88); display:none; align-items:center; justify-content:center; z-index:1000; padding:20px; backdrop-filter:blur(4px); }
 .overlay.open { display:flex; }
 .overlay-box { background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%); border:1.5px solid var(--gold); border-radius:22px; padding:38px; text-align:center; max-width:440px; width:100%; box-shadow:0 0 60px rgba(255,215,0,0.15),0 30px 80px rgba(0,0,0,0.6); }
@@ -228,30 +202,53 @@ body::before {
 .poll-track { flex:1; background:rgba(255,255,255,0.08); border-radius:10px; height:22px; overflow:hidden; }
 .poll-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#1a3a8a,#3d6fd4); width:0; transition:width 1.1s ease; }
 .poll-pct { min-width:36px; text-align:right; font-size:0.85rem; color:rgba(255,255,255,0.75); }
-
-/* ===================================================== TOAST ===================================================== */
 .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px); background:linear-gradient(135deg,#1a3a8a,#0a1a50); border:1px solid rgba(255,215,0,0.4); padding:11px 26px; border-radius:50px; color:white; font-size:0.9rem; font-weight:600; z-index:2000; transition:transform 0.35s ease,opacity 0.35s ease; white-space:nowrap; opacity:0; box-shadow:0 8px 32px rgba(0,0,0,0.4); }
 .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-
-/* ===================================================== MISC ===================================================== */
 .back-btn { position:absolute; top:18px; left:18px; z-index:10; background:transparent; border:1px solid rgba(255,215,0,0.25); color:rgba(255,215,0,0.65); padding:7px 16px; border-radius:20px; cursor:pointer; font-size:0.82rem; font-family:'Cinzel',serif; letter-spacing:1px; transition:all 0.2s; }
 .back-btn:hover { border-color:var(--gold); color:var(--gold); }
 .spinner { width:36px; height:36px; border:3px solid rgba(255,215,0,0.15); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; margin:16px auto; }
 @keyframes spin { to{transform:rotate(360deg);} }
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px;}
+
+/* AI LOADING SCREEN */
+.ai-loading-screen { position:fixed; inset:0; background:var(--midnight); z-index:500; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; }
+.ai-loading-screen.hidden { display:none; }
+.ai-loader-title { font-family:'Cinzel',serif; color:var(--gold); font-size:1.2rem; font-weight:700; letter-spacing:3px; }
+.ai-loader-sub { color:rgba(255,255,255,0.5); font-size:0.9rem; max-width:300px; text-align:center; line-height:1.6; }
+.ai-loader-dots { display:flex; gap:8px; }
+.ai-loader-dots span { width:10px; height:10px; border-radius:50%; background:var(--gold); opacity:0.3; animation:dotPulse 1.4s ease-in-out infinite; }
+.ai-loader-dots span:nth-child(2) { animation-delay:0.2s; }
+.ai-loader-dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes dotPulse { 0%,80%,100%{opacity:0.3;transform:scale(1);} 40%{opacity:1;transform:scale(1.3);} }
+.ai-progress { width:280px; height:4px; background:rgba(255,215,0,0.12); border-radius:2px; overflow:hidden; }
+.ai-progress-bar { height:100%; background:linear-gradient(90deg,var(--gold),#FFA500); border-radius:2px; width:0%; transition:width 0.5s ease; }
+
+/* API KEY SETUP */
+.api-key-notice { background:rgba(255,215,0,0.06); border:1px solid rgba(255,215,0,0.2); border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:0.82rem; color:rgba(255,255,255,0.6); line-height:1.6; text-align:left; }
+.api-key-notice strong { color:var(--gold); }
+.api-key-hint { font-size:0.7rem; color:rgba(255,255,255,0.35); margin-top:6px; display:block; }
+
 @media(max-width:768px){ #gameScreen{flex-direction:column;} .prize-ladder{display:none!important;} .players-panel{width:100%;border-left:none;border-top:1px solid rgba(255,215,0,0.12);max-height:140px;padding:10px;} .players-panel .players-title{margin-bottom:6px;} .card{padding:24px;} .overlay-box{padding:28px 22px;} }
 @media(max-width:480px){ .lifelines{gap:10px;} .ll-btn{width:50px;height:50px;font-size:1.1rem;} .question-box{padding:18px;} .audio-controls{top:10px;right:10px;} }
 </style>
 </head>
 <body>
 
-<!-- Audio Controls (always visible) -->
 <div class="audio-controls">
   <button class="audio-toggle" id="btnMusic" onclick="toggleMusic()" title="Toggle Music">🎵</button>
   <button class="audio-toggle" id="btnSound" onclick="toggleSfx()" title="Toggle Sound Effects">🔊</button>
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- AI LOADING OVERLAY -->
+<div class="ai-loading-screen hidden" id="aiLoadingScreen">
+  <div style="font-size:3rem">🧠</div>
+  <div class="ai-loader-title">AI IS THINKING…</div>
+  <div class="ai-loader-dots"><span></span><span></span><span></span></div>
+  <div class="ai-progress"><div class="ai-progress-bar" id="aiProgressBar"></div></div>
+  <div class="ai-loader-sub" id="aiLoaderMsg">Generating fresh questions just for you…</div>
+</div>
 
 <!-- HOME SCREEN -->
 <div class="screen active" id="homeScreen">
@@ -268,7 +265,35 @@ body::before {
   <div class="divider"></div>
   <div class="home-menu">
     <button class="btn btn-primary" onclick="sfxClick();go('modeScreen')">🎮 &nbsp;Play Now</button>
+    <button class="btn" onclick="sfxClick();go('apiKeyScreen')">🔑 &nbsp;API Key Setup</button>
     <button class="btn" onclick="sfxClick();showOverlay('howToPlayOverlay')">📖 &nbsp;How to Play</button>
+  </div>
+</div>
+
+<!-- API KEY SETUP SCREEN -->
+<div class="screen" id="apiKeyScreen">
+  <button class="back-btn" onclick="sfxClick();go('homeScreen')">← Back</button>
+  <div class="centered-page">
+    <div class="card" style="max-width:500px">
+      <div class="card-title">🔑 API Key Setup</div>
+      <div style="color:rgba(255,255,255,0.65);font-size:0.88rem;line-height:1.7;margin-bottom:20px;text-align:left">
+        <p>This game uses the <strong style="color:var(--gold)">Anthropic Claude API</strong> to generate <em>brand-new, unique questions</em> every game — so you'll never see repeats!</p>
+        <br>
+        <p>🔒 Your API key is stored only in your browser (localStorage) and never sent anywhere except directly to Anthropic's API.</p>
+        <br>
+        <p>Get a free API key at <strong style="color:var(--gold)">console.anthropic.com</strong></p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Anthropic API Key</label>
+        <input id="apiKeyInput" class="input-field" type="password" placeholder="sk-ant-…" autocomplete="off">
+        <span class="api-key-hint">Starts with "sk-ant-" — stored locally in your browser only</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-primary" style="flex:1" onclick="saveApiKey()">Save Key ✓</button>
+        <button class="btn" style="flex:1" onclick="sfxClick();clearApiKey()">Clear Key</button>
+      </div>
+      <div id="apiKeyStatus" style="margin-top:14px;text-align:center;font-size:0.85rem;color:rgba(255,255,255,0.45)"></div>
+    </div>
   </div>
 </div>
 
@@ -281,7 +306,7 @@ body::before {
       <div class="mode-card" onclick="sfxClick();go('soloSetupScreen')">
         <span class="mode-icon">🧠</span>
         <div class="mode-title">Play Alone</div>
-        <div class="mode-desc">Climb the prize ladder solo. One wrong answer — it's over!</div>
+        <div class="mode-desc">Climb the prize ladder solo. AI generates fresh questions each game!</div>
       </div>
       <div class="mode-card" onclick="sfxClick();go('multiScreen')">
         <span class="mode-icon">👥</span>
@@ -316,9 +341,9 @@ body::before {
         <label class="form-label">Difficulty</label>
         <select id="soloDiff" class="input-field" style="cursor:pointer">
           <option value="mixed">Mixed (All Levels)</option>
-          <option value="1">Easy Only</option>
-          <option value="2">Medium Only</option>
-          <option value="3">Hard Only</option>
+          <option value="easy">Easy Only</option>
+          <option value="medium">Medium Only</option>
+          <option value="hard">Hard Only</option>
         </select>
       </div>
       <button class="btn btn-primary" style="width:100%" onclick="startSolo()">Start Game →</button>
@@ -480,13 +505,31 @@ body::before {
     <span class="overlay-icon">🇳🇵</span>
     <div class="overlay-title" style="color:var(--gold)">How to Play</div>
     <div class="overlay-body" style="text-align:left">
-      <p>🧠 <strong style="color:var(--gold)">Solo Mode:</strong> Answer 15 Nepal-based &amp; World questions across <em>General, Movies, Sports, Politics &amp; World</em>. Climb the prize ladder up to Rs. 1 Crore!</p><br>
-      <p>👥 <strong style="color:var(--gold)">Multiplayer:</strong> Create a room, share the 6-digit code. Min 15 questions. Everyone answers simultaneously — faster correct answers earn bonus points!</p><br>
+      <p>🤖 <strong style="color:var(--gold)">AI Questions:</strong> Every game generates <em>brand-new questions</em> using Claude AI — you'll never see repeats! Covers Nepal & world topics.</p><br>
+      <p>🧠 <strong style="color:var(--gold)">Solo Mode:</strong> Answer 15 questions across <em>General, Movies, Sports, Politics &amp; World</em>. Climb the prize ladder up to Rs. 1 Crore!</p><br>
+      <p>👥 <strong style="color:var(--gold)">Multiplayer:</strong> Create a room, share the 6-digit code. Everyone answers simultaneously — faster correct answers earn bonus points!</p><br>
       <p>⏱️ <strong style="color:var(--gold)">30 seconds</strong> per question. Use your 3 lifelines wisely: <strong>50:50</strong>, <strong>Phone a Friend</strong>, and <strong>Audience Poll</strong>.</p><br>
-      <p>🔒 <strong style="color:var(--gold)">Safe Havens</strong> at Q5 &amp; Q11 — you keep that amount even if you go wrong later.</p><br>
-      <p>🎵 Use the top-right buttons to toggle <strong>music</strong> and <strong>sound effects</strong>. Questions never repeat for 2–3 games!</p>
+      <p>🔑 <strong style="color:var(--gold)">Setup:</strong> Add your free Anthropic API key under "API Key Setup" to enable AI questions.</p>
     </div>
     <button class="btn" onclick="sfxClick();closeOverlay('howToPlayOverlay')">Got it! ✓</button>
+  </div>
+</div>
+
+<div class="overlay" id="noApiKeyOverlay">
+  <div class="overlay-box" style="max-width:460px">
+    <span class="overlay-icon">🔑</span>
+    <div class="overlay-title" style="color:var(--gold)">API Key Needed</div>
+    <div class="overlay-body">
+      To generate AI-powered questions, you need a free Anthropic API key.<br><br>
+      1. Go to <strong style="color:var(--gold)">console.anthropic.com</strong><br>
+      2. Create an account → go to API Keys<br>
+      3. Create a key (starts with "sk-ant-")<br>
+      4. Paste it in the <strong style="color:var(--gold)">API Key Setup</strong> screen
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="sfxClick();closeOverlay('noApiKeyOverlay');go('apiKeyScreen')">Setup API Key</button>
+      <button class="btn" onclick="sfxClick();closeOverlay('noApiKeyOverlay')">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -499,8 +542,8 @@ body::before {
       1. Go to <strong style="color:var(--gold)">console.firebase.google.com</strong><br>
       2. Create a new project → Enable <strong style="color:var(--gold)">Realtime Database</strong><br>
       3. Set Rules: read &amp; write to <code style="color:#7ec8e3">true</code><br>
-      4. Replace the <code style="color:#7ec8e3">FIREBASE_CONFIG</code> object at the top of index.html<br><br>
-      <em style="color:rgba(255,255,255,.45)">Solo mode works without any setup!</em>
+      4. Replace the <code style="color:#7ec8e3">FIREBASE_CONFIG</code> in the script section<br><br>
+      <em style="color:rgba(255,255,255,.45)">Solo mode works without Firebase!</em>
     </div>
     <button class="btn" onclick="sfxClick();closeOverlay('firebaseOverlay')">OK, Got it</button>
   </div>
@@ -547,7 +590,7 @@ body::before {
 
 <script>
 // ============================================================
-// FIREBASE CONFIG — replace with your own
+// FIREBASE CONFIG — replace with your own for multiplayer
 // ============================================================
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyCjA9QSFXK0iuokpNTzmqXPZzcairkHWWI",
@@ -560,13 +603,179 @@ const FIREBASE_CONFIG = {
 };
 
 // ============================================================
+// API KEY MANAGEMENT
+// ============================================================
+function getApiKey() {
+  return localStorage.getItem('nkc_api_key') || '';
+}
+function saveApiKey() {
+  sfxClick();
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) { toast('Please enter your API key!'); return; }
+  if (!key.startsWith('sk-ant-')) {
+    toast('Key should start with "sk-ant-"');
+    document.getElementById('apiKeyStatus').textContent = '⚠️ Invalid format — Anthropic keys start with sk-ant-';
+    return;
+  }
+  localStorage.setItem('nkc_api_key', key);
+  document.getElementById('apiKeyStatus').innerHTML = '✅ Key saved! You\'re ready to play with AI questions.';
+  document.getElementById('apiKeyStatus').style.color = 'var(--correct)';
+  toast('API key saved!');
+  setTimeout(() => go('homeScreen'), 1200);
+}
+function clearApiKey() {
+  localStorage.removeItem('nkc_api_key');
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('apiKeyStatus').innerHTML = 'Key cleared.';
+  document.getElementById('apiKeyStatus').style.color = 'rgba(255,255,255,0.4)';
+  toast('API key cleared');
+}
+function loadApiKeyScreen() {
+  const existing = getApiKey();
+  if (existing) {
+    document.getElementById('apiKeyInput').value = existing;
+    document.getElementById('apiKeyStatus').innerHTML = '✅ Key is saved. You can update it anytime.';
+    document.getElementById('apiKeyStatus').style.color = 'var(--correct)';
+  }
+}
+
+// ============================================================
+// AI QUESTION GENERATOR
+// ============================================================
+const CAT_PROMPTS = {
+  general:  "Nepal general knowledge (geography, culture, history, festivals, landmarks, nature)",
+  movies:   "Nepali cinema and Bollywood (Nepali films, actors, directors, famous songs)",
+  sports:   "Nepal sports (cricket, football, mountaineering, volleyball, athletes)",
+  politics: "Nepal politics and history (government, constitution, politicians, historical events)",
+  world:    "World general knowledge (international events, science, geography, history, sports)"
+};
+
+async function generateQuestionsWithAI(cats, difficulty, count) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    showOverlay('noApiKeyOverlay');
+    return null;
+  }
+
+  const catDescriptions = cats.map(c => CAT_PROMPTS[c] || c).join(', ');
+  const diffNote = difficulty === 'mixed'
+    ? 'Mix of easy, medium, and hard difficulty levels'
+    : `${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} difficulty only`;
+
+  const prompt = `You are a quiz master for "Nepal Ko Crorepati" — a Nepali version of Who Wants to Be a Millionaire.
+
+Generate exactly ${count} multiple-choice trivia questions. Topics: ${catDescriptions}. Difficulty: ${diffNote}.
+
+RULES:
+- Questions must be UNIQUE and varied — no two questions on the same specific topic
+- Each question has exactly 4 options (A, B, C, D)
+- Only ONE correct answer per question
+- Questions should feel authentic to Nepali culture and interests
+- Mix easy, medium, and hard questions if difficulty is "mixed"
+- For Nepal topics, make them factual and accurate
+- The correct answer index should be randomly distributed (not always index 0 or 1)
+
+RESPOND WITH ONLY a valid JSON array, no markdown, no explanation. Format:
+[
+  {
+    "cat": "general",
+    "q": "Question text here?",
+    "opts": ["Option A", "Option B", "Option C", "Option D"],
+    "a": 2
+  }
+]
+
+The "cat" field must be one of: general, movies, sports, politics, world
+The "a" field is the 0-based index of the correct answer (0=A, 1=B, 2=C, 3=D)
+
+Generate ${count} questions now:`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 4096,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      if (response.status === 401) throw new Error('Invalid API key. Please check your key in API Key Setup.');
+      if (response.status === 429) throw new Error('Rate limit hit. Please wait a moment and try again.');
+      throw new Error(err.error?.message || `API error ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+
+    // Parse JSON — strip any accidental markdown fences
+    const clean = text.replace(/```json|```/g, '').trim();
+    const questions = JSON.parse(clean);
+
+    if (!Array.isArray(questions) || questions.length === 0) {
+      throw new Error('AI returned invalid question format');
+    }
+
+    // Validate and sanitize each question
+    const valid = questions.filter(q =>
+      q.q && Array.isArray(q.opts) && q.opts.length === 4 &&
+      typeof q.a === 'number' && q.a >= 0 && q.a <= 3 && q.cat
+    );
+
+    if (valid.length < count) {
+      console.warn(`AI returned ${valid.length} valid questions, requested ${count}`);
+    }
+
+    // Assign IDs
+    return valid.slice(0, count).map((q, i) => ({ ...q, id: Date.now() + i }));
+
+  } catch (e) {
+    console.error('AI question generation failed:', e);
+    throw e;
+  }
+}
+
+// Progress bar animation for loading screen
+function showAiLoading(msg) {
+  const screen = document.getElementById('aiLoadingScreen');
+  const bar = document.getElementById('aiProgressBar');
+  const msgEl = document.getElementById('aiLoaderMsg');
+  screen.classList.remove('hidden');
+  msgEl.textContent = msg || 'Generating fresh questions just for you…';
+  bar.style.width = '0%';
+  // Animate progress bar
+  let pct = 0;
+  const iv = setInterval(() => {
+    pct = Math.min(pct + Math.random() * 12, 85);
+    bar.style.width = pct + '%';
+  }, 400);
+  return iv;
+}
+function hideAiLoading(intervalId) {
+  clearInterval(intervalId);
+  const bar = document.getElementById('aiProgressBar');
+  bar.style.width = '100%';
+  setTimeout(() => {
+    document.getElementById('aiLoadingScreen').classList.add('hidden');
+    bar.style.width = '0%';
+  }, 500);
+}
+
+// ============================================================
 // AUDIO ENGINE
 // ============================================================
 const AUDIO = {
   ctx: null, masterGain: null, bgGain: null, sfxGain: null,
   _bgTimer: null, _loopStep: 0,
   musicOn: true, sfxOn: true, initialized: false,
-
   init() {
     if (this.initialized) return;
     try {
@@ -575,16 +784,13 @@ const AUDIO = {
       this.bgGain = this.ctx.createGain(); this.bgGain.gain.value = 0.16; this.bgGain.connect(this.masterGain);
       this.sfxGain = this.ctx.createGain(); this.sfxGain.gain.value = 0.65; this.sfxGain.connect(this.masterGain);
       this.initialized = true;
-    } catch(e) { console.warn('Web Audio not available'); }
+    } catch(e) {}
   },
-
   resume() { if (this.ctx?.state === 'suspended') this.ctx.resume(); },
-
   _n(freq, start, dur, type, gainVal, dest) {
     if (!this.ctx) return;
     const tgt = dest || this.sfxGain;
-    const o = this.ctx.createOscillator();
-    const g = this.ctx.createGain();
+    const o = this.ctx.createOscillator(), g = this.ctx.createGain();
     o.type = type || 'sine'; o.frequency.setValueAtTime(freq, this.ctx.currentTime + start);
     g.gain.setValueAtTime(0.0001, this.ctx.currentTime + start);
     g.gain.linearRampToValueAtTime(gainVal, this.ctx.currentTime + start + Math.min(0.025, dur * 0.15));
@@ -593,105 +799,47 @@ const AUDIO = {
     o.start(this.ctx.currentTime + start);
     o.stop(this.ctx.currentTime + start + dur + 0.06);
   },
-
-  correct() {
-    if (!this.sfxOn || !this.ctx) return;
-    [[523,0],[659,0.1],[784,0.2],[1047,0.32]].forEach(([f,t]) => this._n(f, t, 0.4, 'sine', 0.5));
-  },
-  wrong() {
-    if (!this.sfxOn || !this.ctx) return;
-    [[233,0,0.2,'sawtooth',0.35],[196,0.15,0.2,'sawtooth',0.3],[155,0.32,0.38,'sawtooth',0.22]].forEach(([f,t,d,tp,g]) => this._n(f,t,d,tp,g));
-  },
-  tick(urgent) {
-    if (!this.sfxOn || !this.ctx) return;
-    this._n(urgent ? 1320 : 880, 0, 0.04, 'square', urgent ? 0.28 : 0.14);
-  },
-  click() {
-    if (!this.sfxOn || !this.ctx) return;
-    this._n(660, 0, 0.05, 'sine', 0.2);
-  },
-  win() {
-    if (!this.sfxOn || !this.ctx) return;
-    [[523,0],[659,0.12],[784,0.24],[659,0.4],[784,0.52],[1047,0.68],[1047,0.85]].forEach(([f,t]) => this._n(f,t,0.35,'sine',0.5));
-  },
-  lifeline() {
-    if (!this.sfxOn || !this.ctx) return;
-    [440,554,659,880].forEach((f,i) => this._n(f, i*0.07, 0.25, 'triangle', 0.32));
-  },
-  newQ() {
-    if (!this.sfxOn || !this.ctx) return;
-    this._n(880, 0, 0.08, 'sine', 0.28);
-    this._n(1100, 0.07, 0.1, 'sine', 0.22);
-  },
-
-  // Background Music – looping ambient game-show style
+  correct() { if (!this.sfxOn||!this.ctx) return; [[523,0],[659,0.1],[784,0.2],[1047,0.32]].forEach(([f,t])=>this._n(f,t,0.4,'sine',0.5)); },
+  wrong()   { if (!this.sfxOn||!this.ctx) return; [[233,0,0.2,'sawtooth',0.35],[196,0.15,0.2,'sawtooth',0.3],[155,0.32,0.38,'sawtooth',0.22]].forEach(([f,t,d,tp,g])=>this._n(f,t,d,tp,g)); },
+  tick(u)   { if (!this.sfxOn||!this.ctx) return; this._n(u?1320:880,0,0.04,'square',u?0.28:0.14); },
+  click()   { if (!this.sfxOn||!this.ctx) return; this._n(660,0,0.05,'sine',0.2); },
+  win()     { if (!this.sfxOn||!this.ctx) return; [[523,0],[659,0.12],[784,0.24],[659,0.4],[784,0.52],[1047,0.68],[1047,0.85]].forEach(([f,t])=>this._n(f,t,0.35,'sine',0.5)); },
+  lifeline(){ if (!this.sfxOn||!this.ctx) return; [440,554,659,880].forEach((f,i)=>this._n(f,i*0.07,0.25,'triangle',0.32)); },
+  newQ()    { if (!this.sfxOn||!this.ctx) return; this._n(880,0,0.08,'sine',0.28); this._n(1100,0.07,0.1,'sine',0.22); },
   startMusic() {
-    if (!this.initialized || !this.musicOn) return;
-    this.stopMusic();
-    this._loopStep = 0;
-    this._playBeat();
+    if (!this.initialized||!this.musicOn) return;
+    this.stopMusic(); this._loopStep = 0; this._playBeat();
   },
   stopMusic() { clearTimeout(this._bgTimer); this._bgTimer = null; },
-
   _playBeat() {
-    if (!this.musicOn || !this.ctx) return;
-    const BPM = 98, Q = 60000 / BPM;
-    const idx = this._loopStep % 16;
-    const qs = Q / 1000;
-    // Bass line – C minor / Phrygian feel
-    const BASS  = [65.4,65.4,73.4,65.4, 58.3,65.4,65.4,69.3, 65.4,65.4,73.4,61.7, 58.3,61.7,65.4,65.4];
-    // Pad frequencies (harmonics)
-    const PAD   = [196,207.6,233.1,196, 174.6,196,196,207.6, 196,207.6,233.1,185, 174.6,185,196,196];
-    // Melodic layer
-    const MEL   = [392,0,466.2,392, 349.2,0,392,415.3, 392,0,466.2,369.9, 349.2,369.9,392,0];
-
-    this._n(BASS[idx], 0, qs*0.9,  'sine',     0.28, this.bgGain);
-    this._n(PAD[idx],  0, qs*1.8,  'triangle', 0.09, this.bgGain);
-    if (idx % 2 === 0) this._n(PAD[idx]*1.5, 0, qs*1.8, 'triangle', 0.05, this.bgGain);
-    if (MEL[idx] > 0)  this._n(MEL[idx], 0, qs*0.7, 'triangle', 0.1, this.bgGain);
-    // Sub-kick on beats 0,4,8,12
-    if (idx % 4 === 0) this._n(65, 0, 0.12, 'sine', 0.35, this.bgGain);
-    // Hi-hat on every step
-    this._n(3200, 0, 0.025, 'square', 0.018, this.bgGain);
-
+    if (!this.musicOn||!this.ctx) return;
+    const BPM=98, Q=60000/BPM, idx=this._loopStep%16, qs=Q/1000;
+    const BASS=[65.4,65.4,73.4,65.4,58.3,65.4,65.4,69.3,65.4,65.4,73.4,61.7,58.3,61.7,65.4,65.4];
+    const PAD=[196,207.6,233.1,196,174.6,196,196,207.6,196,207.6,233.1,185,174.6,185,196,196];
+    const MEL=[392,0,466.2,392,349.2,0,392,415.3,392,0,466.2,369.9,349.2,369.9,392,0];
+    this._n(BASS[idx],0,qs*0.9,'sine',0.28,this.bgGain);
+    this._n(PAD[idx],0,qs*1.8,'triangle',0.09,this.bgGain);
+    if(idx%2===0)this._n(PAD[idx]*1.5,0,qs*1.8,'triangle',0.05,this.bgGain);
+    if(MEL[idx]>0)this._n(MEL[idx],0,qs*0.7,'triangle',0.1,this.bgGain);
+    if(idx%4===0)this._n(65,0,0.12,'sine',0.35,this.bgGain);
+    this._n(3200,0,0.025,'square',0.018,this.bgGain);
     this._loopStep++;
-    this._bgTimer = setTimeout(() => this._playBeat(), Q * 0.975);
+    this._bgTimer=setTimeout(()=>this._playBeat(),Q*0.975);
   }
 };
-
 function toggleMusic() {
-  AUDIO.init(); AUDIO.resume();
-  AUDIO.musicOn = !AUDIO.musicOn;
-  const btn = document.getElementById('btnMusic');
-  btn.classList.toggle('muted', !AUDIO.musicOn);
-  btn.textContent = AUDIO.musicOn ? '🎵' : '🔇';
-  if (AUDIO.musicOn) AUDIO.startMusic();
-  else AUDIO.stopMusic();
+  AUDIO.init();AUDIO.resume();AUDIO.musicOn=!AUDIO.musicOn;
+  const b=document.getElementById('btnMusic');b.classList.toggle('muted',!AUDIO.musicOn);
+  b.textContent=AUDIO.musicOn?'🎵':'🔇';
+  if(AUDIO.musicOn)AUDIO.startMusic();else AUDIO.stopMusic();
 }
 function toggleSfx() {
-  AUDIO.init(); AUDIO.resume();
-  AUDIO.sfxOn = !AUDIO.sfxOn;
-  const btn = document.getElementById('btnSound');
-  btn.classList.toggle('muted', !AUDIO.sfxOn);
-  btn.textContent = AUDIO.sfxOn ? '🔊' : '🔕';
+  AUDIO.init();AUDIO.resume();AUDIO.sfxOn=!AUDIO.sfxOn;
+  const b=document.getElementById('btnSound');b.classList.toggle('muted',!AUDIO.sfxOn);
+  b.textContent=AUDIO.sfxOn?'🔊':'🔕';
 }
-function sfxClick() { AUDIO.init(); AUDIO.resume(); AUDIO.click(); }
-
-// Init audio on first user gesture
-document.addEventListener('click', () => { AUDIO.init(); AUDIO.resume(); }, { once: true });
-
-// ============================================================
-// QUESTION HISTORY (localStorage) — avoids repeats for ~3 games
-// ============================================================
-const QHistory = {
-  KEY: 'nkc_qhist', MAX: 90,
-  get() { try { return JSON.parse(localStorage.getItem(this.KEY)||'[]'); } catch { return []; } },
-  save(ids) {
-    const merged = [...new Set([...this.get(), ...ids])];
-    try { localStorage.setItem(this.KEY, JSON.stringify(merged.slice(-this.MAX))); } catch {}
-  },
-  clear() { try { localStorage.removeItem(this.KEY); } catch {} }
-};
+function sfxClick(){AUDIO.init();AUDIO.resume();AUDIO.click();}
+document.addEventListener('click',()=>{AUDIO.init();AUDIO.resume();},{once:true});
 
 // ============================================================
 // PRIZES & META
@@ -703,200 +851,12 @@ const PRIZES = [
 ];
 const SAFE_HAVENS = [4, 10];
 const CAT_META = {
-  general:  { label:'🧠 General',   cls:'general'  },
-  movies:   { label:'🎬 Movies',    cls:'movies'   },
-  sports:   { label:'⚽ Sports',    cls:'sports'   },
-  politics: { label:'🏛️ Politics',  cls:'politics' },
-  world:    { label:'🌍 World',     cls:'world'    },
+  general:  {label:'🧠 General',   cls:'general'},
+  movies:   {label:'🎬 Movies',    cls:'movies'},
+  sports:   {label:'⚽ Sports',    cls:'sports'},
+  politics: {label:'🏛️ Politics',  cls:'politics'},
+  world:    {label:'🌍 World',     cls:'world'},
 };
-
-// ============================================================
-// QUESTION POOL  (170+ questions, all with unique IDs)
-// ============================================================
-const POOL = [
-// ─── NEPAL GENERAL ──────────────────────────────────────────────────────────
-{id:1,  cat:'general',d:1,q:"What is the capital city of Nepal?",opts:["Pokhara","Kathmandu","Bhaktapur","Lalitpur"],a:1},
-{id:2,  cat:'general',d:1,q:"Which is the highest mountain in the world, located in Nepal?",opts:["Kanchenjunga","Lhotse","Mount Everest","Makalu"],a:2},
-{id:3,  cat:'general',d:1,q:"What is the national currency of Nepal?",opts:["Rupiah","Taka","Nepali Rupee","Dinar"],a:2},
-{id:4,  cat:'general',d:1,q:"What is the national animal of Nepal?",opts:["Tiger","Elephant","Snow Leopard","Cow"],a:3},
-{id:5,  cat:'general',d:1,q:"What is the national bird of Nepal?",opts:["Peacock","Danphe (Himalayan Monal)","Eagle","Crane"],a:1},
-{id:6,  cat:'general',d:1,q:"What is the national flower of Nepal?",opts:["Lotus","Rose","Rhododendron","Marigold"],a:2},
-{id:7,  cat:'general',d:1,q:"Which Nepali city is famous for its lakeside and adventure sports?",opts:["Biratnagar","Pokhara","Dharan","Butwal"],a:1},
-{id:8,  cat:'general',d:1,q:"What is the official language of Nepal?",opts:["Hindi","Sanskrit","Nepali","Maithili"],a:2},
-{id:9,  cat:'general',d:1,q:"Nepal shares its borders with which two countries?",opts:["China and Bangladesh","India and Bhutan","China and India","India and Pakistan"],a:2},
-{id:10, cat:'general',d:1,q:"Lumbini is famous as the birthplace of whom?",opts:["Mahavira","Gautam Buddha","Guru Nanak","Confucius"],a:1},
-{id:11, cat:'general',d:2,q:"Which river is the longest in Nepal?",opts:["Karnali","Gandaki","Koshi","Bagmati"],a:0},
-{id:12, cat:'general',d:2,q:"What is the largest lake in Nepal?",opts:["Fewa Lake","Begnas Lake","Rara Lake","Shey Phoksundo"],a:2},
-{id:13, cat:'general',d:2,q:"Who is considered the unifier of Nepal?",opts:["King Tribhuvan","Prithvi Narayan Shah","King Mahendra","King Birendra"],a:1},
-{id:14, cat:'general',d:2,q:"In which year did Nepal become a Federal Democratic Republic?",opts:["2005","2006","2008","2010"],a:2},
-{id:15, cat:'general',d:2,q:"The Pashupatinath Temple is dedicated to which deity?",opts:["Vishnu","Brahma","Shiva","Indra"],a:2},
-{id:16, cat:'general',d:2,q:"Tenzing Norgay and Edmund Hillary first summited Everest in which year?",opts:["1950","1951","1952","1953"],a:3},
-{id:17, cat:'general',d:2,q:"Which festival is known as the 'Festival of Lights' in Nepal?",opts:["Dashain","Tihar","Holi","Teej"],a:1},
-{id:18, cat:'general',d:2,q:"How many UNESCO World Heritage Sites does Nepal have?",opts:["4","6","8","10"],a:2},
-{id:19, cat:'general',d:2,q:"Chitwan National Park is famous for which animal?",opts:["Snow Leopard","One-horned Rhinoceros","Red Panda","Himalayan Bear"],a:1},
-{id:20, cat:'general',d:2,q:"The 'Living Goddess' tradition in Nepal is called:",opts:["Devi Puja","Kumari","Shakti","Durga Puja"],a:1},
-{id:21, cat:'general',d:3,q:"Nepal's first multiparty democracy was restored in which year?",opts:["1988","1990","1992","1995"],a:1},
-{id:22, cat:'general',d:3,q:"The Annapurna Circuit trek is famous for which high mountain pass?",opts:["Thorong La","Renjo La","Cho La","Kongma La"],a:0},
-{id:23, cat:'general',d:3,q:"Nirmal 'Nims' Purja climbed all 14 eight-thousanders in how many months?",opts:["6 months","7 months","8 months","12 months"],a:1},
-{id:24, cat:'general',d:2,q:"Mount Annapurna in Sanskrit roughly means:",opts:["Goddess of Snow","Full of Food / Nourishment","Queen of Peaks","Eternal Mountain"],a:1},
-{id:25, cat:'general',d:1,q:"Nepal's national flag is unique because it is:",opts:["Circular","The only non-rectangular national flag","Triangular","The largest national flag"],a:1},
-{id:26, cat:'general',d:2,q:"The devastating earthquake that struck Nepal in April 2015 had a magnitude of approximately:",opts:["6.8","7.2","7.8","8.1"],a:2},
-{id:27, cat:'general',d:1,q:"Which sacred river flows through Kathmandu Valley?",opts:["Trishuli","Gandaki","Bagmati","Narayani"],a:2},
-{id:28, cat:'general',d:3,q:"The Treaty of Sugauli (1816) defined Nepal's borders with:",opts:["China","British East India Company","Tibet","Mughal Empire"],a:1},
-{id:29, cat:'general',d:2,q:"Nepal's parliament is officially known as:",opts:["National Assembly","Rashtriya Sabha","Federal Parliament (Sanghiya Sansad)","People's Congress"],a:2},
-{id:30, cat:'general',d:1,q:"Janakpur is revered as the birthplace of which deity/figure?",opts:["Radha","Draupadi","Sita","Parvati"],a:2},
-{id:31, cat:'general',d:2,q:"Which mountain near Pokhara is nicknamed 'Fish Tail' for its twin summit shape?",opts:["Annapurna I","Machhapuchhre","Dhaulagiri","Manaslu"],a:1},
-{id:32, cat:'general',d:3,q:"Annapurna (8,091m) was the first 8,000-metre peak ever climbed, in which year?",opts:["1948","1950","1952","1955"],a:1},
-{id:33, cat:'general',d:2,q:"Nepal has how many peaks above 8,000 metres (eight-thousanders)?",opts:["6","7","8","9"],a:2},
-{id:34, cat:'general',d:2,q:"Thamel is the famous tourist hub in which city?",opts:["Pokhara","Bhaktapur","Kathmandu","Biratnagar"],a:2},
-{id:35, cat:'general',d:2,q:"Chitwan National Park was established in which year?",opts:["1963","1967","1973","1982"],a:2},
-{id:36, cat:'general',d:3,q:"Nepal became a member of the United Nations in which year?",opts:["1945","1950","1955","1960"],a:2},
-{id:37, cat:'general',d:2,q:"Nepal's Dashain festival celebrates the victory of which goddess?",opts:["Lakshmi","Saraswati","Durga","Parvati"],a:2},
-{id:38, cat:'general',d:2,q:"Boudhanath Stupa in Kathmandu is one of the largest of which type of structure?",opts:["Hindu temples","Buddhist stupas","Mosques","Pagodas"],a:1},
-{id:39, cat:'general',d:3,q:"Upper Mustang was opened to tourists only in which year?",opts:["1985","1990","1992","2000"],a:2},
-{id:40, cat:'general',d:3,q:"Nepal's Sagarmatha National Park was designated a UNESCO World Heritage Site in:",opts:["1976","1979","1984","1990"],a:1},
-{id:41, cat:'general',d:1,q:"Pokhara's new international airport, which opened in January 2023, is named after which river?",opts:["Seti","Kali Gandaki","Gandaki","Trishuli"],a:2},
-{id:42, cat:'general',d:2,q:"Nepal's Terai (southern plains) shares a border with which country?",opts:["China","Bhutan","Bangladesh","India"],a:3},
-{id:43, cat:'general',d:3,q:"The official height of Mount Everest, updated after a 2020 survey by Nepal and China, is:",opts:["8,844.43m","8,848.00m","8,848.86m","8,850.00m"],a:2},
-{id:44, cat:'general',d:2,q:"The historic Bhaktapur Durbar Square is a living museum of which architectural style?",opts:["Mughal","Newar medieval","Buddhist Tibetan","Colonial British"],a:1},
-{id:45, cat:'general',d:3,q:"Which Nepali district is famous for the village of Chhomrong, a gateway to Annapurna Base Camp?",opts:["Kaski","Myagdi","Gorkha","Mustang"],a:0},
-
-// ─── NEPALI MOVIES ──────────────────────────────────────────────────────────
-{id:46, cat:'movies',d:1,q:"Which superhit Nepali film features the iconic chase dialogue 'Baburam timi bahira aau'?",opts:["Pashupati Prasad","Loot","Kabaddi","Sano Sansar"],a:1},
-{id:47, cat:'movies',d:1,q:"Who directed 'Pashupati Prasad' (2016)?",opts:["Dipendra K. Khanal","Dinesh Rajan DC","Nischal Basnet","Diwas Sapkota"],a:0},
-{id:48, cat:'movies',d:1,q:"'Loot' (2012) is widely considered Nepal's first:",opts:["Horror film","Action-comedy blockbuster","Documentary","Animation film"],a:1},
-{id:49, cat:'movies',d:1,q:"Who played the lead role in 'Pashupati Prasad'?",opts:["Paul Shah","Dayahang Rai","Saugat Malla","Bipin Karki"],a:2},
-{id:50, cat:'movies',d:1,q:"The Nepali film 'Kabaddi' (2014) was directed by:",opts:["Nischal Basnet","Dipendra K. Khanal","Rambabu Gurung","Nabin Subba"],a:0},
-{id:51, cat:'movies',d:2,q:"Which Nepali film was Nepal's first official entry for the Academy Awards?",opts:["Kagbeni","Kabaddi","Caravan (Himalaya)","Numafung"],a:2},
-{id:52, cat:'movies',d:2,q:"'Talakjung vs Tulke' (2014) stars which pairing?",opts:["Bipin Karki & Dayahang Rai","Saugat Malla & Neer Shah","Paul Shah & Pooja Sharma","Salon Basnet & Reecha Sharma"],a:0},
-{id:53, cat:'movies',d:2,q:"The Nepali film 'Seto Surya' (White Sun, 2016) is set against the backdrop of:",opts:["A folk tale","The 2015 earthquake","The Maoist conflict","A love story"],a:2},
-{id:54, cat:'movies',d:2,q:"Dayahang Rai won the National Film Award for Best Actor for:",opts:["Loot","Kalo Pothi","Jhola","White Sun"],a:2},
-{id:55, cat:'movies',d:2,q:"Rekha Thapa is often referred to as:",opts:["Nepali film queen","Nepali action hero","Nepali singing star","Dance icon"],a:0},
-{id:56, cat:'movies',d:2,q:"'Bulbul' (2006) was directed by which acclaimed Nepali director?",opts:["Nabin Subba","Tulasi Ghimire","Nischal Basnet","Rambabu Gurung"],a:1},
-{id:57, cat:'movies',d:3,q:"'Kagbeni' (2008) is a Nepali thriller inspired by which classic Bollywood film?",opts:["Don","Sholay","Veer-Zaara","Andaz Apna Apna"],a:0},
-{id:58, cat:'movies',d:3,q:"'Numafung' (2004) draws from the folk traditions of which community?",opts:["Gurung","Rai / Limbu","Sherpa","Tamang"],a:1},
-{id:59, cat:'movies',d:3,q:"Which Nepali director made the internationally acclaimed film 'Kalo Pothi' (The Black Hen)?",opts:["Dipendra K. Khanal","Min Bahadur Bham","Nischal Basnet","Nabin Subba"],a:1},
-{id:60, cat:'movies',d:3,q:"'Jhola' (2016) addresses which social issue?",opts:["Child marriage","Widow remarriage","Drug addiction","Caste discrimination"],a:1},
-{id:61, cat:'movies',d:3,q:"Which Nepali film was the first to win at the prestigious Busan International Film Festival?",opts:["Kabaddi","Loot","Kalo Pothi","Kagbeni"],a:2},
-{id:62, cat:'movies',d:2,q:"'Chapali Height' (2012) is notable for being one of Nepal's first commercially successful:",opts:["Animation films","Horror films","War films","Sports dramas"],a:1},
-{id:63, cat:'movies',d:1,q:"Which young leading actor is known for youth-oriented Nepali films like 'Jerry' and 'Hostel'?",opts:["Bipin Karki","Anmol KC","Paul Shah","Dayahang Rai"],a:1},
-{id:64, cat:'movies',d:2,q:"Namrata Shrestha is a popular Nepali actress who is also known for being a:",opts:["Politician","Model and beauty queen","Classical dancer","Singer"],a:1},
-{id:65, cat:'movies',d:3,q:"The documentary 'Sherpa' (2015) by Jennifer Peedom focused on:",opts:["Hillary & Tenzing's 1953 climb","The 2014 Everest ice-fall avalanche tragedy","The life of Apa Sherpa","High-altitude Sherpa culture generally"],a:1},
-
-// ─── NEPALI SPORTS ──────────────────────────────────────────────────────────
-{id:66, cat:'sports',d:1,q:"What is Nepal's national sport?",opts:["Cricket","Football","Volleyball","Kabaddi"],a:2},
-{id:67, cat:'sports',d:1,q:"Sandeep Lamichhane is known as Nepal's:",opts:["Cricket captain only","Legendary leg-spin bowler","Fast bowling sensation","Wicketkeeper-batsman"],a:1},
-{id:68, cat:'sports',d:2,q:"Nepal qualified for the ICC Cricket World Cup 2023 Super League. Which team did they upset to qualify?",opts:["UAE","West Indies","Zimbabwe","Ireland"],a:1},
-{id:69, cat:'sports',d:1,q:"Dipendra Singh Airee broke the world record for the fastest ODI fifty in 2023, in how many balls?",opts:["7","8","9","10"],a:2},
-{id:70, cat:'sports',d:2,q:"Which Nepali footballer played professionally in the Indian I-League and is known as 'Magic'?",opts:["Bharat Khawas","Anjan Bista","Rohit Chand","Nawayug Shrestha"],a:2},
-{id:71, cat:'sports',d:2,q:"The 13th South Asian Games in 2019 were hosted by Nepal in which two cities?",opts:["Pokhara & Biratnagar","Kathmandu & Pokhara","Dharan & Chitwan","Butwal & Kathmandu"],a:1},
-{id:72, cat:'sports',d:2,q:"Nirmal 'Nims' Purja broke which mountaineer's record for climbing all 14 eight-thousanders?",opts:["Reinhold Messner","Edmund Hillary","Tenzing Norgay","Ueli Steck"],a:0},
-{id:73, cat:'sports',d:2,q:"Pasang Lhamu Sherpa became the first Nepali woman to summit Everest in which year?",opts:["1985","1990","1993","1996"],a:2},
-{id:74, cat:'sports',d:2,q:"Apa Sherpa held the record for:",opts:["First solo Everest ascent","Most times summiting Everest (21)","Fastest Everest ascent","First winter Everest ascent"],a:1},
-{id:75, cat:'sports',d:3,q:"Kushal Malla became the youngest ODI centurion, scoring a century at age:",opts:["16","17","18","19"],a:2},
-{id:76, cat:'sports',d:3,q:"Which Nepali cricketer was the first to be picked in the IPL?",opts:["Rohit Chand","Kushal Bhurtel","Sandeep Lamichhane","Dipendra Airee"],a:2},
-{id:77, cat:'sports',d:3,q:"Nepal beat which team in the T20 World Cup 2024 to make the Super 8?",opts:["UAE","Oman","Papua New Guinea","Namibia"],a:1},
-{id:78, cat:'sports',d:2,q:"Nepal's national football team is governed by:",opts:["NFA","ANFA","NSA","NFAB"],a:1},
-{id:79, cat:'sports',d:3,q:"In the 2023 ACC Men's Premier Cup, Nepal clinched the title by defeating:",opts:["UAE","Oman","Kuwait","Bahrain"],a:0},
-{id:80, cat:'sports',d:2,q:"Which Nepali MMA fighter gained international recognition competing in Asia?",opts:["Jit Bikram Singh","Bibek Giri","Sagar Khadka","Deepak Bista"],a:1},
-{id:81, cat:'sports',d:1,q:"Rohit Chand represents Nepal in which sport?",opts:["Cricket","Football","Volleyball","Athletics"],a:1},
-{id:82, cat:'sports',d:2,q:"Nepal's premier cricket venue, Tribhuvan University (TU) International Cricket Ground, is located in:",opts:["Pokhara","Kirtipur, Kathmandu","Biratnagar","Chitwan"],a:1},
-{id:83, cat:'sports',d:3,q:"Which Nepali climber became the first to summit all 14 eight-thousanders in a single season (spring 2023)?",opts:["Nirmal Purja","Kami Rita Sherpa","Sanu Sherpa","Mingma Sherpa"],a:2},
-{id:84, cat:'sports',d:2,q:"Nepal's cricket team played its first T20 International match against which country?",opts:["Afghanistan","UAE","Hong Kong","Singapore"],a:0},
-{id:85, cat:'sports',d:3,q:"The ANFA (All Nepal Football Association) was founded in which year?",opts:["1951","1976","1985","1990"],a:0},
-
-// ─── NEPAL POLITICS ─────────────────────────────────────────────────────────
-{id:86, cat:'politics',d:1,q:"Who was Nepal's Prime Minister as of mid-2024?",opts:["KP Sharma Oli","Pushpa Kamal Dahal","Sher Bahadur Deuba","Madhav Kumar Nepal"],a:0},
-{id:87, cat:'politics',d:1,q:"Nepal's current constitution was promulgated in which year?",opts:["2006","2008","2015","2018"],a:2},
-{id:88, cat:'politics',d:1,q:"Nepal is divided into how many provinces?",opts:["5","6","7","8"],a:2},
-{id:89, cat:'politics',d:1,q:"The Maoist People's War in Nepal was led by:",opts:["KP Sharma Oli","Pushpa Kamal Dahal","Sher Bahadur Deuba","Madhav Nepal"],a:1},
-{id:90, cat:'politics',d:2,q:"Nepal abolished its monarchy and became a republic in which year?",opts:["2006","2007","2008","2010"],a:2},
-{id:91, cat:'politics',d:2,q:"The Comprehensive Peace Accord (CPA) in Nepal was signed in:",opts:["2004","2005","2006","2007"],a:2},
-{id:92, cat:'politics',d:2,q:"Who was Nepal's first President after becoming a republic?",opts:["Bidhya Devi Bhandari","Ram Baran Yadav","Onsari Gharti Magar","Parmanand Jha"],a:1},
-{id:93, cat:'politics',d:2,q:"Nepal's 'Jana Andolan II' (People's Movement II) took place in:",opts:["2004","2005","2006","2007"],a:2},
-{id:94, cat:'politics',d:2,q:"Who is Nepal's President as of 2024?",opts:["Bidhya Devi Bhandari","Ram Baran Yadav","Ram Chandra Paudel","Onsari Gharti Magar"],a:2},
-{id:95, cat:'politics',d:2,q:"The Nepal Communist Party (NCP) was formed by merging which two parties?",opts:["NC and UML","UML and Maoist Centre","Maoist and NC","RPP and UML"],a:1},
-{id:96, cat:'politics',d:2,q:"The 2015 Gorkha earthquake had a magnitude of approximately:",opts:["6.8","7.2","7.8","8.2"],a:2},
-{id:97, cat:'politics',d:3,q:"Prachanda became Prime Minister of Nepal for the third time in:",opts:["2020","2021","2022","2023"],a:2},
-{id:98, cat:'politics',d:3,q:"Which political party won the most seats in Nepal's 2022 general election?",opts:["Nepali Congress","CPN-UML","CPN Maoist Centre","Rastriya Swatantra Party"],a:0},
-{id:99, cat:'politics',d:3,q:"The Rastriya Swatantra Party (RSP) was founded by:",opts:["KP Sharma Oli","Rabi Lamichhane","Upendra Yadav","Rajendra Lingden"],a:1},
-{id:100,cat:'politics',d:2,q:"Sher Bahadur Deuba belongs to which political party?",opts:["CPN-UML","Nepali Congress","CPN Maoist Centre","RPP"],a:1},
-{id:101,cat:'politics',d:3,q:"The MCC (Millennium Challenge Corporation) compact with the USA was approved by Nepal's parliament in:",opts:["2020","2021","2022","2023"],a:2},
-{id:102,cat:'politics',d:2,q:"The '12-point agreement' (2005) was between the political parties and:",opts:["The Indian government","The Maoist rebels","The Royal Palace","The United Nations"],a:1},
-{id:103,cat:'politics',d:1,q:"Nepal is officially a:",opts:["Hindu Kingdom","Constitutional Monarchy","Federal Democratic Republic","People's Republic"],a:2},
-{id:104,cat:'politics',d:3,q:"B.P. Koirala became Nepal's first democratically elected Prime Minister in:",opts:["1950","1955","1959","1963"],a:2},
-{id:105,cat:'politics',d:3,q:"Nepal's controversial Gorkhaland/sovereignty protests of 2017 were related to which region?",opts:["Terai / Madhesh","Darjeeling hills (India, not Nepal)","Upper Mustang","Limbuwan"],a:1},
-
-// ─── WORLD / INTERNATIONAL ──────────────────────────────────────────────────
-{id:106,cat:'world',d:1,q:"Which country won the 2022 FIFA World Cup in Qatar?",opts:["France","Brazil","Argentina","Germany"],a:2},
-{id:107,cat:'world',d:1,q:"Who was the first human to walk on the Moon?",opts:["Buzz Aldrin","Yuri Gagarin","Neil Armstrong","John Glenn"],a:2},
-{id:108,cat:'world',d:1,q:"The 2020 Tokyo Olympics were actually held in which year due to COVID-19?",opts:["2020","2021","2022","2023"],a:1},
-{id:109,cat:'world',d:1,q:"Usain Bolt holds the 100m world record with a time of:",opts:["9.58 sec","9.63 sec","9.69 sec","9.72 sec"],a:0},
-{id:110,cat:'world',d:1,q:"Which is the largest ocean on Earth?",opts:["Atlantic","Indian","Arctic","Pacific"],a:3},
-{id:111,cat:'world',d:1,q:"The Eiffel Tower was built for the World's Fair of:",opts:["1876","1885","1889","1900"],a:2},
-{id:112,cat:'world',d:1,q:"The first artificial satellite launched into space was:",opts:["Explorer 1","Vostok 1","Sputnik 1","Apollo 1"],a:2},
-{id:113,cat:'world',d:1,q:"India gained independence from British rule in which year?",opts:["1945","1946","1947","1948"],a:2},
-{id:114,cat:'world',d:1,q:"The Titanic sank in which year?",opts:["1910","1912","1914","1916"],a:1},
-{id:115,cat:'world',d:1,q:"Which is the largest country in the world by land area?",opts:["Canada","China","USA","Russia"],a:3},
-{id:116,cat:'world',d:1,q:"As of 2023, which country surpassed China to become the world's most populous?",opts:["USA","Indonesia","India","Bangladesh"],a:2},
-{id:117,cat:'world',d:1,q:"The fastest land animal is the:",opts:["Lion","Cheetah","Pronghorn","Peregrine Falcon"],a:1},
-{id:118,cat:'world',d:1,q:"What is the capital of Australia?",opts:["Sydney","Melbourne","Brisbane","Canberra"],a:3},
-{id:119,cat:'world',d:2,q:"Australia won the 2023 ICC Cricket World Cup by defeating which team in the final?",opts:["England","Pakistan","India","South Africa"],a:2},
-{id:120,cat:'world',d:2,q:"The Great Wall of China was mainly constructed during which dynasty?",opts:["Han","Tang","Song","Ming"],a:3},
-{id:121,cat:'world',d:2,q:"COVID-19 was declared a global pandemic by the WHO on:",opts:["January 30, 2020","March 11, 2020","April 1, 2020","May 15, 2020"],a:1},
-{id:122,cat:'world',d:2,q:"As of 2024, which planet has the most confirmed natural moons?",opts:["Jupiter","Uranus","Neptune","Saturn"],a:3},
-{id:123,cat:'world',d:2,q:"The 2024 Summer Olympics were held in:",opts:["Los Angeles","Tokyo","Brisbane","Paris"],a:3},
-{id:124,cat:'world',d:2,q:"Mount Kilimanjaro, Africa's highest peak, is located in:",opts:["Kenya","Uganda","Tanzania","Ethiopia"],a:2},
-{id:125,cat:'world',d:2,q:"Which country won the FIFA World Cup 2018 held in Russia?",opts:["Germany","Croatia","France","Belgium"],a:2},
-{id:126,cat:'world',d:2,q:"Yuri Gagarin became the first human in space in which year?",opts:["1957","1959","1961","1963"],a:2},
-{id:127,cat:'world',d:2,q:"The world's tallest building, the Burj Khalifa, is located in:",opts:["Saudi Arabia","Qatar","Bahrain","UAE (Dubai)"],a:3},
-{id:128,cat:'world',d:2,q:"The Amazon River, the world's largest by discharge, flows through:",opts:["Colombia","Peru","Brazil","Venezuela"],a:2},
-{id:129,cat:'world',d:3,q:"ChatGPT was launched publicly by OpenAI in:",opts:["January 2022","July 2022","November 2022","March 2023"],a:2},
-{id:130,cat:'world',d:3,q:"Which country was awarded the Nobel Peace Prize in 2023 through which activist?",opts:["Liu Xiaobo – China","Greta Thunberg – Sweden","Narges Mohammadi – Iran","Malala Yousafzai – Pakistan"],a:2},
-{id:131,cat:'world',d:2,q:"The United Nations was founded in which year?",opts:["1943","1944","1945","1946"],a:2},
-{id:132,cat:'world',d:1,q:"What is the currency of Japan?",opts:["Won","Yuan","Baht","Yen"],a:3},
-{id:133,cat:'world',d:3,q:"The BRICS group added new members in 2024. Which of these newly joined BRICS?",opts:["Nigeria","Turkey","Egypt","Pakistan"],a:2},
-{id:134,cat:'world',d:3,q:"SpaceX's first crewed NASA mission (Crew Dragon Demo-2) launched in:",opts:["2019","2020","2021","2022"],a:1},
-{id:135,cat:'world',d:2,q:"The Amazon Rainforest covers most of which country?",opts:["Colombia","Peru","Venezuela","Brazil"],a:3},
-
-// ─── EXTRA NEPAL GENERAL (harder / niche) ───────────────────────────────────
-{id:136,cat:'general',d:3,q:"Which Nepali district has the lowest Human Development Index (HDI)?",opts:["Rautahat","Bajura","Humla","Achham"],a:1},
-{id:137,cat:'general',d:2,q:"Tilicho Lake, one of the world's highest lakes, is located in which district?",opts:["Mustang","Manang","Dolpa","Humla"],a:1},
-{id:138,cat:'general',d:2,q:"Nepal's 'Bisket Jatra' new year festival is celebrated in which ancient city?",opts:["Kathmandu","Patan","Bhaktapur","Kirtipur"],a:2},
-{id:139,cat:'general',d:3,q:"Which Nepali ethnic group is renowned for their skills as high-altitude porters and climbers?",opts:["Gurung","Tamang","Sherpa","Rai"],a:2},
-{id:140,cat:'general',d:2,q:"Bardia National Park in Nepal is famous for its population of:",opts:["One-horned rhinos","Wild elephants","Bengal tigers","Red pandas"],a:2},
-{id:141,cat:'general',d:3,q:"Nepal's Karnali Province was formerly known as:",opts:["Bheri Province","Seti Province","Mid-Western Province","Karnali Province"],a:2},
-{id:142,cat:'general',d:2,q:"The Pashupatinath temple complex sits on the banks of which river?",opts:["Bagmati","Bishnumati","Balkhu","Manohara"],a:0},
-{id:143,cat:'general',d:1,q:"Nepal's Dashain festival lasts for how many days?",opts:["7","10","15","21"],a:2},
-{id:144,cat:'general',d:3,q:"Kami Rita Sherpa holds the record for the most Everest summits. How many times has he summited (as of 2024)?",opts:["25","27","28","29"],a:2},
-{id:145,cat:'general',d:2,q:"Swayambhunath Stupa in Kathmandu is also popularly known as:",opts:["Golden Temple","Monkey Temple","Dragon Temple","Sky Temple"],a:1},
-
-// ─── EXTRA NEPAL SPORTS ───────────────────────────────────────────────────
-{id:146,cat:'sports',d:2,q:"Nepal's Gyan Bahadur Shrestha won a bronze medal at the 2023 Asian Shooting Championships in which event?",opts:["10m Air Rifle","25m Rapid Fire Pistol","50m Rifle 3 Positions","Skeet"],a:0},
-{id:147,cat:'sports',d:2,q:"Sunil Chhetri, who plays for India, was born in Nepal in which city?",opts:["Pokhara","Kathmandu","Biratnagar","Bhaktapur"],a:0},
-{id:148,cat:'sports',d:3,q:"Nepal's first international cricket ODI was played against which country in 2018?",opts:["UAE","Namibia","Singapore","USA"],a:0},
-{id:149,cat:'sports',d:2,q:"Which Nepali para-athlete has represented Nepal in international powerlifting?",opts:["Bikash Shrestha","Purnima Shrestha","Bhim Bahadur Gurung","Surendra Tamang"],a:2},
-{id:150,cat:'sports',d:1,q:"Nepal's cricket team color (jersey) is predominantly:",opts:["Green","Red","Blue","White"],a:0},
-
-// ─── EXTRA NEPALI MOVIES ──────────────────────────────────────────────────
-{id:151,cat:'movies',d:2,q:"'Mission Paisa' (2021) is the sequel to which Nepali blockbuster?",opts:["Pashupati Prasad","Loot","Kabaddi","Seto Surya"],a:1},
-{id:152,cat:'movies',d:3,q:"The Nepali film 'Prem Geet 3' (2021) was notable for featuring a song by which Indian singer?",opts:["Arijit Singh","Sonu Nigam","Kumar Sanu","Udit Narayan"],a:1},
-{id:153,cat:'movies',d:2,q:"Which Nepali actress starred in both 'Prem Geet' and 'Prem Geet 2'?",opts:["Pooja Sharma","Benisha Hamal","Priyanka Karki","Swastima Khadka"],a:0},
-{id:154,cat:'movies',d:3,q:"'Loot' (2012) featured the hit song 'Yo Mann Ta Mero' sung by:",opts:["Sugam Pokhrel","Sushant KC","Bhim Birag","Aruna Lama"],a:0},
-
-// ─── EXTRA WORLD ─────────────────────────────────────────────────────────
-{id:155,cat:'world',d:2,q:"The 2026 FIFA World Cup will be jointly hosted by:",opts:["USA, Canada, Mexico","Brazil, Argentina, Chile","UK, Spain, Portugal","Germany, France, Italy"],a:0},
-{id:156,cat:'world',d:3,q:"Which country launched the world's first commercial quantum communication satellite?",opts:["USA","Russia","Japan","China"],a:3},
-{id:157,cat:'world',d:1,q:"Who wrote the famous play 'Romeo and Juliet'?",opts:["Charles Dickens","William Shakespeare","Jane Austen","Leo Tolstoy"],a:1},
-{id:158,cat:'world',d:2,q:"The 'Arab Spring' protest movements began in which year?",opts:["2009","2010","2011","2012"],a:2},
-{id:159,cat:'world',d:2,q:"Which country's exit from the European Union is known as 'Brexit'?",opts:["France","Germany","United Kingdom","Italy"],a:2},
-{id:160,cat:'world',d:3,q:"The James Webb Space Telescope's first full-colour images were released in which year?",opts:["2021","2022","2023","2024"],a:1},
-{id:161,cat:'world',d:1,q:"What is the tallest mountain in Africa?",opts:["Mount Kenya","Mount Kilimanjaro","Ras Dashen","Mount Elgon"],a:1},
-{id:162,cat:'world',d:2,q:"Which country has won the most FIFA World Cup titles?",opts:["Germany","Argentina","Italy","Brazil"],a:3},
-{id:163,cat:'world',d:3,q:"The Ukraine-Russia war (full-scale invasion) began on:",opts:["February 14, 2022","February 24, 2022","March 1, 2022","April 4, 2022"],a:1},
-{id:164,cat:'world',d:2,q:"Mahatma Gandhi was assassinated in which year?",opts:["1945","1946","1947","1948"],a:3},
-{id:165,cat:'world',d:1,q:"What does 'AI' stand for in the context of modern computing?",opts:["Automated Interface","Artificial Intelligence","Advanced Integration","Autonomous Internet"],a:1},
-];
 
 // ============================================================
 // GAME STATE
@@ -915,31 +875,28 @@ const G = {
 function go(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id !== 'gameScreen') { AUDIO.stopMusic(); }
+  if (id !== 'gameScreen') AUDIO.stopMusic();
+  if (id === 'apiKeyScreen') loadApiKeyScreen();
 }
 
 // ============================================================
 // CATEGORY TOGGLE
 // ============================================================
-function toggleCat(btn) { sfxClick(); btn.classList.toggle('active'); }
-function getSelectedCats(container) {
+function toggleCat(btn){sfxClick();btn.classList.toggle('active');}
+function getSelectedCats(container){
   const cats=[];
   container.querySelectorAll('.cat-check-btn.active').forEach(b=>cats.push(b.dataset.cat));
   return cats.length>0?cats:['general','movies','sports','politics','world'];
 }
 
 // ============================================================
-// TOAST
+// TOAST / OVERLAY UTILS
 // ============================================================
 let _toastTmr;
 function toast(msg,dur=3000){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(_toastTmr); _toastTmr=setTimeout(()=>t.classList.remove('show'),dur);
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(_toastTmr);_toastTmr=setTimeout(()=>t.classList.remove('show'),dur);
 }
-
-// ============================================================
-// OVERLAYS
-// ============================================================
 function showOverlay(id){document.getElementById(id).classList.add('open');}
 function closeOverlay(id){document.getElementById(id).classList.remove('open');}
 
@@ -951,22 +908,6 @@ function genUid(){return '_'+Math.random().toString(36).substr(2,9);}
 function genRoomCode(){return Math.random().toString(36).substr(2,6).toUpperCase();}
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-function pickQuestions(cats,diff,count){
-  let pool=POOL.filter(q=>cats.includes(q.cat));
-  if(diff!=='mixed') pool=pool.filter(q=>q.d===parseInt(diff));
-  if(pool.length<count) pool=POOL.filter(q=>cats.includes(q.cat));
-  if(pool.length<count) pool=[...POOL];
-
-  // Prefer questions not recently used
-  const recent=QHistory.get();
-  const fresh=pool.filter(q=>!recent.includes(q.id));
-  const stale=pool.filter(q=>recent.includes(q.id));
-  const ordered=[...shuffle(fresh),...shuffle(stale)];
-  const selected=ordered.slice(0,Math.min(count,ordered.length));
-  QHistory.save(selected.map(q=>q.id));
-  return selected;
-}
-
 // ============================================================
 // FIREBASE
 // ============================================================
@@ -974,7 +915,7 @@ function initFb(){
   if(G.fbOk)return true;
   if(!FIREBASE_CONFIG.apiKey||FIREBASE_CONFIG.apiKey==='YOUR_API_KEY')return false;
   try{if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);G.fbOk=true;return true;}
-  catch(e){console.error(e);return false;}
+  catch(e){return false;}
 }
 
 // ============================================================
@@ -1002,41 +943,64 @@ function updateLadder(idx){
 // ============================================================
 // SOLO MODE
 // ============================================================
-function startSolo(){
+async function startSolo(){
   const n=document.getElementById('soloName').value.trim();
   if(!n){toast('Please enter your name!');return;}
+  if(!getApiKey()){showOverlay('noApiKeyOverlay');return;}
+
   const diff=document.getElementById('soloDiff').value;
   const cats=getSelectedCats(document.getElementById('soloSetupScreen'));
   G.mode='solo'; G.name=n; G.uid=genUid();
-  G.questions=pickQuestions(cats,diff,15);
   G.qIdx=0; G.score=0; G.answered=false;
   G.lifelines={'5050':true,phone:true,audience:true};
-  setupGame(false); go('gameScreen');
-  AUDIO.init(); AUDIO.resume(); AUDIO.startMusic();
-  loadQ();
+
+  const iv=showAiLoading('Generating 15 fresh questions for you…');
+  try {
+    const qs = await generateQuestionsWithAI(cats, diff, 15);
+    hideAiLoading(iv);
+    if(!qs){return;}
+    G.questions=qs;
+    setupGame(false);go('gameScreen');
+    AUDIO.init();AUDIO.resume();AUDIO.startMusic();
+    loadQ();
+  } catch(e) {
+    hideAiLoading(iv);
+    toast('⚠️ ' + e.message, 5000);
+  }
 }
 
 // ============================================================
 // MULTIPLAYER — CREATE
 // ============================================================
-function createRoom(){
+async function createRoom(){
   const n=document.getElementById('hostName').value.trim();
   if(!n){toast('Please enter your name!');return;}
+  if(!getApiKey()){showOverlay('noApiKeyOverlay');return;}
   if(!initFb()){showOverlay('firebaseOverlay');return;}
+
   const code=genRoomCode(), pid=genUid();
   const cats=getSelectedCats(document.getElementById('createRoomScreen'));
   const qCount=parseInt(document.getElementById('hostQCount').value);
-  const qs=pickQuestions(cats,'mixed',qCount);
-  G.name=n;G.uid=pid;G.roomCode=code;G.isHost=true;G.mode='multi';G.questions=qs;
-  const ref=firebase.database().ref('rooms/'+code);G.roomRef=ref;
-  ref.set({host:n,hostId:pid,status:'waiting',currentQ:0,questions:qs,ts:Date.now(),
-    players:{[pid]:{name:n,score:0,answered:false}}
-  }).then(()=>{
+  G.name=n;G.uid=pid;G.roomCode=code;G.isHost=true;G.mode='multi';
+
+  const iv=showAiLoading(`Generating ${qCount} questions for your room…`);
+  try {
+    const qs = await generateQuestionsWithAI(cats, 'mixed', qCount);
+    hideAiLoading(iv);
+    if(!qs){return;}
+    G.questions=qs;
+    const ref=firebase.database().ref('rooms/'+code);G.roomRef=ref;
+    await ref.set({host:n,hostId:pid,status:'waiting',currentQ:0,questions:qs,ts:Date.now(),
+      players:{[pid]:{name:n,score:0,answered:false}}
+    });
     document.getElementById('displayCode').textContent=code;
     document.getElementById('hostCtrl').style.display='block';
     document.getElementById('guestCtrl').style.display='none';
-    go('waitingScreen'); listenWaiting();
-  }).catch(err=>{console.error(err);toast('Error creating room. Check Firebase config.');});
+    go('waitingScreen');listenWaiting();
+  } catch(e) {
+    hideAiLoading(iv);
+    toast('⚠️ ' + e.message, 5000);
+  }
 }
 
 // ============================================================
@@ -1053,22 +1017,21 @@ function joinRoom(){
   const ref=firebase.database().ref('rooms/'+code);G.roomRef=ref;
   ref.once('value').then(snap=>{
     const room=snap.val();
-    if(!room){toast('Room not found! Check the code.');return;}
+    if(!room){toast('Room not found!');return;}
     if(room.status!=='waiting'){toast('Game already started!');return;}
     G.questions=room.questions;
     ref.child('players/'+pid).set({name:n,score:0,answered:false}).then(()=>{
       document.getElementById('displayCode').textContent=code;
       document.getElementById('hostCtrl').style.display='none';
       document.getElementById('guestCtrl').style.display='block';
-      go('waitingScreen'); listenWaiting();
+      go('waitingScreen');listenWaiting();
     });
   }).catch(()=>toast('Error joining. Try again.'));
 }
-
 function copyCode(){if(navigator.clipboard)navigator.clipboard.writeText(G.roomCode);toast('Code copied: '+G.roomCode);}
 
 // ============================================================
-// WAITING ROOM LISTENERS
+// WAITING ROOM
 // ============================================================
 function listenWaiting(){
   const emojis=['😊','😎','🤩','🥳','😄','🦁','🐯','🦊','🐻','🦅','🦋','🐉'];
@@ -1076,11 +1039,9 @@ function listenWaiting(){
     const players=snap.val()||{};
     const arr=Object.entries(players);
     document.getElementById('playerCount').textContent=arr.length;
-    const grid=document.getElementById('waitingGrid');
-    grid.innerHTML='';
+    const grid=document.getElementById('waitingGrid');grid.innerHTML='';
     arr.forEach(([id,p],i)=>{
-      const d=document.createElement('div');
-      d.className='waiting-player-card';
+      const d=document.createElement('div');d.className='waiting-player-card';
       const isH=G.isHost&&id===G.uid;
       d.innerHTML=`<span class="wp-avatar">${emojis[i%emojis.length]}</span><div class="wp-name">${esc(p.name)}</div>${isH?'<span class="wp-badge">👑 Host</span>':''}`;
       grid.appendChild(d);
@@ -1091,13 +1052,13 @@ function listenWaiting(){
       G.roomRef.off();
       G.roomRef.once('value').then(s=>{
         const room=s.val();
-        G.questions=room.questions; G.qIdx=0; G.score=0; G.answered=false;
-        setupGame(true); go('gameScreen');
-        AUDIO.init(); AUDIO.resume(); AUDIO.startMusic();
-        listenGame(); loadQ();
+        G.questions=room.questions;G.qIdx=0;G.score=0;G.answered=false;
+        setupGame(true);go('gameScreen');
+        AUDIO.init();AUDIO.resume();AUDIO.startMusic();
+        listenGame();loadQ();
       });
     }
-    if(snap.val()==='abandoned'){toast('Host left the room.');G.roomRef.off();G.roomRef=null;go('multiScreen');}
+    if(snap.val()==='abandoned'){toast('Host left the room.');G.roomRef&&G.roomRef.off();G.roomRef=null;go('multiScreen');}
   });
 }
 function hostStartGame(){if(!G.isHost)return;G.roomRef.update({status:'playing',currentQ:0});}
@@ -1111,10 +1072,10 @@ function leaveRoom(){
 }
 
 // ============================================================
-// QUIT GAME (mid-game)
+// QUIT GAME
 // ============================================================
 function confirmQuit(){
-  closeOverlay('quitOverlay'); stopTimer(); AUDIO.stopMusic();
+  closeOverlay('quitOverlay');stopTimer();AUDIO.stopMusic();
   if(G.mode==='multi'&&G.roomRef){
     G.roomRef.child('players/'+G.uid).remove();
     if(G.isHost)G.roomRef.update({status:'abandoned'});
@@ -1141,7 +1102,7 @@ function setupGame(isMulti){
 }
 
 // ============================================================
-// MULTIPLAYER GAME LISTENERS
+// MULTIPLAYER LISTENERS
 // ============================================================
 function listenGame(){
   const ref=G.roomRef;
@@ -1188,7 +1149,7 @@ function advanceQ(){
   });
 }
 function endMulti(){
-  stopTimer(); AUDIO.stopMusic();
+  stopTimer();AUDIO.stopMusic();
   if(G.roomRef){
     G.roomRef.off();
     G.roomRef.child('players').once('value').then(snap=>showMultiResult(snap.val()||{}));
@@ -1208,7 +1169,7 @@ function loadQ(){
   document.getElementById('qText').textContent=q.q;
   const meta=CAT_META[q.cat]||CAT_META.general;
   const chip=document.getElementById('qCatChip');
-  chip.textContent=meta.label; chip.className='cat-chip '+meta.cls;
+  chip.textContent=meta.label;chip.className='cat-chip '+meta.cls;
   const lbls=['A','B','C','D'];
   for(let i=0;i<4;i++){
     const btn=document.getElementById('o'+i);
@@ -1225,7 +1186,7 @@ function loadQ(){
 // ============================================================
 const CIRC=2*Math.PI*33;
 function startTimer(){
-  stopTimer(); G.timeLeft=30; tickTimer(true);
+  stopTimer();G.timeLeft=30;tickTimer(true);
   G.timer=setInterval(()=>{G.timeLeft--;tickTimer();if(G.timeLeft<=0){stopTimer();if(!G.answered)onTimeout();}},1000);
 }
 function stopTimer(){clearInterval(G.timer);G.timer=null;}
@@ -1236,8 +1197,8 @@ function tickTimer(silent=false){
   ring.style.strokeDashoffset=CIRC-(t/30)*CIRC;
   num.textContent=t;
   const color=t>15?'#FFD700':t>8?'#FFA500':'#FF4444';
-  ring.style.stroke=color; num.style.color=color;
-  if(!silent&&!G.answered&&t>0) AUDIO.tick(t<=5);
+  ring.style.stroke=color;num.style.color=color;
+  if(!silent&&!G.answered&&t>0)AUDIO.tick(t<=5);
 }
 function onTimeout(){
   G.answered=true;
@@ -1250,7 +1211,7 @@ function onTimeout(){
 // ============================================================
 function pick(i){
   if(G.answered)return;
-  G.answered=true; stopTimer();
+  G.answered=true;stopTimer();
   AUDIO.click();
   const btn=document.getElementById('o'+i);btn.classList.add('selected');
   for(let j=0;j<4;j++)document.getElementById('o'+j).disabled=true;
@@ -1288,12 +1249,12 @@ function computeSafeAmount(){
 function triggerWrong(chosen){
   G.safeAmount=computeSafeAmount();
   const q=G.questions[G.qIdx];const lbls=['A','B','C','D'];
-  const reason=chosen===-1?"⏱ Time's up! You ran out of time.":`You chose ${lbls[chosen]}) ${q.opts[chosen]}, which was incorrect.`;
+  const reason=chosen===-1?"⏱ Time's up!":(`You chose ${lbls[chosen]}) ${q.opts[chosen]}, which was incorrect.`);
   document.getElementById('wrongMsg').innerHTML=`${reason}<br><br><span style="color:var(--correct)">Correct answer: ${lbls[q.a]}) ${q.opts[q.a]}</span><br><br><span style="color:rgba(255,255,255,.5)">You go home with <strong style="color:var(--gold)">${G.safeAmount}</strong>.</span>`;
   showOverlay('wrongOverlay');
 }
 function finalizeWrong(){
-  closeOverlay('wrongOverlay'); stopTimer(); AUDIO.stopMusic();
+  closeOverlay('wrongOverlay');stopTimer();AUDIO.stopMusic();
   go('resultScreen');
   document.getElementById('resultEmoji').textContent='😔';
   document.getElementById('resultHeading').textContent='Better Luck Next Time!';
@@ -1301,7 +1262,7 @@ function finalizeWrong(){
   document.getElementById('leaderboard').style.display='none';
 }
 function soloWin(){
-  stopTimer(); AUDIO.stopMusic(); AUDIO.win();
+  stopTimer();AUDIO.stopMusic();AUDIO.win();
   go('resultScreen');
   document.getElementById('resultEmoji').textContent='🏆';
   document.getElementById('resultHeading').textContent='CROREPATI!';
@@ -1353,12 +1314,11 @@ function showMultiResult(players){
 }
 
 // ============================================================
-// LIFELINES (SOLO)
+// LIFELINES
 // ============================================================
 function useLl(type){
   if(!G.lifelines[type])return;
-  G.lifelines[type]=false;
-  AUDIO.lifeline();
+  G.lifelines[type]=false;AUDIO.lifeline();
   const q=G.questions[G.qIdx];const lbls=['A','B','C','D'];
   if(type==='5050'){
     document.getElementById('ll5050').disabled=true;
@@ -1370,8 +1330,8 @@ function useLl(type){
     document.getElementById('llPhone').disabled=true;
     const confident=Math.random()>0.28;
     let advice;
-    if(confident){advice=`"Hey! I'm pretty sure the answer is ${lbls[q.a]}) ${q.opts[q.a]}. Go for it!"`;}
-    else{const wrong=[0,1,2,3].filter(i=>i!==q.a),wi=wrong[Math.floor(Math.random()*wrong.length)];advice=`"Hmm, I think it might be ${lbls[wi]}) ${q.opts[wi]}… but honestly I'm not 100% sure."`;}
+    if(confident){advice=`"I'm pretty sure the answer is ${lbls[q.a]}) ${q.opts[q.a]}. Go for it!"`;}
+    else{const wrong=[0,1,2,3].filter(i=>i!==q.a),wi=wrong[Math.floor(Math.random()*wrong.length)];advice=`"I think it might be ${lbls[wi]}) ${q.opts[wi]}… but I'm not 100% sure."`;}
     document.getElementById('phoneMsg').textContent=advice;showOverlay('phoneOverlay');
   }
   if(type==='audience'){
@@ -1395,7 +1355,7 @@ function useLl(type){
 // PLAY AGAIN
 // ============================================================
 function playAgain(){
-  stopTimer(); AUDIO.stopMusic();
+  stopTimer();AUDIO.stopMusic();
   if(G.roomRef){G.roomRef.off();G.roomRef=null;}
   go(G.mode==='solo'?'soloSetupScreen':'multiScreen');
 }
@@ -1407,8 +1367,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const km={'soloName':startSolo,'hostName':createRoom,'joinCode':joinRoom,'guestName':()=>document.getElementById('joinCode').focus()};
   Object.entries(km).forEach(([id,fn])=>{const el=document.getElementById(id);if(el)el.addEventListener('keypress',e=>{if(e.key==='Enter')fn();});});
   const jc=document.getElementById('joinCode');if(jc)jc.addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
+  document.getElementById('apiKeyInput').addEventListener('keypress',e=>{if(e.key==='Enter')saveApiKey();});
 });
 </script>
 </body>
 </html>
-
