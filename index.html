@@ -713,7 +713,7 @@ const CAT_DESCRIPTIONS = {
 
 async function generateQuestions(cats, diff, count) {
   // Check if Gemini key is configured
-  if (!GEMINI_KEY || GEMINI_KEY === 'AQ.Ab8RN6LZl4huKo93QauSEGFNuF_Kss6_ZN3RACcI4hcEvlqr5A') {
+  if (!GEMINI_KEY || GEMINI_KEY === 'GEMINI_KEY') {
     console.log('Gemini key not set — using fallback questions');
     toast('⚠️ Add your Gemini key for AI questions! Using backup pool.', 5000);
     return getFallbackQuestions(cats, diff, count);
