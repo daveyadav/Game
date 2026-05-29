@@ -9,7 +9,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <style>
-/* ===================================================== ROOT ===================================================== */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --gold:#FFD700;--gold-dim:#c9a227;--gold-soft:rgba(255,215,0,0.15);--gold-glow:rgba(255,215,0,0.4);
@@ -21,18 +20,12 @@
 html{height:100%;}
 body{font-family:'Rajdhani',sans-serif;background:var(--midnight);color:var(--text);min-height:100vh;overflow-x:hidden;position:relative;}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(26,58,138,0.25) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(255,215,0,0.04) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 50%,rgba(26,58,138,0.12) 0%,transparent 60%);pointer-events:none;z-index:0;}
-
-/* ===================================================== AUDIO CONTROLS ===================================================== */
 .audio-controls{position:fixed;top:14px;right:14px;z-index:900;display:flex;gap:8px;}
 .audio-toggle{width:36px;height:36px;border-radius:50%;background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.22);color:rgba(255,215,0,0.75);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .audio-toggle:hover{border-color:var(--gold);background:rgba(255,215,0,0.15);color:var(--gold);}
 .audio-toggle.muted{opacity:0.35;}
-
-/* ===================================================== SCREENS ===================================================== */
 .screen{display:none;min-height:100vh;position:relative;z-index:1;flex-direction:column;}
 .screen.active{display:flex;}
-
-/* ===================================================== HOME ===================================================== */
 #homeScreen{align-items:center;justify-content:center;text-align:center;padding:30px 20px;}
 .flag-row{font-size:clamp(3rem,8vw,5rem);margin-bottom:10px;animation:flagFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,100,0,0.4));}
 @keyframes flagFloat{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-8px) rotate(2deg);}}
@@ -48,8 +41,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ai-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(99,48,212,0.25),rgba(48,99,212,0.25));border:1px solid rgba(120,80,255,0.4);padding:6px 16px;border-radius:20px;font-family:'Cinzel',serif;font-size:0.7rem;color:rgba(180,150,255,0.9);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;}
 .divider{width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 28px;}
 .home-menu{display:flex;flex-direction:column;gap:16px;width:100%;max-width:320px;}
-
-/* ===================================================== BUTTONS ===================================================== */
 .btn{font-family:'Cinzel',serif;font-weight:700;font-size:0.95rem;letter-spacing:2px;text-transform:uppercase;padding:16px 36px;border-radius:50px;cursor:pointer;border:2px solid var(--gold);background:transparent;color:var(--gold);transition:all 0.25s ease;position:relative;overflow:hidden;white-space:nowrap;}
 .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,215,0,0.18));opacity:0;transition:opacity 0.25s;}
 .btn:hover::before{opacity:1;}
@@ -60,12 +51,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-sm{padding:10px 22px;font-size:0.8rem;letter-spacing:1px;}
 .btn-danger{border-color:var(--wrong);color:var(--wrong);}
 .btn-danger:hover{box-shadow:0 0 25px rgba(255,23,68,0.4);}
-
-/* ===================================================== CARD ===================================================== */
 .card{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border);border-radius:20px;padding:36px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);}
 .card-title{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(1.3rem,3vw,1.7rem);color:var(--gold);text-align:center;margin-bottom:28px;}
-
-/* ===================================================== FORM ===================================================== */
 .form-group{margin-bottom:20px;}
 .form-label{display:block;color:rgba(255,215,0,0.75);font-size:0.85rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-family:'Cinzel',serif;}
 .input-field{width:100%;padding:14px 18px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,215,0,0.25);border-radius:10px;color:white;font-size:1rem;font-family:'Rajdhani',sans-serif;font-weight:500;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
@@ -86,8 +73,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .cat-check-btn.active.sports{background:rgba(61,212,124,0.25);border-color:#7cf4a8;}
 .cat-check-btn.active.politics{background:rgba(212,124,61,0.25);border-color:#f4a87c;}
 .cat-check-btn.active.world{background:rgba(61,212,212,0.25);border-color:#7cf4f4;}
-
-/* ===================================================== MODE / PAGES ===================================================== */
 .centered-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px 20px;gap:24px;}
 .page-title{font-family:'Cinzel',serif;font-size:clamp(1.4rem,3.5vw,2rem);color:var(--gold);text-align:center;font-weight:700;}
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:560px;width:100%;}
@@ -97,16 +82,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .mode-icon{font-size:3rem;display:block;margin-bottom:12px;}
 .mode-title{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);margin-bottom:8px;font-weight:700;}
 .mode-desc{font-size:0.88rem;color:var(--text-dim);line-height:1.5;}
-
-/* ===================================================== WAITING ROOM ===================================================== */
 .room-code-box{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,8vw,3.5rem);font-weight:900;color:var(--gold);letter-spacing:10px;text-align:center;padding:22px 30px;background:rgba(255,215,0,0.04);border:2px dashed rgba(255,215,0,0.35);border-radius:16px;margin:16px 0;filter:drop-shadow(0 0 12px rgba(255,215,0,0.3));}
 .waiting-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin:16px 0;}
 .waiting-player-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px 8px;text-align:center;}
 .wp-avatar{font-size:2rem;display:block;margin-bottom:6px;}
 .wp-name{font-size:0.82rem;color:rgba(255,255,255,0.8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .wp-badge{font-size:0.65rem;color:var(--gold);font-family:'Cinzel',serif;display:block;margin-top:3px;}
-
-/* ===================================================== GAME SCREEN ===================================================== */
 #gameScreen{flex-direction:row;min-height:100vh;}
 .prize-ladder{width:195px;flex-shrink:0;background:rgba(0,0,0,0.35);border-right:1px solid rgba(255,215,0,0.12);padding:16px 8px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;}
 .prize-ladder-title{font-family:'Cinzel',serif;font-size:0.7rem;color:rgba(255,215,0,0.5);text-align:center;letter-spacing:2px;text-transform:uppercase;padding-bottom:10px;margin-bottom:6px;border-bottom:1px solid rgba(255,215,0,0.1);}
@@ -165,8 +146,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .p-score{font-size:0.72rem;color:var(--gold);font-family:'Cinzel',serif;}
 .p-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;transition:background 0.3s;}
 .p-dot.answered{background:var(--correct);box-shadow:0 0 6px rgba(0,230,118,0.6);}
-
-/* ===================================================== RESULTS ===================================================== */
 #resultScreen{align-items:center;justify-content:center;text-align:center;padding:30px 20px;}
 .result-trophy{font-size:clamp(4rem,12vw,6rem);margin-bottom:16px;animation:trophyBounce 0.8s ease;}
 @keyframes trophyBounce{0%{transform:scale(0) rotate(-10deg);}60%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0);}}
@@ -179,8 +158,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .lb-rank{font-family:'Cinzel',serif;font-size:1.1rem;min-width:28px;}
 .lb-name{flex:1;text-align:left;font-size:0.95rem;font-weight:600;}
 .lb-pts{font-family:'Cinzel',serif;color:var(--gold);font-size:0.9rem;}
-
-/* ===================================================== OVERLAYS ===================================================== */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(4px);}
 .overlay.open{display:flex;}
 .overlay-box{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1.5px solid var(--gold);border-radius:22px;padding:38px;text-align:center;max-width:440px;width:100%;box-shadow:0 0 60px rgba(255,215,0,0.15),0 30px 80px rgba(0,0,0,0.6);}
@@ -192,8 +169,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .poll-track{flex:1;background:rgba(255,255,255,0.08);border-radius:10px;height:22px;overflow:hidden;}
 .poll-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#1a3a8a,#3d6fd4);width:0;transition:width 1.1s ease;}
 .poll-pct{min-width:36px;text-align:right;font-size:0.85rem;color:rgba(255,255,255,0.75);}
-
-/* Loading Overlay */
 .loading-overlay-box{background:linear-gradient(135deg,#060e1e 0%,#0c1a38 100%);border:1.5px solid rgba(120,80,255,0.5);border-radius:22px;padding:42px 38px;text-align:center;max-width:380px;width:100%;box-shadow:0 0 60px rgba(100,60,255,0.2),0 30px 80px rgba(0,0,0,0.6);}
 .loading-title{font-family:'Cinzel',serif;font-weight:700;font-size:1.4rem;color:var(--gold);margin-bottom:8px;}
 .loading-msg{font-size:0.9rem;color:rgba(255,255,255,0.6);min-height:24px;transition:opacity 0.4s;margin-bottom:20px;font-family:'Rajdhani',sans-serif;}
@@ -205,19 +180,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ai-dot:nth-child(2){animation-delay:0.2s;}
 .ai-dot:nth-child(3){animation-delay:0.4s;}
 @keyframes aiDotPulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
-
-/* ===================================================== TOAST ===================================================== */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:linear-gradient(135deg,#1a3a8a,#0a1a50);border:1px solid rgba(255,215,0,0.4);padding:11px 26px;border-radius:50px;color:white;font-size:0.9rem;font-weight:600;z-index:2000;transition:transform 0.35s ease,opacity 0.35s ease;white-space:nowrap;opacity:0;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
-
-/* ===================================================== MISC ===================================================== */
 .back-btn{position:absolute;top:18px;left:18px;z-index:10;background:transparent;border:1px solid rgba(255,215,0,0.25);color:rgba(255,215,0,0.65);padding:7px 16px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-family:'Cinzel',serif;letter-spacing:1px;transition:all 0.2s;}
 .back-btn:hover{border-color:var(--gold);color:var(--gold);}
 .spinner{width:36px;height:36px;border:3px solid rgba(255,215,0,0.15);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;margin:16px auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px;}
-
-/* ===================================================== RESPONSIVE ===================================================== */
 @media(max-width:768px){
   #gameScreen{flex-direction:column;}
   .prize-ladder{display:none!important;}
@@ -232,11 +201,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   .question-box{padding:18px;}
   .audio-controls{top:10px;right:10px;}
 }
+/* Key fix notice banner */
+.key-notice{background:rgba(255,100,0,0.12);border:1px solid rgba(255,150,0,0.4);border-radius:10px;padding:10px 16px;margin-bottom:16px;font-size:0.78rem;color:rgba(255,180,80,0.9);font-family:'Cinzel',serif;letter-spacing:1px;display:none;}
+.key-notice.show{display:block;}
 </style>
 </head>
 <body>
 
-<!-- Audio Controls -->
 <div class="audio-controls">
   <button class="audio-toggle" id="btnMusic" onclick="toggleMusic()" title="Toggle Music">🎵</button>
   <button class="audio-toggle" id="btnSound" onclick="toggleSfx()" title="Toggle Sound Effects">🔊</button>
@@ -244,7 +215,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 <div class="toast" id="toast"></div>
 
-<!-- ================================================================ HOME ================================================================ -->
+<!-- HOME -->
 <div class="screen active" id="homeScreen">
   <div class="flag-row">🇳🇵</div>
   <div class="home-title">Nepal Ko<br>Crorepati</div>
@@ -256,7 +227,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <span class="cat-badge politics">🏛️ Politics</span>
     <span class="cat-badge world">🌍 World</span>
   </div>
-  <div class="ai-badge">✨ Powered by Gemini AI — Fresh Questions Every Game</div>
+  <div class="ai-badge" id="aiBadge">✨ Powered by Gemini AI — Fresh Questions Every Game</div>
   <div class="divider"></div>
   <div class="home-menu">
     <button class="btn btn-primary" onclick="sfxClick();go('modeScreen')">🎮 &nbsp;Play Now</button>
@@ -264,7 +235,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ MODE ================================================================ -->
+<!-- MODE -->
 <div class="screen" id="modeScreen">
   <button class="back-btn" onclick="sfxClick();go('homeScreen')">← Back</button>
   <div class="centered-page">
@@ -284,7 +255,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ SOLO SETUP ================================================================ -->
+<!-- SOLO SETUP -->
 <div class="screen" id="soloSetupScreen">
   <button class="back-btn" onclick="sfxClick();go('modeScreen')">← Back</button>
   <div class="centered-page">
@@ -297,11 +268,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="cat-select-group">
         <label class="cat-select-label">Question Categories</label>
         <div class="cat-checkboxes">
-          <button class="cat-check-btn general active"  data-cat="general"  onclick="toggleCat(this)">🧠 General</button>
-          <button class="cat-check-btn movies active"   data-cat="movies"   onclick="toggleCat(this)">🎬 Movies</button>
-          <button class="cat-check-btn sports active"   data-cat="sports"   onclick="toggleCat(this)">⚽ Sports</button>
+          <button class="cat-check-btn general active" data-cat="general" onclick="toggleCat(this)">🧠 General</button>
+          <button class="cat-check-btn movies active" data-cat="movies" onclick="toggleCat(this)">🎬 Movies</button>
+          <button class="cat-check-btn sports active" data-cat="sports" onclick="toggleCat(this)">⚽ Sports</button>
           <button class="cat-check-btn politics active" data-cat="politics" onclick="toggleCat(this)">🏛️ Politics</button>
-          <button class="cat-check-btn world active"    data-cat="world"    onclick="toggleCat(this)">🌍 World</button>
+          <button class="cat-check-btn world active" data-cat="world" onclick="toggleCat(this)">🌍 World</button>
         </div>
       </div>
       <div class="form-group">
@@ -318,7 +289,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ MULTI MENU ================================================================ -->
+<!-- MULTI MENU -->
 <div class="screen" id="multiScreen">
   <button class="back-btn" onclick="sfxClick();go('modeScreen')">← Back</button>
   <div class="centered-page">
@@ -338,7 +309,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ CREATE ROOM ================================================================ -->
+<!-- CREATE ROOM -->
 <div class="screen" id="createRoomScreen">
   <button class="back-btn" onclick="sfxClick();go('multiScreen')">← Back</button>
   <div class="centered-page">
@@ -351,11 +322,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="cat-select-group">
         <label class="cat-select-label">Question Categories</label>
         <div class="cat-checkboxes">
-          <button class="cat-check-btn general active"  data-cat="general"  onclick="toggleCat(this)">🧠 General</button>
-          <button class="cat-check-btn movies active"   data-cat="movies"   onclick="toggleCat(this)">🎬 Movies</button>
-          <button class="cat-check-btn sports active"   data-cat="sports"   onclick="toggleCat(this)">⚽ Sports</button>
+          <button class="cat-check-btn general active" data-cat="general" onclick="toggleCat(this)">🧠 General</button>
+          <button class="cat-check-btn movies active" data-cat="movies" onclick="toggleCat(this)">🎬 Movies</button>
+          <button class="cat-check-btn sports active" data-cat="sports" onclick="toggleCat(this)">⚽ Sports</button>
           <button class="cat-check-btn politics active" data-cat="politics" onclick="toggleCat(this)">🏛️ Politics</button>
-          <button class="cat-check-btn world active"    data-cat="world"    onclick="toggleCat(this)">🌍 World</button>
+          <button class="cat-check-btn world active" data-cat="world" onclick="toggleCat(this)">🌍 World</button>
         </div>
       </div>
       <div class="form-group">
@@ -371,7 +342,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ JOIN ROOM ================================================================ -->
+<!-- JOIN ROOM -->
 <div class="screen" id="joinRoomScreen">
   <button class="back-btn" onclick="sfxClick();go('multiScreen')">← Back</button>
   <div class="centered-page">
@@ -390,7 +361,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ WAITING ROOM ================================================================ -->
+<!-- WAITING ROOM -->
 <div class="screen" id="waitingScreen">
   <div class="centered-page" style="gap:16px">
     <div class="card" style="max-width:580px">
@@ -418,7 +389,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ GAME SCREEN ================================================================ -->
+<!-- GAME SCREEN -->
 <div class="screen" id="gameScreen">
   <div class="prize-ladder" id="prizeLadder"><div class="prize-ladder-title">Prize</div></div>
   <div class="game-main">
@@ -460,7 +431,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ RESULT SCREEN ================================================================ -->
+<!-- RESULT SCREEN -->
 <div class="screen" id="resultScreen">
   <div class="centered-page" style="gap:8px">
     <div class="result-trophy" id="resultEmoji">🏆</div>
@@ -471,9 +442,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ OVERLAYS ================================================================ -->
-
-<!-- How to Play -->
+<!-- OVERLAYS -->
 <div class="overlay" id="howToPlayOverlay">
   <div class="overlay-box" style="max-width:500px">
     <span class="overlay-icon">🇳🇵</span>
@@ -481,14 +450,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="overlay-body" style="text-align:left">
       <p>🤖 <strong style="color:var(--gold)">AI Questions:</strong> Every game generates fresh questions using Gemini AI — Nepal-focused (movies, sports, politics, culture) plus international knowledge. No repeats!</p><br>
       <p>🧠 <strong style="color:var(--gold)">Solo Mode:</strong> Answer 15 questions, climb the prize ladder to Rs. 1 Crore. One wrong answer ends the game (safe havens at Q5 &amp; Q11).</p><br>
-      <p>👥 <strong style="color:var(--gold)">Multiplayer:</strong> Min 15 questions. Everyone answers simultaneously — faster correct answers earn bonus points. Players stay in the room after the game — host can start a new round!</p><br>
+      <p>👥 <strong style="color:var(--gold)">Multiplayer:</strong> Min 15 questions. Everyone answers simultaneously — faster correct answers earn bonus points.</p><br>
       <p>⏱️ <strong style="color:var(--gold)">30 seconds</strong> per question. Use 3 lifelines in solo: <strong>50:50</strong>, <strong>Phone a Friend</strong>, <strong>Audience Poll</strong>.</p>
     </div>
     <button class="btn" onclick="sfxClick();closeOverlay('howToPlayOverlay')">Got it! ✓</button>
   </div>
 </div>
 
-<!-- Firebase Warning -->
 <div class="overlay" id="firebaseOverlay">
   <div class="overlay-box" style="max-width:500px">
     <span class="overlay-icon">⚠️</span>
@@ -498,14 +466,32 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       1. Go to <strong style="color:var(--gold)">console.firebase.google.com</strong><br>
       2. Create project → Enable <strong style="color:var(--gold)">Realtime Database</strong><br>
       3. Set Database Rules: read &amp; write = <code style="color:#7ec8e3">true</code><br>
-      4. Replace <code style="color:#7ec8e3">FIREBASE_CONFIG</code> in index.html<br><br>
+      4. Replace <code style="color:#7ec8e3">FIREBASE_CONFIG</code> in the code<br><br>
       <em style="color:rgba(255,255,255,.45)">Solo mode works without any setup!</em>
     </div>
     <button class="btn" onclick="sfxClick();closeOverlay('firebaseOverlay')">OK, Got it</button>
   </div>
 </div>
 
-<!-- Wrong Answer -->
+<div class="overlay" id="keyFixOverlay">
+  <div class="overlay-box" style="max-width:520px">
+    <span class="overlay-icon">🔑</span>
+    <div class="overlay-title" style="color:#FFA500">Fix Your Gemini API Key</div>
+    <div class="overlay-body" style="text-align:left;font-size:0.85rem">
+      Your key has <strong style="color:#FFA500">domain restrictions</strong> blocking it from working in the browser.<br><br>
+      <strong style="color:var(--gold)">Fix in 30 seconds:</strong><br><br>
+      1. Go to <strong style="color:#7ec8e3">console.cloud.google.com/apis/credentials</strong><br>
+      2. Click on your API key named <strong>"game"</strong><br>
+      3. Under <strong>Application restrictions</strong> → select <strong>"None"</strong><br>
+      4. Click <strong>Save</strong><br><br>
+      OR create a brand new unrestricted key at:<br>
+      <strong style="color:#7ec8e3">aistudio.google.com/apikey</strong><br><br>
+      <em style="color:rgba(255,255,255,.5)">The game is currently using backup questions.</em>
+    </div>
+    <button class="btn" onclick="sfxClick();closeOverlay('keyFixOverlay')">OK, I'll Fix It</button>
+  </div>
+</div>
+
 <div class="overlay" id="wrongOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">😔</span>
@@ -515,7 +501,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- Audience Poll -->
 <div class="overlay" id="audOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">👥</span>
@@ -525,7 +510,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- Phone a Friend -->
 <div class="overlay" id="phoneOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">📞</span>
@@ -535,7 +519,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- Quit Confirm -->
 <div class="overlay" id="quitOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">🚪</span>
@@ -548,7 +531,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- AI Loading Overlay -->
 <div class="overlay" id="loadingOverlay">
   <div class="loading-overlay-box">
     <span class="overlay-icon">🤖</span>
@@ -560,28 +542,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
-<!-- ================================================================ JAVASCRIPT ================================================================ -->
 <script>
-/*
- ============================================================
- GEMINI AI SETUP GUIDE
- ============================================================
- 1. Go to: https://aistudio.google.com/app/apikey
- 2. Sign in with your Google account (completely FREE)
- 3. Click "Create API key" → Copy it
- 4. Paste it below replacing 'YOUR_GEMINI_KEY'
+// ============================================================
+// CONFIG — paste your unrestricted AIzaSy... key here
+// ============================================================
+const GEMINI_KEY = 'AIzaSyCizF7m-Dunr2KCX7EDOLOn36iR1oCDHgQ';
 
- Free limits: 15 requests/min, 1500 requests/day
- (More than enough for any quiz game!)
- ============================================================
-*/
-const GEMINI_KEY = 'AIzaSyCizF7m-Dunr2KCX7EDOLOn36iR1oCDHgQ'; // ← REPLACE THIS
-
-/*
- ============================================================
- FIREBASE CONFIG (already set up with your project)
- ============================================================
-*/
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyCjA9QSFXK0iuokpNTzmqXPZzcairkHWWI",
   authDomain:        "game-b4f87.firebaseapp.com",
@@ -598,7 +564,6 @@ const FIREBASE_CONFIG = {
 const AUDIO = {
   ctx:null,masterGain:null,bgGain:null,sfxGain:null,
   _bgTimer:null,_loopStep:0,musicOn:true,sfxOn:true,initialized:false,
-
   init(){
     if(this.initialized)return;
     try{
@@ -609,9 +574,7 @@ const AUDIO = {
       this.initialized=true;
     }catch(e){console.warn('Web Audio unavailable');}
   },
-
-  resume(){if(this.ctx?.state==='suspended')this.ctx.resume();},
-
+  resume(){if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume();},
   _n(freq,start,dur,type,gainVal,dest){
     if(!this.ctx)return;
     const tgt=dest||this.sfxGain;
@@ -624,7 +587,6 @@ const AUDIO = {
     o.start(this.ctx.currentTime+start);
     o.stop(this.ctx.currentTime+start+dur+0.06);
   },
-
   correct(){if(!this.sfxOn||!this.ctx)return;[[523,0],[659,0.1],[784,0.2],[1047,0.32]].forEach(([f,t])=>this._n(f,t,0.4,'sine',0.5));},
   wrong(){if(!this.sfxOn||!this.ctx)return;[[233,0,0.2,'sawtooth',0.35],[196,0.15,0.2,'sawtooth',0.3],[155,0.32,0.38,'sawtooth',0.22]].forEach(([f,t,d,tp,g])=>this._n(f,t,d,tp,g));},
   tick(urgent){if(!this.sfxOn||!this.ctx)return;this._n(urgent?1320:880,0,0.04,'square',urgent?0.28:0.14);},
@@ -632,13 +594,11 @@ const AUDIO = {
   win(){if(!this.sfxOn||!this.ctx)return;[[523,0],[659,0.12],[784,0.24],[659,0.4],[784,0.52],[1047,0.68],[1047,0.85]].forEach(([f,t])=>this._n(f,t,0.35,'sine',0.5));},
   lifeline(){if(!this.sfxOn||!this.ctx)return;[440,554,659,880].forEach((f,i)=>this._n(f,i*0.07,0.25,'triangle',0.32));},
   newQ(){if(!this.sfxOn||!this.ctx)return;this._n(880,0,0.08,'sine',0.28);this._n(1100,0.07,0.1,'sine',0.22);},
-
   startMusic(){
     if(!this.initialized||!this.musicOn)return;
     this.stopMusic();this._loopStep=0;this._playBeat();
   },
   stopMusic(){clearTimeout(this._bgTimer);this._bgTimer=null;},
-
   _playBeat(){
     if(!this.musicOn||!this.ctx)return;
     const BPM=98,Q=60000/BPM,qs=Q/1000,idx=this._loopStep%16;
@@ -671,18 +631,10 @@ function sfxClick(){AUDIO.init();AUDIO.resume();AUDIO.click();}
 document.addEventListener('click',()=>{AUDIO.init();AUDIO.resume();},{once:true});
 
 // ============================================================
-// AI LOADING OVERLAY
+// LOADING OVERLAY
 // ============================================================
-const LOADING_MSGS = [
-  '🤖 AI is crafting Nepal questions…',
-  '🇳🇵 Thinking about Himalayan trivia…',
-  '📚 Mixing Nepal & World knowledge…',
-  '🎬 Writing movie & sports questions…',
-  '🏛️ Adding politics & current affairs…',
-  '✨ Almost ready, Crorepati awaits!',
-];
+const LOADING_MSGS=['🤖 AI is crafting Nepal questions…','🇳🇵 Thinking about Himalayan trivia…','📚 Mixing Nepal & World knowledge…','🎬 Writing movie & sports questions…','🏛️ Adding politics & current affairs…','✨ Almost ready, Crorepati awaits!'];
 let _loadMsgIdx=0,_loadMsgTmr=null;
-
 function showLoading(){
   _loadMsgIdx=0;
   document.getElementById('loadingMsg').textContent=LOADING_MSGS[0];
@@ -695,135 +647,133 @@ function showLoading(){
     setTimeout(()=>{el.textContent=LOADING_MSGS[_loadMsgIdx];el.style.opacity='1';},200);
   },2400);
 }
-function hideLoading(){
-  clearInterval(_loadMsgTmr);
-  document.getElementById('loadingOverlay').classList.remove('open');
-}
+function hideLoading(){clearInterval(_loadMsgTmr);document.getElementById('loadingOverlay').classList.remove('open');}
 
 // ============================================================
-// GEMINI AI QUESTION GENERATOR
+// GEMINI AI — with domain-restriction detection
 // ============================================================
-const CAT_DESCRIPTIONS = {
-  general:  'Nepal General Knowledge: history, geography, culture, festivals, landmarks, traditions, food',
-  movies:   'Nepali Cinema & Entertainment: films, actors, directors, popular songs, OTT shows',
-  sports:   'Nepal Sports: cricket, football, mountaineering, athletes, records, tournaments',
-  politics: 'Nepal Politics & Current Affairs: constitution, political parties, elections, PM, President, policies',
-  world:    'International General Knowledge: world geography, famous events, science, sports, pop culture, technology'
+const CAT_DESCRIPTIONS={
+  general:'Nepal General Knowledge: history, geography, culture, festivals, landmarks, traditions, food',
+  movies:'Nepali Cinema & Entertainment: films, actors, directors, popular songs, OTT shows',
+  sports:'Nepal Sports: cricket, football, mountaineering, athletes, records, tournaments',
+  politics:'Nepal Politics & Current Affairs: constitution, political parties, elections, PM, President, policies',
+  world:'International General Knowledge: world geography, famous events, science, sports, pop culture, technology'
 };
 
-async function generateQuestions(cats, diff, count) {
-  // Check if Gemini key is configured
-  if (!GEMINI_KEY || GEMINI_KEY === 'YOUR_GEMINI_KEY') {
-    console.log('Gemini key not set — using fallback questions');
-    toast('⚠️ Add your Gemini key for AI questions! Using backup pool.', 5000);
-    return getFallbackQuestions(cats, diff, count);
+// Track if we already showed the key fix notice this session
+let _keyNoticeShown = false;
+
+async function generateQuestions(cats,diff,count){
+  const keyMissing = !GEMINI_KEY || GEMINI_KEY==='YOUR_GEMINI_KEY';
+  if(keyMissing){
+    toast('Using backup questions (no Gemini key set)',4000);
+    return getFallbackQuestions(cats,diff,count);
   }
 
-  const catLines = cats.map(c => `• ${CAT_DESCRIPTIONS[c]||c}`).join('\n');
-  const diffLine = diff==='mixed' ? 'Mix: ~30% easy (d:1), ~50% medium (d:2), ~20% hard (d:3)' :
-                   diff==='1' ? 'All easy (d:1)' : diff==='2' ? 'All medium (d:2)' : 'All hard (d:3)';
+  const catLines=cats.map(c=>`• ${CAT_DESCRIPTIONS[c]||c}`).join('\n');
+  const diffLine=diff==='mixed'?'Mix: ~30% easy (d:1), ~50% medium (d:2), ~20% hard (d:3)':
+    diff==='1'?'All easy (d:1)':diff==='2'?'All medium (d:2)':'All hard (d:3)';
 
-  const prompt = `You are the question master for "Nepal Ko Crorepati" — a Nepali quiz show.
-
+  const prompt=`You are the question master for "Nepal Ko Crorepati" — a Nepali quiz show.
 Generate exactly ${count} multiple-choice trivia questions.
 Focus: 65% Nepal content, 35% international.
-
-Categories:
-${catLines}
-
+Categories:\n${catLines}
 Difficulty: ${diffLine}
-
 RETURN ONLY a raw JSON array. No markdown. No explanation. No code blocks.
-
-Example format:
-[{"cat":"general","d":2,"q":"What is Nepal's national bird?","opts":["Eagle","Danphe","Crane","Peacock"],"a":1},{"cat":"world","d":1,"q":"Which country won the 2022 FIFA World Cup?","opts":["France","Brazil","Argentina","Germany"],"a":2}]
-
+Example: [{"cat":"general","d":2,"q":"What is Nepal's national bird?","opts":["Eagle","Danphe","Crane","Peacock"],"a":1}]
 Rules:
 - cat must be exactly one of: general, movies, sports, politics, world
 - d must be integer 1, 2, or 3
 - opts must have exactly 4 strings (no empty strings)
-- a is the integer index 0-3 of the ONLY correct answer in opts
+- a is the integer index 0-3 of the correct answer
 - All questions must be factually accurate
-- Nepal questions should reflect current facts up to 2024
-- Make wrong options realistic but clearly incorrect
+- Nepal questions reflect facts up to 2024
 - No duplicate questions`;
 
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
-        {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({
-            contents:[{parts:[{text:prompt}]}],
-            generationConfig:{temperature:0.88,maxOutputTokens:8192}
-          })
+  // Try gemini-1.5-flash first, then gemini-pro as fallback
+  const models=['gemini-1.5-flash','gemini-1.0-pro'];
+
+  for(let m=0;m<models.length;m++){
+    for(let attempt=0;attempt<2;attempt++){
+      try{
+        const resp=await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${models[m]}:generateContent?key=${GEMINI_KEY}`,
+          {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+              contents:[{parts:[{text:prompt}]}],
+              generationConfig:{temperature:0.88,maxOutputTokens:8192}
+            })
+          }
+        );
+
+        if(!resp.ok){
+          const e=await resp.json().catch(()=>({}));
+          const msg=e?.error?.message||`HTTP ${resp.status}`;
+          const status=resp.status;
+
+          // Domain restriction (403) or invalid key (401) — show fix overlay once
+          if((status===403||status===401)&&!_keyNoticeShown){
+            _keyNoticeShown=true;
+            // Update badge
+            const badge=document.getElementById('aiBadge');
+            if(badge){badge.textContent='⚠️ Using Backup Questions — Fix API Key';badge.style.borderColor='rgba(255,150,0,0.5)';badge.style.color='rgba(255,180,80,0.9)';}
+            setTimeout(()=>showOverlay('keyFixOverlay'),500);
+          }
+
+          console.warn(`Gemini ${models[m]} attempt ${attempt+1} error [${status}]:`,msg);
+          if(attempt===0){await sleep(1500);continue;}
+          break; // Try next model
         }
-      );
 
-      if(!resp.ok){
-        const e=await resp.json().catch(()=>({}));
-        const msg=e?.error?.message||`HTTP ${resp.status}`;
-        console.warn(`Gemini attempt ${attempt+1} HTTP error:`,msg);
-        if(attempt===0){await sleep(2000);continue;}
-        throw new Error(msg);
+        const data=await resp.json();
+        let text=data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+        text=text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+        const start=text.indexOf('['),end=text.lastIndexOf(']');
+        if(start===-1||end===-1)throw new Error('No JSON array in response');
+        const raw=JSON.parse(text.slice(start,end+1));
+        const valid=raw.filter(q=>
+          q&&typeof q.q==='string'&&q.q.length>5&&
+          Array.isArray(q.opts)&&q.opts.length===4&&
+          q.opts.every(o=>typeof o==='string'&&o.length>0)&&
+          typeof q.a==='number'&&q.a>=0&&q.a<=3&&
+          typeof q.cat==='string'&&typeof q.d==='number'
+        );
+        if(valid.length<Math.min(count,5))throw new Error(`Only ${valid.length} valid questions`);
+        console.log(`✅ Gemini (${models[m]}) generated ${valid.length} questions`);
+        return valid.slice(0,count).map((q,i)=>({...q,id:`ai_${Date.now()}_${i}`}));
+
+      }catch(e){
+        console.warn(`Gemini ${models[m]} attempt ${attempt+1} failed:`,e.message||e);
+        if(attempt===0)await sleep(1500);
       }
-
-      const data=await resp.json();
-      let text=data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
-
-      // Clean markdown wrappers
-      text=text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
-
-      // Find outermost JSON array
-      const start=text.indexOf('[');
-      const end=text.lastIndexOf(']');
-      if(start===-1||end===-1)throw new Error('No JSON array in response');
-
-      const raw=JSON.parse(text.slice(start,end+1));
-
-      // Validate each question strictly
-      const valid=raw.filter(q=>
-        q && typeof q.q==='string' && q.q.length>5 &&
-        Array.isArray(q.opts) && q.opts.length===4 &&
-        q.opts.every(o=>typeof o==='string'&&o.length>0) &&
-        typeof q.a==='number' && q.a>=0 && q.a<=3 &&
-        typeof q.cat==='string' && typeof q.d==='number'
-      );
-
-      if(valid.length < Math.min(count,5)) throw new Error(`Only ${valid.length} valid questions`);
-
-      console.log(`✅ Gemini generated ${valid.length} questions`);
-      return valid.slice(0,count).map((q,i)=>({...q,id:`ai_${Date.now()}_${i}`}));
-
-    } catch(e) {
-      console.warn(`Gemini attempt ${attempt+1} failed:`,e.message||e);
-      if(attempt===0) await sleep(2500);
     }
   }
 
-  // Both attempts failed — use fallback
-  toast('⚠️ AI unavailable — using backup questions', 4000);
-  return getFallbackQuestions(cats, diff, count);
+  // All attempts failed — use fallback silently
+  console.warn('All Gemini attempts failed — using fallback questions');
+  if(!_keyNoticeShown){
+    toast('⚠️ AI unavailable — using backup questions',4000);
+  }
+  return getFallbackQuestions(cats,diff,count);
 }
 
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 // ============================================================
-// QUESTION HISTORY (localStorage) — tracks used question IDs
+// QUESTION HISTORY
 // ============================================================
-const QHistory = {
-  KEY:'nkc_qhist', MAX:120,
+const QHistory={
+  KEY:'nkc_qhist',MAX:120,
   get(){try{return JSON.parse(localStorage.getItem(this.KEY)||'[]');}catch{return[];}},
   save(ids){const m=[...new Set([...this.get(),...ids])];try{localStorage.setItem(this.KEY,JSON.stringify(m.slice(-this.MAX)));}catch{}},
-  clear(){try{localStorage.removeItem(this.KEY);}catch{}}
 };
 
 // ============================================================
-// FALLBACK QUESTION POOL (used when Gemini is unavailable)
+// FALLBACK QUESTION POOL
 // ============================================================
-const FALLBACK_POOL = [
+const FALLBACK_POOL=[
   {id:1,cat:'general',d:1,q:"What is the capital city of Nepal?",opts:["Pokhara","Kathmandu","Bhaktapur","Lalitpur"],a:1},
   {id:2,cat:'general',d:1,q:"Which is the highest mountain in the world, located in Nepal?",opts:["Kanchenjunga","Lhotse","Mount Everest","Makalu"],a:2},
   {id:3,cat:'general',d:1,q:"What is the national animal of Nepal?",opts:["Tiger","Elephant","Snow Leopard","Cow"],a:3},
@@ -839,30 +789,30 @@ const FALLBACK_POOL = [
   {id:13,cat:'general',d:2,q:"Tenzing Norgay and Edmund Hillary first summited Everest in which year?",opts:["1950","1951","1952","1953"],a:3},
   {id:14,cat:'general',d:2,q:"Which festival is known as the 'Festival of Lights' in Nepal?",opts:["Dashain","Tihar","Holi","Teej"],a:1},
   {id:15,cat:'general',d:2,q:"How many UNESCO World Heritage Sites does Nepal have?",opts:["4","6","8","10"],a:2},
-  {id:16,cat:'general',d:2,q:"The official height of Mount Everest, confirmed after a 2020 survey, is:",opts:["8,844.43m","8,848.00m","8,848.86m","8,850.00m"],a:2},
+  {id:16,cat:'general',d:2,q:"The official height of Mount Everest confirmed in 2020 is:",opts:["8,844.43m","8,848.00m","8,848.86m","8,850.00m"],a:2},
   {id:17,cat:'general',d:3,q:"Nirmal 'Nims' Purja climbed all 14 eight-thousanders in how many months?",opts:["6 months","7 months","8 months","12 months"],a:1},
   {id:18,cat:'general',d:3,q:"Nepal became a member of the United Nations in which year?",opts:["1945","1950","1955","1960"],a:2},
   {id:19,cat:'general',d:2,q:"Which sacred river flows through the Kathmandu Valley?",opts:["Trishuli","Gandaki","Bagmati","Narayani"],a:2},
   {id:20,cat:'general',d:2,q:"Janakpur is revered as the birthplace of which figure?",opts:["Radha","Draupadi","Sita","Parvati"],a:2},
-  {id:21,cat:'movies',d:1,q:"Which superhit Nepali film features the chase dialogue 'Baburam timi bahira aau'?",opts:["Pashupati Prasad","Loot","Kabaddi","Sano Sansar"],a:1},
+  {id:21,cat:'movies',d:1,q:"Which superhit Nepali film features the dialogue 'Baburam timi bahira aau'?",opts:["Pashupati Prasad","Loot","Kabaddi","Sano Sansar"],a:1},
   {id:22,cat:'movies',d:1,q:"'Loot' (2012) is widely considered Nepal's first what?",opts:["Horror film","Action-comedy blockbuster","Documentary","Animation film"],a:1},
   {id:23,cat:'movies',d:1,q:"Who played the lead role in 'Pashupati Prasad'?",opts:["Paul Shah","Dayahang Rai","Saugat Malla","Bipin Karki"],a:2},
   {id:24,cat:'movies',d:2,q:"Which Nepali film was Nepal's first official entry for the Academy Awards?",opts:["Kagbeni","Kabaddi","Caravan (Himalaya)","Numafung"],a:2},
   {id:25,cat:'movies',d:2,q:"Rekha Thapa is often called:",opts:["Nepali film queen","Nepali action hero","Nepali singing star","Dance icon"],a:0},
-  {id:26,cat:'movies',d:2,q:"Which Nepali youth film actor is known for 'Jerry' and 'Hostel'?",opts:["Bipin Karki","Anmol KC","Paul Shah","Dayahang Rai"],a:1},
+  {id:26,cat:'movies',d:2,q:"Which Nepali actor is known for 'Jerry' and 'Hostel'?",opts:["Bipin Karki","Anmol KC","Paul Shah","Dayahang Rai"],a:1},
   {id:27,cat:'movies',d:3,q:"Which Nepali director made the internationally acclaimed 'Kalo Pothi'?",opts:["Dipendra K. Khanal","Min Bahadur Bham","Nischal Basnet","Nabin Subba"],a:1},
   {id:28,cat:'movies',d:3,q:"Which Nepali film was the first to win at the Busan International Film Festival?",opts:["Kabaddi","Loot","Kalo Pothi","Kagbeni"],a:2},
   {id:29,cat:'movies',d:2,q:"'Chapali Height' (2012) is notable for being one of Nepal's first successful:",opts:["Animation films","Horror films","War films","Sports dramas"],a:1},
-  {id:30,cat:'movies',d:3,q:"The documentary 'Sherpa' (2015) by Jennifer Peedom focused on:",opts:["Hillary & Tenzing's 1953 climb","The 2014 Everest ice-fall avalanche","The life of Apa Sherpa","High-altitude culture"],a:1},
+  {id:30,cat:'movies',d:3,q:"The documentary 'Sherpa' (2015) by Jennifer Peedom focused on:",opts:["Hillary & Tenzing's 1953 climb","The 2014 Everest avalanche","The life of Apa Sherpa","High-altitude culture"],a:1},
   {id:31,cat:'sports',d:1,q:"What is Nepal's national sport?",opts:["Cricket","Football","Volleyball","Kabaddi"],a:2},
   {id:32,cat:'sports',d:1,q:"Sandeep Lamichhane is known as Nepal's:",opts:["Fast bowler","Leg-spin bowler","Wicketkeeper","Opening batsman"],a:1},
-  {id:33,cat:'sports',d:2,q:"Dipendra Singh Airee broke the world record for the fastest ODI fifty in 2023, in how many balls?",opts:["7","8","9","10"],a:2},
+  {id:33,cat:'sports',d:2,q:"Dipendra Singh Airee broke the world record for the fastest ODI fifty in 2023 in how many balls?",opts:["7","8","9","10"],a:2},
   {id:34,cat:'sports',d:2,q:"Pasang Lhamu Sherpa was the first Nepali woman to summit Everest in which year?",opts:["1985","1990","1993","1996"],a:2},
   {id:35,cat:'sports',d:2,q:"Apa Sherpa is known for which record?",opts:["First solo Everest ascent","Most Everest summits","Fastest Everest ascent","First winter ascent"],a:1},
-  {id:36,cat:'sports',d:2,q:"Nepal's main cricket venue, TU International Cricket Ground, is located in:",opts:["Pokhara","Kirtipur, Kathmandu","Biratnagar","Chitwan"],a:1},
+  {id:36,cat:'sports',d:2,q:"Nepal's main cricket venue TU International Cricket Ground is in:",opts:["Pokhara","Kirtipur, Kathmandu","Biratnagar","Chitwan"],a:1},
   {id:37,cat:'sports',d:3,q:"Which Nepali cricketer was the first to be signed by an IPL franchise?",opts:["Rohit Chand","Kushal Bhurtel","Sandeep Lamichhane","Dipendra Airee"],a:2},
   {id:38,cat:'sports',d:1,q:"Rohit Chand represents Nepal in which sport?",opts:["Cricket","Football","Volleyball","Athletics"],a:1},
-  {id:39,cat:'sports',d:3,q:"Nepal beat which team in the T20 World Cup 2024 to advance to the Super 8?",opts:["UAE","Oman","West Indies","Namibia"],a:1},
+  {id:39,cat:'sports',d:3,q:"Nepal beat which team in the T20 World Cup 2024 group stage?",opts:["UAE","Oman","West Indies","Namibia"],a:1},
   {id:40,cat:'sports',d:2,q:"The 13th South Asian Games 2019 were hosted by Nepal in which two cities?",opts:["Pokhara & Biratnagar","Kathmandu & Pokhara","Dharan & Chitwan","Butwal & Kathmandu"],a:1},
   {id:41,cat:'politics',d:1,q:"Nepal's current constitution was promulgated in which year?",opts:["2006","2008","2015","2018"],a:2},
   {id:42,cat:'politics',d:1,q:"Nepal is divided into how many provinces?",opts:["5","6","7","8"],a:2},
@@ -884,48 +834,48 @@ const FALLBACK_POOL = [
   {id:58,cat:'world',d:2,q:"The 2024 Summer Olympics were held in:",opts:["Los Angeles","Tokyo","Brisbane","Paris"],a:3},
   {id:59,cat:'world',d:2,q:"Mount Kilimanjaro, Africa's highest peak, is in which country?",opts:["Kenya","Uganda","Tanzania","Ethiopia"],a:2},
   {id:60,cat:'world',d:3,q:"The James Webb Space Telescope's first full-colour images were released in:",opts:["2021","2022","2023","2024"],a:1},
+  {id:61,cat:'general',d:1,q:"What currency does Nepal use?",opts:["Rupee","Taka","Dollar","Yen"],a:0},
+  {id:62,cat:'general',d:2,q:"Which mountain range runs through Nepal?",opts:["Alps","Andes","Himalayas","Rockies"],a:2},
+  {id:63,cat:'sports',d:2,q:"Which Nepali footballer is nicknamed 'Messi of Nepal'?",opts:["Bimal Gharti Magar","Rohit Chand","Santosh Tamang","Hari Khadka"],a:0},
+  {id:64,cat:'world',d:1,q:"What is the largest country in the world by area?",opts:["USA","China","Canada","Russia"],a:3},
+  {id:65,cat:'world',d:2,q:"Which planet is known as the Red Planet?",opts:["Venus","Mars","Jupiter","Saturn"],a:1},
 ];
 
-function getFallbackQuestions(cats, diff, count) {
-  let pool = FALLBACK_POOL.filter(q => cats.includes(q.cat));
-  if (diff !== 'mixed') pool = pool.filter(q => q.d === parseInt(diff));
-  if (pool.length < count) pool = [...FALLBACK_POOL];
-
-  const recent = QHistory.get();
-  const fresh = pool.filter(q => !recent.includes(q.id));
-  const stale = pool.filter(q => recent.includes(q.id));
-  const ordered = [...shuffle(fresh), ...shuffle(stale)];
-  const selected = ordered.slice(0, Math.min(count, ordered.length));
-  QHistory.save(selected.map(q => q.id));
+function getFallbackQuestions(cats,diff,count){
+  let pool=FALLBACK_POOL.filter(q=>cats.includes(q.cat));
+  if(diff!=='mixed')pool=pool.filter(q=>q.d===parseInt(diff));
+  if(pool.length<count)pool=[...FALLBACK_POOL];
+  const recent=QHistory.get();
+  const fresh=pool.filter(q=>!recent.includes(q.id));
+  const stale=pool.filter(q=>recent.includes(q.id));
+  const ordered=[...shuffle(fresh),...shuffle(stale)];
+  const selected=ordered.slice(0,Math.min(count,ordered.length));
+  QHistory.save(selected.map(q=>q.id));
   return selected;
 }
 
 // ============================================================
-// PRIZES & META
+// GAME CONSTANTS
 // ============================================================
-const PRIZES = [
-  "Rs. 1,000","Rs. 2,000","Rs. 3,000","Rs. 5,000","Rs. 10,000",
-  "Rs. 20,000","Rs. 40,000","Rs. 80,000","Rs. 1,60,000","Rs. 3,20,000",
-  "Rs. 6,40,000","Rs. 12,50,000","Rs. 25,00,000","Rs. 50,00,000","Rs. 1,00,00,000"
-];
-const SAFE_HAVENS = [4, 10];
-const CAT_META = {
-  general:  {label:'🧠 General',  cls:'general'},
-  movies:   {label:'🎬 Movies',   cls:'movies'},
-  sports:   {label:'⚽ Sports',   cls:'sports'},
-  politics: {label:'🏛️ Politics', cls:'politics'},
-  world:    {label:'🌍 World',    cls:'world'},
+const PRIZES=["Rs. 1,000","Rs. 2,000","Rs. 3,000","Rs. 5,000","Rs. 10,000","Rs. 20,000","Rs. 40,000","Rs. 80,000","Rs. 1,60,000","Rs. 3,20,000","Rs. 6,40,000","Rs. 12,50,000","Rs. 25,00,000","Rs. 50,00,000","Rs. 1,00,00,000"];
+const SAFE_HAVENS=[4,10];
+const CAT_META={
+  general:{label:'🧠 General',cls:'general'},
+  movies:{label:'🎬 Movies',cls:'movies'},
+  sports:{label:'⚽ Sports',cls:'sports'},
+  politics:{label:'🏛️ Politics',cls:'politics'},
+  world:{label:'🌍 World',cls:'world'},
 };
 
 // ============================================================
 // GAME STATE
 // ============================================================
-const G = {
-  mode:'solo', name:'', uid:'', roomCode:'', isHost:false,
-  questions:[], qIdx:0, score:0,
-  timer:null, timeLeft:30, answered:false,
+const G={
+  mode:'solo',name:'',uid:'',roomCode:'',isHost:false,
+  questions:[],qIdx:0,score:0,
+  timer:null,timeLeft:30,answered:false,
   lifelines:{'5050':true,phone:true,audience:true},
-  roomRef:null, fbOk:false, safeAmount:'Rs. 0',
+  roomRef:null,fbOk:false,safeAmount:'Rs. 0',
   selectedCats:['general','movies','sports','politics','world'],
   totalQCount:15,
 };
@@ -933,61 +883,52 @@ const G = {
 // ============================================================
 // NAVIGATION
 // ============================================================
-function go(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id !== 'gameScreen') AUDIO.stopMusic();
+  if(id!=='gameScreen')AUDIO.stopMusic();
 }
 
-// ============================================================
-// CATEGORY TOGGLE
-// ============================================================
-function toggleCat(btn) { sfxClick(); btn.classList.toggle('active'); }
-function getSelectedCats(container) {
-  const cats = [];
-  container.querySelectorAll('.cat-check-btn.active').forEach(b => cats.push(b.dataset.cat));
-  return cats.length > 0 ? cats : ['general','movies','sports','politics','world'];
+function toggleCat(btn){sfxClick();btn.classList.toggle('active');}
+function getSelectedCats(container){
+  const cats=[];
+  container.querySelectorAll('.cat-check-btn.active').forEach(b=>cats.push(b.dataset.cat));
+  return cats.length>0?cats:['general','movies','sports','politics','world'];
 }
 
-// ============================================================
-// TOAST & OVERLAYS
-// ============================================================
 let _toastTmr;
-function toast(msg, dur=3000) {
+function toast(msg,dur=3000){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   clearTimeout(_toastTmr);_toastTmr=setTimeout(()=>t.classList.remove('show'),dur);
 }
-function showOverlay(id) { document.getElementById(id).classList.add('open'); }
-function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+function showOverlay(id){document.getElementById(id).classList.add('open');}
+function closeOverlay(id){document.getElementById(id).classList.remove('open');}
 
-// ============================================================
-// UTILS
-// ============================================================
-function shuffle(a) {
+function shuffle(a){
   const b=[...a];
   for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
   return b;
 }
-function genUid() { return '_'+Math.random().toString(36).substr(2,9); }
-function genRoomCode() { return Math.random().toString(36).substr(2,6).toUpperCase(); }
-function esc(s) { const d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+function genUid(){return '_'+Math.random().toString(36).substr(2,9);}
+function genRoomCode(){return Math.random().toString(36).substr(2,6).toUpperCase();}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 // ============================================================
 // FIREBASE
 // ============================================================
-function initFb() {
-  if (G.fbOk) return true;
-  if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey==='YOUR_API_KEY') return false;
-  try {
-    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-    G.fbOk=true; return true;
-  } catch(e) { console.error(e); return false; }
+function initFb(){
+  if(G.fbOk)return true;
+  if(!FIREBASE_CONFIG.apiKey||FIREBASE_CONFIG.apiKey==='YOUR_API_KEY')return false;
+  try{
+    if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
+    G.fbOk=true;return true;
+  }catch(e){console.error('Firebase init error:',e);return false;}
 }
 
 // ============================================================
 // PRIZE LADDER
 // ============================================================
-function buildLadder() {
+function buildLadder(){
   const el=document.getElementById('prizeLadder');
   el.innerHTML='<div class="prize-ladder-title">Prize</div>';
   [...PRIZES].reverse().forEach((p,i)=>{
@@ -999,7 +940,7 @@ function buildLadder() {
     el.appendChild(div);
   });
 }
-function updateLadder(idx) {
+function updateLadder(idx){
   document.querySelectorAll('.prize-item').forEach(el=>el.classList.remove('current','done'));
   const cur=document.getElementById('pi_'+idx);
   if(cur){cur.classList.add('current');cur.scrollIntoView({behavior:'smooth',block:'center'});}
@@ -1009,30 +950,32 @@ function updateLadder(idx) {
 // ============================================================
 // SOLO MODE
 // ============================================================
-async function startSolo() {
+async function startSolo(){
   const n=document.getElementById('soloName').value.trim();
   if(!n){toast('Please enter your name!');return;}
   const diff=document.getElementById('soloDiff').value;
   const cats=getSelectedCats(document.getElementById('soloSetupScreen'));
 
   showLoading();
-  const qs = await generateQuestions(cats, diff, 15);
+  const qs=await generateQuestions(cats,diff,15);
   hideLoading();
 
-  G.mode='solo'; G.name=n; G.uid=genUid();
-  G.questions=qs; G.qIdx=0; G.score=0; G.answered=false;
-  G.selectedCats=cats; G.totalQCount=15;
+  if(!qs||qs.length===0){toast('Failed to load questions. Try again.');return;}
+
+  G.mode='solo';G.name=n;G.uid=genUid();
+  G.questions=qs;G.qIdx=0;G.score=0;G.answered=false;
+  G.selectedCats=cats;G.totalQCount=15;
   G.lifelines={'5050':true,phone:true,audience:true};
   setupGame(false);
   go('gameScreen');
-  AUDIO.init(); AUDIO.resume(); AUDIO.startMusic();
+  AUDIO.init();AUDIO.resume();AUDIO.startMusic();
   loadQ();
 }
 
 // ============================================================
 // MULTIPLAYER — CREATE ROOM
 // ============================================================
-async function createRoom() {
+async function createRoom(){
   const n=document.getElementById('hostName').value.trim();
   if(!n){toast('Please enter your name!');return;}
   if(!initFb()){showOverlay('firebaseOverlay');return;}
@@ -1041,23 +984,27 @@ async function createRoom() {
   const qCount=parseInt(document.getElementById('hostQCount').value);
 
   showLoading();
-  const qs = await generateQuestions(cats, 'mixed', qCount);
+  const qs=await generateQuestions(cats,'mixed',qCount);
   hideLoading();
 
-  const code=genRoomCode(), pid=genUid();
-  G.name=n; G.uid=pid; G.roomCode=code; G.isHost=true; G.mode='multi';
-  G.questions=qs; G.selectedCats=cats; G.totalQCount=qCount;
+  if(!qs||qs.length===0){toast('Failed to load questions. Try again.');return;}
+
+  const code=genRoomCode(),pid=genUid();
+  G.name=n;G.uid=pid;G.roomCode=code;G.isHost=true;G.mode='multi';
+  G.questions=qs;G.selectedCats=cats;G.totalQCount=qCount;
 
   const ref=firebase.database().ref('rooms/'+code);
   G.roomRef=ref;
 
-  // Auto-cleanup on disconnect
   ref.child('players/'+pid).onDisconnect().remove();
 
+  // Strip non-serializable fields before writing to Firebase
+  const cleanQs=qs.map(q=>({cat:q.cat,d:q.d,q:q.q,opts:q.opts,a:q.a,id:String(q.id||'')}));
+
   ref.set({
-    host:n, hostId:pid, status:'waiting',
-    currentQ:0, questions:qs, ts:Date.now(),
-    cats:cats, qCount:qCount,
+    host:n,hostId:pid,status:'waiting',
+    currentQ:0,questions:cleanQs,ts:Date.now(),
+    cats:cats,qCount:qCount,
     players:{[pid]:{name:n,score:0,answered:false}}
   }).then(()=>{
     document.getElementById('displayCode').textContent=code;
@@ -1065,21 +1012,24 @@ async function createRoom() {
     document.getElementById('guestCtrl').style.display='none';
     go('waitingScreen');
     listenWaiting();
-  }).catch(err=>{console.error(err);toast('Error creating room. Check Firebase config.');});
+  }).catch(err=>{
+    console.error('Firebase write error:',err);
+    toast('Error creating room: '+err.message);
+  });
 }
 
 // ============================================================
 // MULTIPLAYER — JOIN ROOM
 // ============================================================
-function joinRoom() {
+function joinRoom(){
   const n=document.getElementById('guestName').value.trim();
   const code=document.getElementById('joinCode').value.trim().toUpperCase();
   if(!n){toast('Please enter your name!');return;}
-  if(code.length<6){toast('Enter a valid 6-digit room code!');return;}
+  if(code.length<6){toast('Enter a valid 6-character room code!');return;}
   if(!initFb()){showOverlay('firebaseOverlay');return;}
 
   const pid=genUid();
-  G.name=n; G.uid=pid; G.roomCode=code; G.isHost=false; G.mode='multi';
+  G.name=n;G.uid=pid;G.roomCode=code;G.isHost=false;G.mode='multi';
 
   const ref=firebase.database().ref('rooms/'+code);
   G.roomRef=ref;
@@ -1089,7 +1039,7 @@ function joinRoom() {
     if(!room){toast('Room not found! Check the code.');return;}
     if(room.status==='abandoned'){toast('This room has been closed.');return;}
     if(room.status==='playing'){toast('Game already in progress!');return;}
-    G.questions=room.questions;
+    G.questions=room.questions||[];
     G.selectedCats=room.cats||['general','movies','sports','politics','world'];
     G.totalQCount=room.qCount||15;
 
@@ -1100,8 +1050,11 @@ function joinRoom() {
       document.getElementById('guestCtrl').style.display='block';
       go('waitingScreen');
       listenWaiting();
-    });
-  }).catch(()=>toast('Error joining. Try again.'));
+    }).catch(err=>{toast('Error joining: '+err.message);});
+  }).catch(err=>{
+    console.error('Join error:',err);
+    toast('Error joining room. Check Firebase rules (read/write must be true).');
+  });
 }
 
 function copyCode(){if(navigator.clipboard)navigator.clipboard.writeText(G.roomCode);toast('Code copied: '+G.roomCode);}
@@ -1109,7 +1062,7 @@ function copyCode(){if(navigator.clipboard)navigator.clipboard.writeText(G.roomC
 // ============================================================
 // WAITING ROOM LISTENERS
 // ============================================================
-function listenWaiting() {
+function listenWaiting(){
   const emojis=['😊','😎','🤩','🥳','😄','🦁','🐯','🦊','🐻','🦅','🦋','🐉'];
 
   G.roomRef.child('players').on('value',snap=>{
@@ -1131,41 +1084,41 @@ function listenWaiting() {
       G.roomRef.off();
       G.roomRef.once('value').then(r=>{
         const room=r.val();if(!room)return;
-        G.questions=room.questions; G.qIdx=0; G.score=0; G.answered=false;
-        setupGame(true); go('gameScreen');
+        G.questions=room.questions||[];G.qIdx=0;G.score=0;G.answered=false;
+        setupGame(true);go('gameScreen');
         AUDIO.init();AUDIO.resume();AUDIO.startMusic();
-        listenGame(); loadQ();
+        listenGame();loadQ();
       });
     }
     if(s==='abandoned'){
-      toast('Host closed the room.'); G.roomRef.off(); G.roomRef=null; go('multiScreen');
+      toast('Host closed the room.');G.roomRef.off();G.roomRef=null;go('multiScreen');
     }
   });
 }
 
-function hostStartGame() {
+function hostStartGame(){
   if(!G.isHost)return;
   G.roomRef.update({status:'playing',currentQ:0});
 }
 
-function leaveRoom() {
+function leaveRoom(){
   if(G.roomRef){
     G.roomRef.child('players/'+G.uid).remove();
-    if(G.isHost) G.roomRef.update({status:'abandoned'});
-    G.roomRef.off(); G.roomRef=null;
+    if(G.isHost)G.roomRef.update({status:'abandoned'});
+    G.roomRef.off();G.roomRef=null;
   }
   go('multiScreen');
 }
 
 // ============================================================
-// QUIT GAME (mid-game)
+// QUIT MID-GAME
 // ============================================================
-function confirmQuit() {
-  closeOverlay('quitOverlay'); stopTimer(); AUDIO.stopMusic();
+function confirmQuit(){
+  closeOverlay('quitOverlay');stopTimer();AUDIO.stopMusic();
   if(G.mode==='multi'&&G.roomRef){
     G.roomRef.child('players/'+G.uid).remove();
-    if(G.isHost) G.roomRef.update({status:'abandoned'});
-    G.roomRef.off(); G.roomRef=null;
+    if(G.isHost)G.roomRef.update({status:'abandoned'});
+    G.roomRef.off();G.roomRef=null;
   }
   go('homeScreen');
 }
@@ -1173,7 +1126,7 @@ function confirmQuit() {
 // ============================================================
 // GAME UI SETUP
 // ============================================================
-function setupGame(isMulti) {
+function setupGame(isMulti){
   document.getElementById('prizeLadder').style.display=isMulti?'none':'flex';
   document.getElementById('playersPanel').style.display=isMulti?'flex':'none';
   document.getElementById('lifelinesRow').style.display=isMulti?'none':'flex';
@@ -1190,7 +1143,7 @@ function setupGame(isMulti) {
 // ============================================================
 // MULTIPLAYER GAME LISTENERS
 // ============================================================
-function listenGame() {
+function listenGame(){
   const ref=G.roomRef;
 
   ref.child('currentQ').on('value',snap=>{
@@ -1209,34 +1162,33 @@ function listenGame() {
 
   ref.child('status').on('value',snap=>{
     const s=snap.val();
-    if(s==='finished')  { endMulti(); }
-    // Host triggered play again → route everyone back to waiting
-    if(s==='waiting')   { handleRoomReset(); }
-    if(s==='abandoned') {
+    if(s==='finished'){endMulti();}
+    if(s==='waiting'){handleRoomReset();}
+    if(s==='abandoned'){
       toast('Host ended the game.');
       stopTimer();AUDIO.stopMusic();
-      G.roomRef&&G.roomRef.off();G.roomRef=null;
+      if(G.roomRef){G.roomRef.off();G.roomRef=null;}
       go('homeScreen');
     }
   });
 }
 
-function renderPlayers(players) {
+function renderPlayers(players){
   const sorted=Object.entries(players).sort((a,b)=>b[1].score-a[1].score);
   const list=document.getElementById('playersList');list.innerHTML='';
   const colors=['#1a3a8a','#4a1a8a','#8a1a4a','#1a8a4a','#8a4a1a','#2a5a2a'];
   sorted.forEach(([id,p],i)=>{
     const me=id===G.uid;
     const d=document.createElement('div');d.className='player-row'+(me?' me':'');
-    d.innerHTML=`<div class="p-avatar" style="background:linear-gradient(135deg,${colors[i%colors.length]},#0a0a1a)">${esc(p.name[0]).toUpperCase()}</div>
-      <div class="p-info"><div class="p-name">${esc(p.name)}${me?' <span style="font-size:.7rem;color:rgba(255,215,0,.5)">(you)</span>':''}</div>
-      <div class="p-score">${p.score} pts</div></div>
+    d.innerHTML=`<div class="p-avatar" style="background:linear-gradient(135deg,${colors[i%colors.length]},#0a0a1a)">${esc((p.name||'?')[0]).toUpperCase()}</div>
+      <div class="p-info"><div class="p-name">${esc(p.name||'')}${me?' <span style="font-size:.7rem;color:rgba(255,215,0,.5)">(you)</span>':''}</div>
+      <div class="p-score">${p.score||0} pts</div></div>
       <div class="p-dot${p.answered?' answered':''}"></div>`;
     list.appendChild(d);
   });
 }
 
-function advanceQ() {
+function advanceQ(){
   if(!G.isHost)return;
   const next=G.qIdx+1;
   if(next>=G.questions.length){G.roomRef.update({status:'finished'});return;}
@@ -1248,10 +1200,8 @@ function advanceQ() {
   });
 }
 
-// ─── END OF GAME (keep listeners alive so play again works) ───
-function endMulti() {
-  stopTimer(); AUDIO.stopMusic();
-  // ⚠️ Do NOT call G.roomRef.off() — keep listeners alive for play again
+function endMulti(){
+  stopTimer();AUDIO.stopMusic();
   if(G.roomRef){
     G.roomRef.child('players').once('value').then(snap=>{
       showMultiResult(snap.val()||{});
@@ -1259,75 +1209,65 @@ function endMulti() {
   }
 }
 
-// ─── HOST PLAY AGAIN ───
-async function hostPlayAgain() {
+async function hostPlayAgain(){
   showLoading();
-  try {
-    const newQs = await generateQuestions(G.selectedCats, 'mixed', G.totalQCount);
-    const pSnap = await G.roomRef.child('players').once('value');
-    const players = pSnap.val()||{};
-    const upd = { questions:newQs, currentQ:0, status:'waiting', ts:Date.now() };
+  try{
+    const newQs=await generateQuestions(G.selectedCats,'mixed',G.totalQCount);
+    const cleanQs=newQs.map(q=>({cat:q.cat,d:q.d,q:q.q,opts:q.opts,a:q.a,id:String(q.id||'')}));
+    const pSnap=await G.roomRef.child('players').once('value');
+    const players=pSnap.val()||{};
+    const upd={questions:cleanQs,currentQ:0,status:'waiting',ts:Date.now()};
     Object.keys(players).forEach(id=>{
       upd[`players/${id}/score`]=0;
       upd[`players/${id}/answered`]=false;
     });
     await G.roomRef.update(upd);
     hideLoading();
-    // The status listener (still active) will detect 'waiting' and call handleRoomReset()
-  } catch(e) {
+  }catch(e){
     hideLoading();
-    console.error(e);
+    console.error('Play again error:',e);
     toast('Error generating new questions. Try again.');
   }
 }
 
-// ─── RESET BACK TO WAITING ROOM (all clients) ───
-function handleRoomReset() {
-  stopTimer(); AUDIO.stopMusic();
-  G.roomRef.off(); // Remove all existing game listeners
+function handleRoomReset(){
+  stopTimer();AUDIO.stopMusic();
+  G.roomRef.off();
   G.roomRef.once('value').then(snap=>{
     const room=snap.val();if(!room)return;
-    G.questions=room.questions; G.qIdx=0; G.score=0; G.answered=false;
+    G.questions=room.questions||[];G.qIdx=0;G.score=0;G.answered=false;
     document.getElementById('displayCode').textContent=G.roomCode;
     document.getElementById('hostCtrl').style.display=G.isHost?'block':'none';
     document.getElementById('guestCtrl').style.display=G.isHost?'none':'block';
     go('waitingScreen');
-    listenWaiting(); // Re-attach waiting listeners
+    listenWaiting();
   });
 }
 
-// ─── GUEST: LEAVE FROM RESULT SCREEN ───
-function leaveRoomFromResult() {
-  if(G.roomRef){
-    G.roomRef.child('players/'+G.uid).remove();
-    G.roomRef.off(); G.roomRef=null;
-  }
+function leaveRoomFromResult(){
+  if(G.roomRef){G.roomRef.child('players/'+G.uid).remove();G.roomRef.off();G.roomRef=null;}
   go('homeScreen');
 }
 
-// ─── HOST: CLOSE ROOM FROM RESULT SCREEN ───
-function closeRoom() {
+function closeRoom(){
   if(G.roomRef){
     G.roomRef.update({status:'abandoned'});
-    setTimeout(()=>{G.roomRef&&G.roomRef.off();G.roomRef=null;},500);
+    setTimeout(()=>{if(G.roomRef){G.roomRef.off();G.roomRef=null;}},500);
   }
   go('homeScreen');
 }
 
 // ============================================================
-// SHOW MULTIPLAYER RESULTS
+// MULTIPLAYER RESULTS
 // ============================================================
-function showMultiResult(players) {
+function showMultiResult(players){
   const sorted=Object.entries(players).sort((a,b)=>b[1].score-a[1].score);
   const myRank=sorted.findIndex(([id])=>id===G.uid)+1;
   const me=players[G.uid];
-
-  if(myRank===1) AUDIO.win();
-
+  if(myRank===1)AUDIO.win();
   document.getElementById('resultEmoji').textContent=myRank===1?'🏆':myRank===2?'🥈':'🎮';
   document.getElementById('resultHeading').textContent=myRank===1?'You Won! 🎉':`You Finished #${myRank}`;
   document.getElementById('resultSub').textContent=`Your score: ${me?me.score:0} points`;
-
   const lb=document.getElementById('leaderboard');lb.style.display='block';
   lb.innerHTML='<div class="lb-header">🏆 Final Leaderboard</div>';
   const medals=['🥇','🥈','🥉'];
@@ -1335,32 +1275,29 @@ function showMultiResult(players) {
     const isMe=id===G.uid;
     const row=document.createElement('div');row.className='lb-row'+(isMe?' lb-me':'');
     row.innerHTML=`<span class="lb-rank">${medals[i]||(i+1)}</span>
-      <span class="lb-name">${esc(p.name)}${isMe?' <span style="color:rgba(255,215,0,.5);font-size:.75rem">(you)</span>':''}</span>
-      <span class="lb-pts">${p.score} pts</span>`;
+      <span class="lb-name">${esc(p.name||'')}${isMe?' <span style="color:rgba(255,215,0,.5);font-size:.75rem">(you)</span>':''}</span>
+      <span class="lb-pts">${p.score||0} pts</span>`;
     lb.appendChild(row);
   });
-
-  // Dynamic action buttons for host vs guest
   const actions=document.getElementById('resultActions');
   if(G.isHost){
     actions.innerHTML=`
       <button class="btn btn-primary" onclick="sfxClick();hostPlayAgain()">🔄 Play Again</button>
       <button class="btn btn-danger" onclick="sfxClick();closeRoom()">✕ Close Room</button>`;
-  } else {
+  }else{
     actions.innerHTML=`
       <div style="color:var(--text-dim);font-size:0.85rem;margin-bottom:10px;font-family:'Cinzel',serif;letter-spacing:1px">⏳ Waiting for host to start new round…</div>
       <button class="btn btn-danger" onclick="sfxClick();leaveRoomFromResult()">🚪 Leave Room</button>`;
   }
-
   go('resultScreen');
 }
 
 // ============================================================
 // LOAD QUESTION
 // ============================================================
-function loadQ() {
+function loadQ(){
   const q=G.questions[G.qIdx];if(!q)return;
-  G.answered=false; AUDIO.newQ();
+  G.answered=false;AUDIO.newQ();
   document.getElementById('qNum').textContent=`Question ${G.qIdx+1} of ${G.questions.length}`;
   document.getElementById('qChip').textContent=`Q ${G.qIdx+1}/${G.questions.length}`;
   document.getElementById('qText').textContent=q.q;
@@ -1382,15 +1319,15 @@ function loadQ() {
 // TIMER
 // ============================================================
 const CIRC=2*Math.PI*33;
-function startTimer() {
-  stopTimer(); G.timeLeft=30; tickTimer(true);
+function startTimer(){
+  stopTimer();G.timeLeft=30;tickTimer(true);
   G.timer=setInterval(()=>{
     G.timeLeft--;tickTimer();
     if(G.timeLeft<=0){stopTimer();if(!G.answered)onTimeout();}
   },1000);
 }
 function stopTimer(){clearInterval(G.timer);G.timer=null;}
-function tickTimer(silent=false) {
+function tickTimer(silent=false){
   const t=G.timeLeft;
   const ring=document.getElementById('timerRing'),num=document.getElementById('timerNum');
   ring.style.strokeDasharray=CIRC;
@@ -1398,9 +1335,9 @@ function tickTimer(silent=false) {
   num.textContent=t;
   const color=t>15?'#FFD700':t>8?'#FFA500':'#FF4444';
   ring.style.stroke=color;num.style.color=color;
-  if(!silent&&!G.answered&&t>0) AUDIO.tick(t<=5);
+  if(!silent&&!G.answered&&t>0)AUDIO.tick(t<=5);
 }
-function onTimeout() {
+function onTimeout(){
   G.answered=true;
   if(G.mode==='solo'){revealAnswer(-1);setTimeout(()=>triggerWrong(-1),1500);}
   else submitMulti(-1);
@@ -1409,7 +1346,7 @@ function onTimeout() {
 // ============================================================
 // ANSWER SELECTION
 // ============================================================
-function pick(i) {
+function pick(i){
   if(G.answered)return;
   G.answered=true;stopTimer();AUDIO.click();
   const btn=document.getElementById('o'+i);btn.classList.add('selected');
@@ -1421,10 +1358,10 @@ function pick(i) {
       if(correct)AUDIO.correct();else AUDIO.wrong();
       setTimeout(()=>correct?onCorrect():triggerWrong(i),1500);
     },500);
-  } else submitMulti(i);
+  }else submitMulti(i);
 }
 
-function revealAnswer(chosen) {
+function revealAnswer(chosen){
   const q=G.questions[G.qIdx];
   for(let i=0;i<4;i++){
     const btn=document.getElementById('o'+i);btn.disabled=true;
@@ -1436,17 +1373,17 @@ function revealAnswer(chosen) {
 // ============================================================
 // SOLO LOGIC
 // ============================================================
-function onCorrect() {
+function onCorrect(){
   G.score++;
   if(G.qIdx+1>=G.questions.length){soloWin();return;}
   G.qIdx++;
   setTimeout(loadQ,600);
 }
-function computeSafeAmount() {
+function computeSafeAmount(){
   for(let i=G.qIdx-1;i>=0;i--)if(SAFE_HAVENS.includes(i))return PRIZES[i];
   return'Rs. 0';
 }
-function triggerWrong(chosen) {
+function triggerWrong(chosen){
   G.safeAmount=computeSafeAmount();
   const q=G.questions[G.qIdx];const lbls=['A','B','C','D'];
   const reason=chosen===-1?"⏱ Time's up! You ran out of time.":`You chose ${lbls[chosen]}) ${q.opts[chosen]}, which was incorrect.`;
@@ -1455,8 +1392,8 @@ function triggerWrong(chosen) {
     <span style="color:rgba(255,255,255,.5)">You go home with <strong style="color:var(--gold)">${G.safeAmount}</strong>.</span>`;
   showOverlay('wrongOverlay');
 }
-function finalizeWrong() {
-  closeOverlay('wrongOverlay'); stopTimer(); AUDIO.stopMusic();
+function finalizeWrong(){
+  closeOverlay('wrongOverlay');stopTimer();AUDIO.stopMusic();
   document.getElementById('resultEmoji').textContent='😔';
   document.getElementById('resultHeading').textContent='Better Luck Next Time!';
   document.getElementById('resultSub').textContent='You go home with '+G.safeAmount;
@@ -1466,8 +1403,8 @@ function finalizeWrong() {
     <button class="btn" onclick="sfxClick();go('homeScreen')">🏠 Home</button>`;
   go('resultScreen');
 }
-function soloWin() {
-  stopTimer(); AUDIO.stopMusic(); AUDIO.win();
+function soloWin(){
+  stopTimer();AUDIO.stopMusic();AUDIO.win();
   document.getElementById('resultEmoji').textContent='🏆';
   document.getElementById('resultHeading').textContent='CROREPATI!';
   document.getElementById('resultSub').textContent='You won '+PRIZES[PRIZES.length-1]+'! 🎉';
@@ -1477,12 +1414,12 @@ function soloWin() {
     <button class="btn" onclick="sfxClick();go('homeScreen')">🏠 Home</button>`;
   go('resultScreen');
 }
-function soloPlayAgain() { go('soloSetupScreen'); }
+function soloPlayAgain(){go('soloSetupScreen');}
 
 // ============================================================
 // MULTIPLAYER ANSWER SUBMIT
 // ============================================================
-function submitMulti(chosen) {
+function submitMulti(chosen){
   const q=G.questions[G.qIdx];
   const correct=chosen===q.a;
   const timeBonus=Math.floor(G.timeLeft*12);
@@ -1492,10 +1429,11 @@ function submitMulti(chosen) {
   else if(chosen>=0){AUDIO.wrong();toast('❌ Wrong answer!');}
   else toast('⏱ Time up!');
   document.getElementById('scoreChip').textContent='Score: '+G.score;
-  if(G.roomRef) G.roomRef.child(`players/${G.uid}`).update({answered:true,score:G.score});
+  if(G.roomRef)G.roomRef.child(`players/${G.uid}`).update({answered:true,score:G.score});
   if(G.isHost){
     setTimeout(()=>{
-      G.roomRef&&G.roomRef.child('players').once('value').then(snap=>{
+      if(!G.roomRef)return;
+      G.roomRef.child('players').once('value').then(snap=>{
         const all=Object.values(snap.val()||{}).every(p=>p.answered);
         if(all)setTimeout(()=>advanceQ(),1800);
       });
@@ -1504,13 +1442,12 @@ function submitMulti(chosen) {
 }
 
 // ============================================================
-// LIFELINES (SOLO)
+// LIFELINES
 // ============================================================
-function useLl(type) {
+function useLl(type){
   if(!G.lifelines[type])return;
-  G.lifelines[type]=false; AUDIO.lifeline();
+  G.lifelines[type]=false;AUDIO.lifeline();
   const q=G.questions[G.qIdx];const lbls=['A','B','C','D'];
-
   if(type==='5050'){
     document.getElementById('ll5050').disabled=true;
     const wrong=shuffle([0,1,2,3].filter(i=>i!==q.a));
@@ -1549,12 +1486,7 @@ function useLl(type) {
 // KEY BINDINGS
 // ============================================================
 document.addEventListener('DOMContentLoaded',()=>{
-  const km={
-    'soloName': startSolo,
-    'hostName': createRoom,
-    'joinCode': joinRoom,
-    'guestName': ()=>document.getElementById('joinCode').focus()
-  };
+  const km={'soloName':startSolo,'hostName':createRoom,'joinCode':joinRoom,'guestName':()=>document.getElementById('joinCode').focus()};
   Object.entries(km).forEach(([id,fn])=>{
     const el=document.getElementById(id);
     if(el)el.addEventListener('keypress',e=>{if(e.key==='Enter')fn();});
