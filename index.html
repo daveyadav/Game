@@ -9,242 +9,234 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <style>
-/* ===================================================== RESET & ROOT ===================================================== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --gold: #FFD700; --gold-dim: #c9a227; --gold-soft: rgba(255,215,0,0.15); --gold-glow: rgba(255,215,0,0.4);
-  --midnight: #04060f; --navy: #080d1f; --card: #0c1428; --card2: #0f1a34;
-  --blue: #1a3a8a; --blue-glow: rgba(26,58,138,0.6);
-  --correct: #00e676; --correct-bg: rgba(0,230,118,0.12);
-  --wrong: #ff1744; --wrong-bg: rgba(255,23,68,0.12);
-  --highlight: #3d6fd4; --text: rgba(255,255,255,0.92); --text-dim: rgba(255,255,255,0.5);
-  --border: rgba(255,215,0,0.2); --border-glow: rgba(255,215,0,0.5);
-  --cat-general: #3d6fd4; --cat-movies: #d43d9a; --cat-sports: #3dd47c;
-  --cat-politics: #d47c3d; --cat-world: #3dd4d4;
+/* ===================================================== ROOT ===================================================== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#FFD700;--gold-dim:#c9a227;--gold-soft:rgba(255,215,0,0.15);--gold-glow:rgba(255,215,0,0.4);
+  --midnight:#04060f;--navy:#080d1f;--card:#0c1428;--card2:#0f1a34;
+  --blue:#1a3a8a;--correct:#00e676;--wrong:#ff1744;
+  --text:rgba(255,255,255,0.92);--text-dim:rgba(255,255,255,0.5);
+  --border:rgba(255,215,0,0.2);
 }
-html { height: 100%; }
-body {
-  font-family: 'Rajdhani', sans-serif; background: var(--midnight);
-  color: var(--text); min-height: 100vh; overflow-x: hidden; position: relative;
-}
-body::before {
-  content: ''; position: fixed; inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,58,138,0.25) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,215,0,0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(26,58,138,0.12) 0%, transparent 60%);
-  pointer-events: none; z-index: 0;
-}
+html{height:100%;}
+body{font-family:'Rajdhani',sans-serif;background:var(--midnight);color:var(--text);min-height:100vh;overflow-x:hidden;position:relative;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(26,58,138,0.25) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(255,215,0,0.04) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 50%,rgba(26,58,138,0.12) 0%,transparent 60%);pointer-events:none;z-index:0;}
 
 /* ===================================================== AUDIO CONTROLS ===================================================== */
-.audio-controls {
-  position: fixed; top: 14px; right: 14px; z-index: 900;
-  display: flex; gap: 8px;
-}
-.audio-toggle {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: rgba(255,215,0,0.07); border: 1px solid rgba(255,215,0,0.22);
-  color: rgba(255,215,0,0.75); cursor: pointer; font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; flex-shrink: 0;
-}
-.audio-toggle:hover { border-color: var(--gold); background: rgba(255,215,0,0.15); color: var(--gold); }
-.audio-toggle.muted { opacity: 0.35; }
+.audio-controls{position:fixed;top:14px;right:14px;z-index:900;display:flex;gap:8px;}
+.audio-toggle{width:36px;height:36px;border-radius:50%;background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.22);color:rgba(255,215,0,0.75);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.audio-toggle:hover{border-color:var(--gold);background:rgba(255,215,0,0.15);color:var(--gold);}
+.audio-toggle.muted{opacity:0.35;}
 
-/* ===================================================== SCREEN MANAGEMENT ===================================================== */
-.screen { display: none; min-height: 100vh; position: relative; z-index: 1; flex-direction: column; }
-.screen.active { display: flex; }
+/* ===================================================== SCREENS ===================================================== */
+.screen{display:none;min-height:100vh;position:relative;z-index:1;flex-direction:column;}
+.screen.active{display:flex;}
 
-/* ===================================================== HOME SCREEN ===================================================== */
-#homeScreen { align-items: center; justify-content: center; text-align: center; padding: 30px 20px; }
-.flag-row { font-size: clamp(3rem,8vw,5rem); margin-bottom:10px; animation:flagFloat 3s ease-in-out infinite; filter:drop-shadow(0 0 20px rgba(255,100,0,0.4)); }
-@keyframes flagFloat { 0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-8px) rotate(2deg);} }
-.home-title {
-  font-family: 'Cinzel Decorative', serif; font-size: clamp(2rem,6vw,4.5rem); font-weight: 900;
-  background: linear-gradient(135deg, #fff8dc 0%, #FFD700 40%, #FFA500 70%, #FFD700 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  filter: drop-shadow(0 0 30px rgba(255,215,0,0.6)); line-height: 1.15; margin-bottom: 8px;
-}
-.home-sub { font-family:'Cinzel',serif; font-size:clamp(0.75rem,2vw,1rem); color:rgba(255,215,0,0.6); letter-spacing:6px; text-transform:uppercase; margin-bottom:14px; }
-.home-cats { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:30px; }
-.cat-badge { font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:1.5px; padding:5px 12px; border-radius:20px; font-weight:700; text-transform:uppercase; }
-.cat-badge.general  { background:rgba(61,111,212,0.15); border:1px solid rgba(61,111,212,0.4); color:#7ca4f4; }
-.cat-badge.movies   { background:rgba(212,61,154,0.15); border:1px solid rgba(212,61,154,0.4); color:#f47cc8; }
-.cat-badge.sports   { background:rgba(61,212,124,0.15); border:1px solid rgba(61,212,124,0.4); color:#7cf4a8; }
-.cat-badge.politics { background:rgba(212,124,61,0.15); border:1px solid rgba(212,124,61,0.4); color:#f4a87c; }
-.cat-badge.world    { background:rgba(61,212,212,0.15); border:1px solid rgba(61,212,212,0.4); color:#7cf4f4; }
-.divider { width:180px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:0 auto 30px; }
-.home-menu { display:flex; flex-direction:column; gap:16px; width:100%; max-width:320px; }
+/* ===================================================== HOME ===================================================== */
+#homeScreen{align-items:center;justify-content:center;text-align:center;padding:30px 20px;}
+.flag-row{font-size:clamp(3rem,8vw,5rem);margin-bottom:10px;animation:flagFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,100,0,0.4));}
+@keyframes flagFloat{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-8px) rotate(2deg);}}
+.home-title{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,6vw,4.5rem);font-weight:900;background:linear-gradient(135deg,#fff8dc 0%,#FFD700 40%,#FFA500 70%,#FFD700 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(255,215,0,0.6));line-height:1.15;margin-bottom:8px;}
+.home-sub{font-family:'Cinzel',serif;font-size:clamp(0.75rem,2vw,1rem);color:rgba(255,215,0,0.6);letter-spacing:6px;text-transform:uppercase;margin-bottom:14px;}
+.home-cats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:22px;}
+.cat-badge{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:1.5px;padding:5px 12px;border-radius:20px;font-weight:700;text-transform:uppercase;}
+.cat-badge.general{background:rgba(61,111,212,0.15);border:1px solid rgba(61,111,212,0.4);color:#7ca4f4;}
+.cat-badge.movies{background:rgba(212,61,154,0.15);border:1px solid rgba(212,61,154,0.4);color:#f47cc8;}
+.cat-badge.sports{background:rgba(61,212,124,0.15);border:1px solid rgba(61,212,124,0.4);color:#7cf4a8;}
+.cat-badge.politics{background:rgba(212,124,61,0.15);border:1px solid rgba(212,124,61,0.4);color:#f4a87c;}
+.cat-badge.world{background:rgba(61,212,212,0.15);border:1px solid rgba(61,212,212,0.4);color:#7cf4f4;}
+.ai-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(99,48,212,0.25),rgba(48,99,212,0.25));border:1px solid rgba(120,80,255,0.4);padding:6px 16px;border-radius:20px;font-family:'Cinzel',serif;font-size:0.7rem;color:rgba(180,150,255,0.9);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;}
+.divider{width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 28px;}
+.home-menu{display:flex;flex-direction:column;gap:16px;width:100%;max-width:320px;}
 
 /* ===================================================== BUTTONS ===================================================== */
-.btn {
-  font-family:'Cinzel',serif; font-weight:700; font-size:0.95rem; letter-spacing:2px;
-  text-transform:uppercase; padding:16px 36px; border-radius:50px; cursor:pointer;
-  border:2px solid var(--gold); background:transparent; color:var(--gold);
-  transition:all 0.25s ease; position:relative; overflow:hidden; white-space:nowrap;
-}
-.btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,215,0,0.18)); opacity:0; transition:opacity 0.25s; }
-.btn:hover::before { opacity:1; }
-.btn:hover { box-shadow:0 0 35px var(--gold-glow); transform:translateY(-2px); }
-.btn:active { transform:translateY(0); }
-.btn-primary { background:linear-gradient(135deg,#1a3a8a 0%,#0a1a50 100%); border-color:var(--gold); box-shadow:0 0 20px rgba(26,58,138,0.4),inset 0 1px 0 rgba(255,255,255,0.1); }
-.btn-primary:hover { box-shadow:0 0 40px var(--gold-glow),0 0 20px rgba(26,58,138,0.6); }
-.btn-sm { padding:10px 22px; font-size:0.8rem; letter-spacing:1px; }
-.btn-danger { border-color:var(--wrong); color:var(--wrong); }
-.btn-danger:hover { box-shadow:0 0 25px rgba(255,23,68,0.4); }
+.btn{font-family:'Cinzel',serif;font-weight:700;font-size:0.95rem;letter-spacing:2px;text-transform:uppercase;padding:16px 36px;border-radius:50px;cursor:pointer;border:2px solid var(--gold);background:transparent;color:var(--gold);transition:all 0.25s ease;position:relative;overflow:hidden;white-space:nowrap;}
+.btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,215,0,0.18));opacity:0;transition:opacity 0.25s;}
+.btn:hover::before{opacity:1;}
+.btn:hover{box-shadow:0 0 35px var(--gold-glow);transform:translateY(-2px);}
+.btn:active{transform:translateY(0);}
+.btn-primary{background:linear-gradient(135deg,#1a3a8a 0%,#0a1a50 100%);border-color:var(--gold);box-shadow:0 0 20px rgba(26,58,138,0.4),inset 0 1px 0 rgba(255,255,255,0.1);}
+.btn-primary:hover{box-shadow:0 0 40px var(--gold-glow),0 0 20px rgba(26,58,138,0.6);}
+.btn-sm{padding:10px 22px;font-size:0.8rem;letter-spacing:1px;}
+.btn-danger{border-color:var(--wrong);color:var(--wrong);}
+.btn-danger:hover{box-shadow:0 0 25px rgba(255,23,68,0.4);}
 
 /* ===================================================== CARD ===================================================== */
-.card {
-  background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%); border:1px solid var(--border);
-  border-radius:20px; padding:36px; width:100%; max-width:460px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.card-title { font-family:'Cinzel',serif; font-weight:700; font-size:clamp(1.3rem,3vw,1.7rem); color:var(--gold); text-align:center; margin-bottom:28px; }
+.card{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border);border-radius:20px;padding:36px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);}
+.card-title{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(1.3rem,3vw,1.7rem);color:var(--gold);text-align:center;margin-bottom:28px;}
 
 /* ===================================================== FORM ===================================================== */
-.form-group { margin-bottom:20px; }
-.form-label { display:block; color:rgba(255,215,0,0.75); font-size:0.85rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px; font-family:'Cinzel',serif; }
-.input-field { width:100%; padding:14px 18px; background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,215,0,0.25); border-radius:10px; color:white; font-size:1rem; font-family:'Rajdhani',sans-serif; font-weight:500; outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
-.input-field:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(255,215,0,0.08); }
-.input-field::placeholder { color:rgba(255,255,255,0.25); }
-.input-code { text-align:center; letter-spacing:8px; font-size:1.5rem; font-family:'Cinzel',serif; text-transform:uppercase; }
-.cat-select-group { margin-bottom:20px; }
-.cat-select-label { display:block; color:rgba(255,215,0,0.75); font-size:0.85rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:10px; font-family:'Cinzel',serif; }
-.cat-checkboxes { display:flex; flex-wrap:wrap; gap:8px; }
-.cat-check-btn { padding:7px 14px; border-radius:20px; font-family:'Cinzel',serif; font-size:0.72rem; font-weight:700; letter-spacing:1px; cursor:pointer; border:1.5px solid; transition:all 0.2s; text-transform:uppercase; background:transparent; }
-.cat-check-btn.general  { border-color:rgba(61,111,212,0.5);  color:#7ca4f4; }
-.cat-check-btn.movies   { border-color:rgba(212,61,154,0.5);  color:#f47cc8; }
-.cat-check-btn.sports   { border-color:rgba(61,212,124,0.5);  color:#7cf4a8; }
-.cat-check-btn.politics { border-color:rgba(212,124,61,0.5);  color:#f4a87c; }
-.cat-check-btn.world    { border-color:rgba(61,212,212,0.5);  color:#7cf4f4; }
-.cat-check-btn.active.general  { background:rgba(61,111,212,0.25); border-color:#7ca4f4; }
-.cat-check-btn.active.movies   { background:rgba(212,61,154,0.25); border-color:#f47cc8; }
-.cat-check-btn.active.sports   { background:rgba(61,212,124,0.25); border-color:#7cf4a8; }
-.cat-check-btn.active.politics { background:rgba(212,124,61,0.25); border-color:#f4a87c; }
-.cat-check-btn.active.world    { background:rgba(61,212,212,0.25); border-color:#7cf4f4; }
+.form-group{margin-bottom:20px;}
+.form-label{display:block;color:rgba(255,215,0,0.75);font-size:0.85rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-family:'Cinzel',serif;}
+.input-field{width:100%;padding:14px 18px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,215,0,0.25);border-radius:10px;color:white;font-size:1rem;font-family:'Rajdhani',sans-serif;font-weight:500;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.input-field:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,215,0,0.08);}
+.input-field::placeholder{color:rgba(255,255,255,0.25);}
+.input-code{text-align:center;letter-spacing:8px;font-size:1.5rem;font-family:'Cinzel',serif;text-transform:uppercase;}
+.cat-select-group{margin-bottom:20px;}
+.cat-select-label{display:block;color:rgba(255,215,0,0.75);font-size:0.85rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-family:'Cinzel',serif;}
+.cat-checkboxes{display:flex;flex-wrap:wrap;gap:8px;}
+.cat-check-btn{padding:7px 14px;border-radius:20px;font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700;letter-spacing:1px;cursor:pointer;border:1.5px solid;transition:all 0.2s;text-transform:uppercase;background:transparent;}
+.cat-check-btn.general{border-color:rgba(61,111,212,0.5);color:#7ca4f4;}
+.cat-check-btn.movies{border-color:rgba(212,61,154,0.5);color:#f47cc8;}
+.cat-check-btn.sports{border-color:rgba(61,212,124,0.5);color:#7cf4a8;}
+.cat-check-btn.politics{border-color:rgba(212,124,61,0.5);color:#f4a87c;}
+.cat-check-btn.world{border-color:rgba(61,212,212,0.5);color:#7cf4f4;}
+.cat-check-btn.active.general{background:rgba(61,111,212,0.25);border-color:#7ca4f4;}
+.cat-check-btn.active.movies{background:rgba(212,61,154,0.25);border-color:#f47cc8;}
+.cat-check-btn.active.sports{background:rgba(61,212,124,0.25);border-color:#7cf4a8;}
+.cat-check-btn.active.politics{background:rgba(212,124,61,0.25);border-color:#f4a87c;}
+.cat-check-btn.active.world{background:rgba(61,212,212,0.25);border-color:#7cf4f4;}
 
-/* ===================================================== MODE/PAGE ===================================================== */
-.centered-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:30px 20px; gap:24px; }
-.page-title { font-family:'Cinzel',serif; font-size:clamp(1.4rem,3.5vw,2rem); color:var(--gold); text-align:center; font-weight:700; }
-.mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:560px; width:100%; }
+/* ===================================================== MODE / PAGES ===================================================== */
+.centered-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px 20px;gap:24px;}
+.page-title{font-family:'Cinzel',serif;font-size:clamp(1.4rem,3.5vw,2rem);color:var(--gold);text-align:center;font-weight:700;}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:560px;width:100%;}
 @media(max-width:480px){.mode-grid{grid-template-columns:1fr;}}
-.mode-card { background:linear-gradient(135deg,var(--card),var(--card2)); border:1.5px solid var(--border); border-radius:18px; padding:28px 20px; cursor:pointer; text-align:center; transition:all 0.3s ease; box-shadow:0 8px 32px rgba(0,0,0,0.3); }
-.mode-card:hover { border-color:var(--gold); box-shadow:0 0 30px var(--gold-glow),0 12px 40px rgba(0,0,0,0.4); transform:translateY(-4px); }
-.mode-icon { font-size:3rem; display:block; margin-bottom:12px; }
-.mode-title { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--gold); margin-bottom:8px; font-weight:700; }
-.mode-desc { font-size:0.88rem; color:var(--text-dim); line-height:1.5; }
+.mode-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1.5px solid var(--border);border-radius:18px;padding:28px 20px;cursor:pointer;text-align:center;transition:all 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+.mode-card:hover{border-color:var(--gold);box-shadow:0 0 30px var(--gold-glow),0 12px 40px rgba(0,0,0,0.4);transform:translateY(-4px);}
+.mode-icon{font-size:3rem;display:block;margin-bottom:12px;}
+.mode-title{font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);margin-bottom:8px;font-weight:700;}
+.mode-desc{font-size:0.88rem;color:var(--text-dim);line-height:1.5;}
 
 /* ===================================================== WAITING ROOM ===================================================== */
-.room-code-box { font-family:'Cinzel Decorative',serif; font-size:clamp(2rem,8vw,3.5rem); font-weight:900; color:var(--gold); letter-spacing:10px; text-align:center; padding:22px 30px; background:rgba(255,215,0,0.04); border:2px dashed rgba(255,215,0,0.35); border-radius:16px; margin:16px 0; filter:drop-shadow(0 0 12px rgba(255,215,0,0.3)); }
-.waiting-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:12px; margin:16px 0; }
-.waiting-player-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.15); border-radius:12px; padding:14px 8px; text-align:center; }
-.wp-avatar { font-size:2rem; display:block; margin-bottom:6px; }
-.wp-name { font-size:0.82rem; color:rgba(255,255,255,0.8); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.wp-badge { font-size:0.65rem; color:var(--gold); font-family:'Cinzel',serif; display:block; margin-top:3px; }
+.room-code-box{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,8vw,3.5rem);font-weight:900;color:var(--gold);letter-spacing:10px;text-align:center;padding:22px 30px;background:rgba(255,215,0,0.04);border:2px dashed rgba(255,215,0,0.35);border-radius:16px;margin:16px 0;filter:drop-shadow(0 0 12px rgba(255,215,0,0.3));}
+.waiting-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin:16px 0;}
+.waiting-player-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px 8px;text-align:center;}
+.wp-avatar{font-size:2rem;display:block;margin-bottom:6px;}
+.wp-name{font-size:0.82rem;color:rgba(255,255,255,0.8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.wp-badge{font-size:0.65rem;color:var(--gold);font-family:'Cinzel',serif;display:block;margin-top:3px;}
 
 /* ===================================================== GAME SCREEN ===================================================== */
-#gameScreen { flex-direction:row; min-height:100vh; }
-.prize-ladder { width:195px; flex-shrink:0; background:rgba(0,0,0,0.35); border-right:1px solid rgba(255,215,0,0.12); padding:16px 8px; overflow-y:auto; display:flex; flex-direction:column; gap:3px; }
-.prize-ladder-title { font-family:'Cinzel',serif; font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; letter-spacing:2px; text-transform:uppercase; padding-bottom:10px; margin-bottom:6px; border-bottom:1px solid rgba(255,215,0,0.1); }
-.prize-item { display:flex; justify-content:space-between; align-items:center; padding:5px 10px; border-radius:6px; font-size:0.75rem; color:rgba(255,255,255,0.4); transition:all 0.4s ease; }
-.prize-item .pnum { opacity:0.5; font-size:0.65rem; }
-.prize-item.safe { color:var(--correct); font-weight:600; }
-.prize-item.done { color:rgba(255,215,0,0.5); }
-.prize-item.current { background:linear-gradient(135deg,#FFD700,#FFA500); color:#000; font-weight:700; padding:7px 12px; box-shadow:0 0 20px rgba(255,215,0,0.5); transform:scale(1.04); border-radius:8px; }
-.prize-item.current .pnum { opacity:0.7; }
-.game-main { flex:1; display:flex; flex-direction:column; align-items:center; padding:20px 16px; overflow-y:auto; }
-.game-topbar { display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
-.topbar-chip { background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.2); padding:6px 16px; border-radius:20px; font-size:0.85rem; color:rgba(255,215,0,0.8); font-family:'Cinzel',serif; font-weight:600; }
-.quit-game-btn { background:rgba(255,23,68,0.1); border:1px solid rgba(255,23,68,0.3); color:rgba(255,23,68,0.7); padding:6px 14px; border-radius:20px; font-size:0.75rem; font-family:'Cinzel',serif; font-weight:700; cursor:pointer; transition:all 0.2s; letter-spacing:1px; }
-.quit-game-btn:hover { background:rgba(255,23,68,0.2); border-color:var(--wrong); color:var(--wrong); }
-.cat-chip { padding:4px 12px; border-radius:20px; font-family:'Cinzel',serif; font-size:0.68rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
-.cat-chip.general  { background:rgba(61,111,212,0.2);  border:1px solid rgba(61,111,212,0.5); color:#7ca4f4; }
-.cat-chip.movies   { background:rgba(212,61,154,0.2);  border:1px solid rgba(212,61,154,0.5); color:#f47cc8; }
-.cat-chip.sports   { background:rgba(61,212,124,0.2);  border:1px solid rgba(61,212,124,0.5); color:#7cf4a8; }
-.cat-chip.politics { background:rgba(212,124,61,0.2);  border:1px solid rgba(212,124,61,0.5); color:#f4a87c; }
-.cat-chip.world    { background:rgba(61,212,212,0.2);  border:1px solid rgba(61,212,212,0.5); color:#7cf4f4; }
-.timer-wrap { position:relative; width:80px; height:80px; margin-bottom:16px; }
-.timer-svg { width:80px; height:80px; transform:rotate(-90deg); }
-.tcbg { fill:none; stroke:rgba(255,215,0,0.12); stroke-width:5; }
-.tcfg { fill:none; stroke:var(--gold); stroke-width:5; stroke-linecap:round; stroke-dasharray:207; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear,stroke 0.5s; }
-.timer-num { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:'Cinzel',serif; font-weight:900; font-size:1.6rem; color:var(--gold); transition:color 0.5s; }
-.lifelines { display:flex; gap:14px; justify-content:center; margin-bottom:18px; }
-.ll-btn { width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg,#1a3a8a,#0a1a50); border:2px solid rgba(255,215,0,0.4); color:white; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:1.3rem; transition:all 0.25s; box-shadow:0 4px 16px rgba(0,0,0,0.4); }
-.ll-btn:hover:not(:disabled) { border-color:var(--gold); box-shadow:0 0 20px var(--gold-glow); transform:scale(1.1); }
-.ll-btn:disabled { opacity:0.25; cursor:not-allowed; }
-.ll-label { font-size:0.42rem; color:rgba(255,215,0,0.7); letter-spacing:0.5px; font-family:'Cinzel',serif; text-transform:uppercase; }
-.question-box { background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%); border:1.5px solid rgba(255,215,0,0.3); border-radius:18px; padding:24px 28px; text-align:center; max-width:680px; width:100%; margin-bottom:22px; box-shadow:0 8px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.03); position:relative; overflow:hidden; }
-.question-box::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
-.q-meta { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:10px; }
-.q-num { font-family:'Cinzel',serif; font-size:0.72rem; color:rgba(255,215,0,0.55); letter-spacing:3px; text-transform:uppercase; }
-.q-text { font-size:clamp(1rem,2.5vw,1.25rem); font-weight:600; line-height:1.65; color:white; }
-.options-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:680px; width:100%; }
+#gameScreen{flex-direction:row;min-height:100vh;}
+.prize-ladder{width:195px;flex-shrink:0;background:rgba(0,0,0,0.35);border-right:1px solid rgba(255,215,0,0.12);padding:16px 8px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;}
+.prize-ladder-title{font-family:'Cinzel',serif;font-size:0.7rem;color:rgba(255,215,0,0.5);text-align:center;letter-spacing:2px;text-transform:uppercase;padding-bottom:10px;margin-bottom:6px;border-bottom:1px solid rgba(255,215,0,0.1);}
+.prize-item{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;border-radius:6px;font-size:0.75rem;color:rgba(255,255,255,0.4);transition:all 0.4s ease;}
+.prize-item .pnum{opacity:0.5;font-size:0.65rem;}
+.prize-item.safe{color:var(--correct);font-weight:600;}
+.prize-item.done{color:rgba(255,215,0,0.5);}
+.prize-item.current{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;font-weight:700;padding:7px 12px;box-shadow:0 0 20px rgba(255,215,0,0.5);transform:scale(1.04);border-radius:8px;}
+.prize-item.current .pnum{opacity:0.7;}
+.game-main{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 16px;overflow-y:auto;}
+.game-topbar{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.topbar-chip{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);padding:6px 16px;border-radius:20px;font-size:0.85rem;color:rgba(255,215,0,0.8);font-family:'Cinzel',serif;font-weight:600;}
+.quit-game-btn{background:rgba(255,23,68,0.08);border:1px solid rgba(255,23,68,0.3);color:rgba(255,100,120,0.8);padding:6px 14px;border-radius:20px;font-size:0.75rem;font-family:'Cinzel',serif;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:1px;}
+.quit-game-btn:hover{background:rgba(255,23,68,0.18);border-color:var(--wrong);color:var(--wrong);}
+.cat-chip{padding:4px 12px;border-radius:20px;font-family:'Cinzel',serif;font-size:0.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.cat-chip.general{background:rgba(61,111,212,0.2);border:1px solid rgba(61,111,212,0.5);color:#7ca4f4;}
+.cat-chip.movies{background:rgba(212,61,154,0.2);border:1px solid rgba(212,61,154,0.5);color:#f47cc8;}
+.cat-chip.sports{background:rgba(61,212,124,0.2);border:1px solid rgba(61,212,124,0.5);color:#7cf4a8;}
+.cat-chip.politics{background:rgba(212,124,61,0.2);border:1px solid rgba(212,124,61,0.5);color:#f4a87c;}
+.cat-chip.world{background:rgba(61,212,212,0.2);border:1px solid rgba(61,212,212,0.5);color:#7cf4f4;}
+.timer-wrap{position:relative;width:80px;height:80px;margin-bottom:16px;}
+.timer-svg{width:80px;height:80px;transform:rotate(-90deg);}
+.tcbg{fill:none;stroke:rgba(255,215,0,0.12);stroke-width:5;}
+.tcfg{fill:none;stroke:var(--gold);stroke-width:5;stroke-linecap:round;stroke-dasharray:207;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke 0.5s;}
+.timer-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cinzel',serif;font-weight:900;font-size:1.6rem;color:var(--gold);transition:color 0.5s;}
+.lifelines{display:flex;gap:14px;justify-content:center;margin-bottom:18px;}
+.ll-btn{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#1a3a8a,#0a1a50);border:2px solid rgba(255,215,0,0.4);color:white;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:1.3rem;transition:all 0.25s;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.ll-btn:hover:not(:disabled){border-color:var(--gold);box-shadow:0 0 20px var(--gold-glow);transform:scale(1.1);}
+.ll-btn:disabled{opacity:0.25;cursor:not-allowed;}
+.ll-label{font-size:0.42rem;color:rgba(255,215,0,0.7);letter-spacing:0.5px;font-family:'Cinzel',serif;text-transform:uppercase;}
+.question-box{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1.5px solid rgba(255,215,0,0.3);border-radius:18px;padding:24px 28px;text-align:center;max-width:680px;width:100%;margin-bottom:22px;box-shadow:0 8px 40px rgba(0,0,0,0.4);position:relative;overflow:hidden;}
+.question-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.q-meta{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;}
+.q-num{font-family:'Cinzel',serif;font-size:0.72rem;color:rgba(255,215,0,0.55);letter-spacing:3px;text-transform:uppercase;}
+.q-text{font-size:clamp(1rem,2.5vw,1.25rem);font-weight:600;line-height:1.65;color:white;}
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px;width:100%;}
 @media(max-width:600px){.options-grid{grid-template-columns:1fr;}}
-.opt-btn { display:flex; align-items:center; gap:12px; padding:14px 18px; border-radius:50px; background:linear-gradient(135deg,#0c1428,#0f1e3a); border:1.5px solid rgba(58,107,212,0.5); color:white; cursor:pointer; font-size:0.95rem; font-weight:600; font-family:'Rajdhani',sans-serif; text-align:left; transition:all 0.22s ease; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
-.opt-lbl { font-family:'Cinzel',serif; font-weight:700; color:var(--gold); font-size:0.9rem; min-width:22px; flex-shrink:0; }
-.opt-btn:hover:not(:disabled) { background:linear-gradient(135deg,#162240,#1e3060); border-color:var(--gold); box-shadow:0 0 22px rgba(255,215,0,0.15); }
-.opt-btn.selected { background:linear-gradient(135deg,#1a3a8a,#0e2460); border-color:var(--gold); box-shadow:0 0 28px rgba(255,215,0,0.2); }
-.opt-btn.correct { background:linear-gradient(135deg,#003d18,#005820)!important; border-color:var(--correct)!important; color:var(--correct); box-shadow:0 0 28px rgba(0,230,118,0.25)!important; animation:correctPop 0.45s ease; }
-.opt-btn.correct .opt-lbl { color:var(--correct); }
-.opt-btn.wrong { background:linear-gradient(135deg,#3d0010,#5a0018)!important; border-color:var(--wrong)!important; color:var(--wrong); }
-.opt-btn.wrong .opt-lbl { color:var(--wrong); }
-.opt-btn.faded { opacity:0.2; pointer-events:none; }
-.opt-btn:disabled { cursor:not-allowed; }
-@keyframes correctPop { 0%{transform:scale(1);} 40%{transform:scale(1.035);} 100%{transform:scale(1);} }
-.players-panel { width:195px; flex-shrink:0; background:rgba(0,0,0,0.35); border-left:1px solid rgba(255,215,0,0.12); padding:16px 12px; overflow-y:auto; }
-.players-title { font-family:'Cinzel',serif; font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; letter-spacing:2px; text-transform:uppercase; padding-bottom:10px; margin-bottom:10px; border-bottom:1px solid rgba(255,215,0,0.1); }
-.player-row { display:flex; align-items:center; gap:8px; padding:8px; border-radius:10px; margin-bottom:6px; background:rgba(255,255,255,0.03); border:1px solid transparent; transition:border-color 0.3s; }
-.player-row.me { border-color:rgba(255,215,0,0.25); }
-.p-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#1a3a8a,#0a1a50); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
-.p-info { flex:1; min-width:0; }
-.p-name { font-size:0.8rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.p-score { font-size:0.72rem; color:var(--gold); font-family:'Cinzel',serif; }
-.p-dot { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.2); flex-shrink:0; transition:background 0.3s; }
-.p-dot.answered { background:var(--correct); box-shadow:0 0 6px rgba(0,230,118,0.6); }
+.opt-btn{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:50px;background:linear-gradient(135deg,#0c1428,#0f1e3a);border:1.5px solid rgba(58,107,212,0.5);color:white;cursor:pointer;font-size:0.95rem;font-weight:600;font-family:'Rajdhani',sans-serif;text-align:left;transition:all 0.22s ease;box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+.opt-lbl{font-family:'Cinzel',serif;font-weight:700;color:var(--gold);font-size:0.9rem;min-width:22px;flex-shrink:0;}
+.opt-btn:hover:not(:disabled){background:linear-gradient(135deg,#162240,#1e3060);border-color:var(--gold);box-shadow:0 0 22px rgba(255,215,0,0.15);}
+.opt-btn.selected{background:linear-gradient(135deg,#1a3a8a,#0e2460);border-color:var(--gold);}
+.opt-btn.correct{background:linear-gradient(135deg,#003d18,#005820)!important;border-color:var(--correct)!important;color:var(--correct);box-shadow:0 0 28px rgba(0,230,118,0.25)!important;animation:correctPop 0.45s ease;}
+.opt-btn.correct .opt-lbl{color:var(--correct);}
+.opt-btn.wrong{background:linear-gradient(135deg,#3d0010,#5a0018)!important;border-color:var(--wrong)!important;color:var(--wrong);}
+.opt-btn.wrong .opt-lbl{color:var(--wrong);}
+.opt-btn.faded{opacity:0.2;pointer-events:none;}
+.opt-btn:disabled{cursor:not-allowed;}
+@keyframes correctPop{0%{transform:scale(1);}40%{transform:scale(1.035);}100%{transform:scale(1);}}
+.players-panel{width:195px;flex-shrink:0;background:rgba(0,0,0,0.35);border-left:1px solid rgba(255,215,0,0.12);padding:16px 12px;overflow-y:auto;}
+.players-title{font-family:'Cinzel',serif;font-size:0.7rem;color:rgba(255,215,0,0.5);text-align:center;letter-spacing:2px;text-transform:uppercase;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid rgba(255,215,0,0.1);}
+.player-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:10px;margin-bottom:6px;background:rgba(255,255,255,0.03);border:1px solid transparent;transition:border-color 0.3s;}
+.player-row.me{border-color:rgba(255,215,0,0.25);}
+.p-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1a3a8a,#0a1a50);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;}
+.p-info{flex:1;min-width:0;}
+.p-name{font-size:0.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.p-score{font-size:0.72rem;color:var(--gold);font-family:'Cinzel',serif;}
+.p-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;transition:background 0.3s;}
+.p-dot.answered{background:var(--correct);box-shadow:0 0 6px rgba(0,230,118,0.6);}
 
 /* ===================================================== RESULTS ===================================================== */
-#resultScreen { align-items:center; justify-content:center; text-align:center; padding:30px 20px; }
-.result-trophy { font-size:clamp(4rem,12vw,6rem); margin-bottom:16px; animation:trophyBounce 0.8s ease; }
-@keyframes trophyBounce { 0%{transform:scale(0) rotate(-10deg);}60%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0);} }
-.result-heading { font-family:'Cinzel Decorative',serif; font-weight:900; font-size:clamp(1.6rem,5vw,2.8rem); color:var(--gold); filter:drop-shadow(0 0 20px rgba(255,215,0,0.5)); margin-bottom:8px; }
-.result-sub { font-size:clamp(1rem,2.5vw,1.3rem); color:rgba(255,255,255,0.7); margin-bottom:28px; }
-.leaderboard { width:100%; max-width:420px; background:rgba(0,0,0,0.2); border-radius:16px; overflow:hidden; margin-bottom:28px; }
-.lb-header { font-family:'Cinzel',serif; font-size:0.75rem; color:rgba(255,215,0,0.6); letter-spacing:2px; text-transform:uppercase; padding:12px 16px; border-bottom:1px solid rgba(255,215,0,0.1); }
-.lb-row { display:flex; align-items:center; gap:14px; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.2s; }
-.lb-row.lb-me { background:rgba(255,215,0,0.05); }
-.lb-rank { font-family:'Cinzel',serif; font-size:1.1rem; min-width:28px; }
-.lb-name { flex:1; text-align:left; font-size:0.95rem; font-weight:600; }
-.lb-pts { font-family:'Cinzel',serif; color:var(--gold); font-size:0.9rem; }
+#resultScreen{align-items:center;justify-content:center;text-align:center;padding:30px 20px;}
+.result-trophy{font-size:clamp(4rem,12vw,6rem);margin-bottom:16px;animation:trophyBounce 0.8s ease;}
+@keyframes trophyBounce{0%{transform:scale(0) rotate(-10deg);}60%{transform:scale(1.15) rotate(3deg);}100%{transform:scale(1) rotate(0);}}
+.result-heading{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(1.6rem,5vw,2.8rem);color:var(--gold);filter:drop-shadow(0 0 20px rgba(255,215,0,0.5));margin-bottom:8px;}
+.result-sub{font-size:clamp(1rem,2.5vw,1.3rem);color:rgba(255,255,255,0.7);margin-bottom:28px;}
+.leaderboard{width:100%;max-width:420px;background:rgba(0,0,0,0.2);border-radius:16px;overflow:hidden;margin-bottom:28px;}
+.lb-header{font-family:'Cinzel',serif;font-size:0.75rem;color:rgba(255,215,0,0.6);letter-spacing:2px;text-transform:uppercase;padding:12px 16px;border-bottom:1px solid rgba(255,215,0,0.1);}
+.lb-row{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.lb-row.lb-me{background:rgba(255,215,0,0.05);}
+.lb-rank{font-family:'Cinzel',serif;font-size:1.1rem;min-width:28px;}
+.lb-name{flex:1;text-align:left;font-size:0.95rem;font-weight:600;}
+.lb-pts{font-family:'Cinzel',serif;color:var(--gold);font-size:0.9rem;}
 
 /* ===================================================== OVERLAYS ===================================================== */
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.88); display:none; align-items:center; justify-content:center; z-index:1000; padding:20px; backdrop-filter:blur(4px); }
-.overlay.open { display:flex; }
-.overlay-box { background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%); border:1.5px solid var(--gold); border-radius:22px; padding:38px; text-align:center; max-width:440px; width:100%; box-shadow:0 0 60px rgba(255,215,0,0.15),0 30px 80px rgba(0,0,0,0.6); }
-.overlay-icon { font-size:3.5rem; margin-bottom:14px; display:block; }
-.overlay-title { font-family:'Cinzel',serif; font-weight:700; font-size:1.5rem; margin-bottom:14px; }
-.overlay-body { font-size:0.97rem; color:rgba(255,255,255,0.75); line-height:1.75; margin-bottom:22px; }
-.poll-row { display:flex; align-items:center; gap:10px; margin:8px 0; }
-.poll-lbl { font-family:'Cinzel',serif; color:var(--gold); font-weight:700; min-width:18px; font-size:0.9rem; }
-.poll-track { flex:1; background:rgba(255,255,255,0.08); border-radius:10px; height:22px; overflow:hidden; }
-.poll-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#1a3a8a,#3d6fd4); width:0; transition:width 1.1s ease; }
-.poll-pct { min-width:36px; text-align:right; font-size:0.85rem; color:rgba(255,255,255,0.75); }
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(4px);}
+.overlay.open{display:flex;}
+.overlay-box{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1.5px solid var(--gold);border-radius:22px;padding:38px;text-align:center;max-width:440px;width:100%;box-shadow:0 0 60px rgba(255,215,0,0.15),0 30px 80px rgba(0,0,0,0.6);}
+.overlay-icon{font-size:3.5rem;margin-bottom:14px;display:block;}
+.overlay-title{font-family:'Cinzel',serif;font-weight:700;font-size:1.5rem;margin-bottom:14px;}
+.overlay-body{font-size:0.97rem;color:rgba(255,255,255,0.75);line-height:1.75;margin-bottom:22px;}
+.poll-row{display:flex;align-items:center;gap:10px;margin:8px 0;}
+.poll-lbl{font-family:'Cinzel',serif;color:var(--gold);font-weight:700;min-width:18px;font-size:0.9rem;}
+.poll-track{flex:1;background:rgba(255,255,255,0.08);border-radius:10px;height:22px;overflow:hidden;}
+.poll-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#1a3a8a,#3d6fd4);width:0;transition:width 1.1s ease;}
+.poll-pct{min-width:36px;text-align:right;font-size:0.85rem;color:rgba(255,255,255,0.75);}
+
+/* Loading Overlay */
+.loading-overlay-box{background:linear-gradient(135deg,#060e1e 0%,#0c1a38 100%);border:1.5px solid rgba(120,80,255,0.5);border-radius:22px;padding:42px 38px;text-align:center;max-width:380px;width:100%;box-shadow:0 0 60px rgba(100,60,255,0.2),0 30px 80px rgba(0,0,0,0.6);}
+.loading-title{font-family:'Cinzel',serif;font-weight:700;font-size:1.4rem;color:var(--gold);margin-bottom:8px;}
+.loading-msg{font-size:0.9rem;color:rgba(255,255,255,0.6);min-height:24px;transition:opacity 0.4s;margin-bottom:20px;font-family:'Rajdhani',sans-serif;}
+.loading-gemini{font-size:0.68rem;color:rgba(150,120,255,0.6);font-family:'Cinzel',serif;letter-spacing:2px;text-transform:uppercase;margin-top:16px;}
+.ai-spinner{width:52px;height:52px;border:3px solid rgba(120,80,255,0.15);border-top-color:rgba(130,100,255,0.9);border-right-color:rgba(200,160,255,0.5);border-radius:50%;animation:aiSpin 0.9s linear infinite;margin:0 auto 16px;}
+@keyframes aiSpin{to{transform:rotate(360deg);}}
+.ai-dots{display:inline-flex;gap:6px;margin-top:4px;}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:rgba(150,120,255,0.7);animation:aiDotPulse 1.2s ease-in-out infinite;}
+.ai-dot:nth-child(2){animation-delay:0.2s;}
+.ai-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes aiDotPulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
 
 /* ===================================================== TOAST ===================================================== */
-.toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px); background:linear-gradient(135deg,#1a3a8a,#0a1a50); border:1px solid rgba(255,215,0,0.4); padding:11px 26px; border-radius:50px; color:white; font-size:0.9rem; font-weight:600; z-index:2000; transition:transform 0.35s ease,opacity 0.35s ease; white-space:nowrap; opacity:0; box-shadow:0 8px 32px rgba(0,0,0,0.4); }
-.toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:linear-gradient(135deg,#1a3a8a,#0a1a50);border:1px solid rgba(255,215,0,0.4);padding:11px 26px;border-radius:50px;color:white;font-size:0.9rem;font-weight:600;z-index:2000;transition:transform 0.35s ease,opacity 0.35s ease;white-space:nowrap;opacity:0;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 
 /* ===================================================== MISC ===================================================== */
-.back-btn { position:absolute; top:18px; left:18px; z-index:10; background:transparent; border:1px solid rgba(255,215,0,0.25); color:rgba(255,215,0,0.65); padding:7px 16px; border-radius:20px; cursor:pointer; font-size:0.82rem; font-family:'Cinzel',serif; letter-spacing:1px; transition:all 0.2s; }
-.back-btn:hover { border-color:var(--gold); color:var(--gold); }
-.spinner { width:36px; height:36px; border:3px solid rgba(255,215,0,0.15); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; margin:16px auto; }
-@keyframes spin { to{transform:rotate(360deg);} }
-::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px;}
-@media(max-width:768px){ #gameScreen{flex-direction:column;} .prize-ladder{display:none!important;} .players-panel{width:100%;border-left:none;border-top:1px solid rgba(255,215,0,0.12);max-height:140px;padding:10px;} .players-panel .players-title{margin-bottom:6px;} .card{padding:24px;} .overlay-box{padding:28px 22px;} }
-@media(max-width:480px){ .lifelines{gap:10px;} .ll-btn{width:50px;height:50px;font-size:1.1rem;} .question-box{padding:18px;} .audio-controls{top:10px;right:10px;} }
+.back-btn{position:absolute;top:18px;left:18px;z-index:10;background:transparent;border:1px solid rgba(255,215,0,0.25);color:rgba(255,215,0,0.65);padding:7px 16px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-family:'Cinzel',serif;letter-spacing:1px;transition:all 0.2s;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+.spinner{width:36px;height:36px;border:3px solid rgba(255,215,0,0.15);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;margin:16px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px;}
+
+/* ===================================================== RESPONSIVE ===================================================== */
+@media(max-width:768px){
+  #gameScreen{flex-direction:column;}
+  .prize-ladder{display:none!important;}
+  .players-panel{width:100%;border-left:none;border-top:1px solid rgba(255,215,0,0.12);max-height:140px;padding:10px;}
+  .card{padding:24px;}
+  .overlay-box{padding:28px 22px;}
+  .loading-overlay-box{padding:32px 22px;}
+}
+@media(max-width:480px){
+  .lifelines{gap:10px;}
+  .ll-btn{width:50px;height:50px;font-size:1.1rem;}
+  .question-box{padding:18px;}
+  .audio-controls{top:10px;right:10px;}
+}
 </style>
 </head>
 <body>
 
-<!-- Audio Controls (always visible) -->
+<!-- Audio Controls -->
 <div class="audio-controls">
   <button class="audio-toggle" id="btnMusic" onclick="toggleMusic()" title="Toggle Music">🎵</button>
   <button class="audio-toggle" id="btnSound" onclick="toggleSfx()" title="Toggle Sound Effects">🔊</button>
@@ -252,7 +244,7 @@ body::before {
 
 <div class="toast" id="toast"></div>
 
-<!-- HOME SCREEN -->
+<!-- ================================================================ HOME ================================================================ -->
 <div class="screen active" id="homeScreen">
   <div class="flag-row">🇳🇵</div>
   <div class="home-title">Nepal Ko<br>Crorepati</div>
@@ -264,6 +256,7 @@ body::before {
     <span class="cat-badge politics">🏛️ Politics</span>
     <span class="cat-badge world">🌍 World</span>
   </div>
+  <div class="ai-badge">✨ Powered by Gemini AI — Fresh Questions Every Game</div>
   <div class="divider"></div>
   <div class="home-menu">
     <button class="btn btn-primary" onclick="sfxClick();go('modeScreen')">🎮 &nbsp;Play Now</button>
@@ -271,7 +264,7 @@ body::before {
   </div>
 </div>
 
-<!-- MODE SELECTION -->
+<!-- ================================================================ MODE ================================================================ -->
 <div class="screen" id="modeScreen">
   <button class="back-btn" onclick="sfxClick();go('homeScreen')">← Back</button>
   <div class="centered-page">
@@ -291,7 +284,7 @@ body::before {
   </div>
 </div>
 
-<!-- SOLO SETUP -->
+<!-- ================================================================ SOLO SETUP ================================================================ -->
 <div class="screen" id="soloSetupScreen">
   <button class="back-btn" onclick="sfxClick();go('modeScreen')">← Back</button>
   <div class="centered-page">
@@ -325,25 +318,27 @@ body::before {
   </div>
 </div>
 
-<!-- MULTIPLAYER MENU -->
+<!-- ================================================================ MULTI MENU ================================================================ -->
 <div class="screen" id="multiScreen">
   <button class="back-btn" onclick="sfxClick();go('modeScreen')">← Back</button>
   <div class="centered-page">
     <div class="page-title">Multiplayer</div>
     <div class="mode-grid">
       <div class="mode-card" onclick="sfxClick();go('createRoomScreen')">
-        <span class="mode-icon">🏠</span><div class="mode-title">Create Room</div>
+        <span class="mode-icon">🏠</span>
+        <div class="mode-title">Create Room</div>
         <div class="mode-desc">Host a game — get a code to share with friends</div>
       </div>
       <div class="mode-card" onclick="sfxClick();go('joinRoomScreen')">
-        <span class="mode-icon">🚪</span><div class="mode-title">Join Room</div>
+        <span class="mode-icon">🚪</span>
+        <div class="mode-title">Join Room</div>
         <div class="mode-desc">Enter a 6-digit code to join your friend's game</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- CREATE ROOM -->
+<!-- ================================================================ CREATE ROOM ================================================================ -->
 <div class="screen" id="createRoomScreen">
   <button class="back-btn" onclick="sfxClick();go('multiScreen')">← Back</button>
   <div class="centered-page">
@@ -376,20 +371,26 @@ body::before {
   </div>
 </div>
 
-<!-- JOIN ROOM -->
+<!-- ================================================================ JOIN ROOM ================================================================ -->
 <div class="screen" id="joinRoomScreen">
   <button class="back-btn" onclick="sfxClick();go('multiScreen')">← Back</button>
   <div class="centered-page">
     <div class="card">
       <div class="card-title">🚪 Join Room</div>
-      <div class="form-group"><label class="form-label">Your Name</label><input id="guestName" class="input-field" placeholder="Enter your name…" maxlength="20"></div>
-      <div class="form-group"><label class="form-label">Room Code</label><input id="joinCode" class="input-field input-code" placeholder="ABC123" maxlength="6"></div>
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input id="guestName" class="input-field" placeholder="Enter your name…" maxlength="20">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Room Code</label>
+        <input id="joinCode" class="input-field input-code" placeholder="ABC123" maxlength="6">
+      </div>
       <button class="btn btn-primary" style="width:100%" onclick="joinRoom()">Join Game →</button>
     </div>
   </div>
 </div>
 
-<!-- WAITING ROOM -->
+<!-- ================================================================ WAITING ROOM ================================================================ -->
 <div class="screen" id="waitingScreen">
   <div class="centered-page" style="gap:16px">
     <div class="card" style="max-width:580px">
@@ -403,7 +404,7 @@ body::before {
       <div style="text-align:center;color:rgba(255,215,0,0.7);margin-bottom:14px;font-family:'Cinzel',serif;font-size:0.85rem">Players in room: <span id="playerCount" style="color:var(--gold)">0</span></div>
       <div class="waiting-grid" id="waitingGrid"></div>
       <div id="hostCtrl" style="display:none;text-align:center;margin-top:18px">
-        <div style="color:var(--text-dim);font-size:0.82rem;margin-bottom:12px">Waiting for players to join… (min. 1 to start)</div>
+        <div style="color:var(--text-dim);font-size:0.82rem;margin-bottom:12px">Waiting for players… (min. 1 to start)</div>
         <button class="btn btn-primary" onclick="hostStartGame()">▶ Start Game</button>
       </div>
       <div id="guestCtrl" style="display:none;text-align:center;margin-top:14px">
@@ -417,7 +418,7 @@ body::before {
   </div>
 </div>
 
-<!-- GAME SCREEN -->
+<!-- ================================================================ GAME SCREEN ================================================================ -->
 <div class="screen" id="gameScreen">
   <div class="prize-ladder" id="prizeLadder"><div class="prize-ladder-title">Prize</div></div>
   <div class="game-main">
@@ -459,36 +460,35 @@ body::before {
   </div>
 </div>
 
-<!-- RESULT SCREEN -->
+<!-- ================================================================ RESULT SCREEN ================================================================ -->
 <div class="screen" id="resultScreen">
   <div class="centered-page" style="gap:8px">
     <div class="result-trophy" id="resultEmoji">🏆</div>
     <div class="result-heading" id="resultHeading">Congratulations!</div>
     <div class="result-sub" id="resultSub">You won Rs. 1,00,00,000!</div>
     <div class="leaderboard" id="leaderboard" style="display:none"></div>
-    <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:16px">
-      <button class="btn btn-primary" onclick="sfxClick();playAgain()">🔄 Play Again</button>
-      <button class="btn" onclick="sfxClick();go('homeScreen')">🏠 Home</button>
-    </div>
+    <div id="resultActions" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:16px"></div>
   </div>
 </div>
 
-<!-- OVERLAYS -->
+<!-- ================================================================ OVERLAYS ================================================================ -->
+
+<!-- How to Play -->
 <div class="overlay" id="howToPlayOverlay">
   <div class="overlay-box" style="max-width:500px">
     <span class="overlay-icon">🇳🇵</span>
     <div class="overlay-title" style="color:var(--gold)">How to Play</div>
     <div class="overlay-body" style="text-align:left">
-      <p>🧠 <strong style="color:var(--gold)">Solo Mode:</strong> Answer 15 Nepal-based &amp; World questions across <em>General, Movies, Sports, Politics &amp; World</em>. Climb the prize ladder up to Rs. 1 Crore!</p><br>
-      <p>👥 <strong style="color:var(--gold)">Multiplayer:</strong> Create a room, share the 6-digit code. Min 15 questions. Everyone answers simultaneously — faster correct answers earn bonus points!</p><br>
-      <p>⏱️ <strong style="color:var(--gold)">30 seconds</strong> per question. Use your 3 lifelines wisely: <strong>50:50</strong>, <strong>Phone a Friend</strong>, and <strong>Audience Poll</strong>.</p><br>
-      <p>🔒 <strong style="color:var(--gold)">Safe Havens</strong> at Q5 &amp; Q11 — you keep that amount even if you go wrong later.</p><br>
-      <p>🎵 Use the top-right buttons to toggle <strong>music</strong> and <strong>sound effects</strong>. Questions never repeat for 2–3 games!</p>
+      <p>🤖 <strong style="color:var(--gold)">AI Questions:</strong> Every game generates fresh questions using Gemini AI — Nepal-focused (movies, sports, politics, culture) plus international knowledge. No repeats!</p><br>
+      <p>🧠 <strong style="color:var(--gold)">Solo Mode:</strong> Answer 15 questions, climb the prize ladder to Rs. 1 Crore. One wrong answer ends the game (safe havens at Q5 &amp; Q11).</p><br>
+      <p>👥 <strong style="color:var(--gold)">Multiplayer:</strong> Min 15 questions. Everyone answers simultaneously — faster correct answers earn bonus points. Players stay in the room after the game — host can start a new round!</p><br>
+      <p>⏱️ <strong style="color:var(--gold)">30 seconds</strong> per question. Use 3 lifelines in solo: <strong>50:50</strong>, <strong>Phone a Friend</strong>, <strong>Audience Poll</strong>.</p>
     </div>
     <button class="btn" onclick="sfxClick();closeOverlay('howToPlayOverlay')">Got it! ✓</button>
   </div>
 </div>
 
+<!-- Firebase Warning -->
 <div class="overlay" id="firebaseOverlay">
   <div class="overlay-box" style="max-width:500px">
     <span class="overlay-icon">⚠️</span>
@@ -496,15 +496,16 @@ body::before {
     <div class="overlay-body" style="text-align:left;font-size:0.88rem">
       Multiplayer requires a <strong>free Firebase Realtime Database</strong>.<br><br>
       1. Go to <strong style="color:var(--gold)">console.firebase.google.com</strong><br>
-      2. Create a new project → Enable <strong style="color:var(--gold)">Realtime Database</strong><br>
-      3. Set Rules: read &amp; write to <code style="color:#7ec8e3">true</code><br>
-      4. Replace the <code style="color:#7ec8e3">FIREBASE_CONFIG</code> object at the top of index.html<br><br>
+      2. Create project → Enable <strong style="color:var(--gold)">Realtime Database</strong><br>
+      3. Set Database Rules: read &amp; write = <code style="color:#7ec8e3">true</code><br>
+      4. Replace <code style="color:#7ec8e3">FIREBASE_CONFIG</code> in index.html<br><br>
       <em style="color:rgba(255,255,255,.45)">Solo mode works without any setup!</em>
     </div>
     <button class="btn" onclick="sfxClick();closeOverlay('firebaseOverlay')">OK, Got it</button>
   </div>
 </div>
 
+<!-- Wrong Answer -->
 <div class="overlay" id="wrongOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">😔</span>
@@ -514,6 +515,7 @@ body::before {
   </div>
 </div>
 
+<!-- Audience Poll -->
 <div class="overlay" id="audOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">👥</span>
@@ -523,6 +525,7 @@ body::before {
   </div>
 </div>
 
+<!-- Phone a Friend -->
 <div class="overlay" id="phoneOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">📞</span>
@@ -532,6 +535,7 @@ body::before {
   </div>
 </div>
 
+<!-- Quit Confirm -->
 <div class="overlay" id="quitOverlay">
   <div class="overlay-box">
     <span class="overlay-icon">🚪</span>
@@ -544,10 +548,40 @@ body::before {
   </div>
 </div>
 
+<!-- AI Loading Overlay -->
+<div class="overlay" id="loadingOverlay">
+  <div class="loading-overlay-box">
+    <span class="overlay-icon">🤖</span>
+    <div class="loading-title">Generating Questions</div>
+    <div class="loading-msg" id="loadingMsg">AI is thinking of Nepal questions…</div>
+    <div class="ai-spinner"></div>
+    <div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>
+    <div class="loading-gemini">✨ Powered by Gemini AI</div>
+  </div>
+</div>
+
+<!-- ================================================================ JAVASCRIPT ================================================================ -->
 <script>
-// ============================================================
-// FIREBASE CONFIG — replace with your own
-// ============================================================
+/*
+ ============================================================
+ GEMINI AI SETUP GUIDE
+ ============================================================
+ 1. Go to: https://aistudio.google.com/app/apikey
+ 2. Sign in with your Google account (completely FREE)
+ 3. Click "Create API key" → Copy it
+ 4. Paste it below replacing 'YOUR_GEMINI_KEY'
+
+ Free limits: 15 requests/min, 1500 requests/day
+ (More than enough for any quiz game!)
+ ============================================================
+*/
+const GEMINI_KEY = 'AQ.Ab8RN6LZl4huKo93QauSEGFNuF_Kss6_ZN3RACcI4hcEvlqr5A'; // ← REPLACE THIS
+
+/*
+ ============================================================
+ FIREBASE CONFIG (already set up with your project)
+ ============================================================
+*/
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyCjA9QSFXK0iuokpNTzmqXPZzcairkHWWI",
   authDomain:        "game-b4f87.firebaseapp.com",
@@ -562,135 +596,309 @@ const FIREBASE_CONFIG = {
 // AUDIO ENGINE
 // ============================================================
 const AUDIO = {
-  ctx: null, masterGain: null, bgGain: null, sfxGain: null,
-  _bgTimer: null, _loopStep: 0,
-  musicOn: true, sfxOn: true, initialized: false,
+  ctx:null,masterGain:null,bgGain:null,sfxGain:null,
+  _bgTimer:null,_loopStep:0,musicOn:true,sfxOn:true,initialized:false,
 
-  init() {
-    if (this.initialized) return;
-    try {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      this.masterGain = this.ctx.createGain(); this.masterGain.gain.value = 0.85; this.masterGain.connect(this.ctx.destination);
-      this.bgGain = this.ctx.createGain(); this.bgGain.gain.value = 0.16; this.bgGain.connect(this.masterGain);
-      this.sfxGain = this.ctx.createGain(); this.sfxGain.gain.value = 0.65; this.sfxGain.connect(this.masterGain);
-      this.initialized = true;
-    } catch(e) { console.warn('Web Audio not available'); }
-  },
-
-  resume() { if (this.ctx?.state === 'suspended') this.ctx.resume(); },
-
-  _n(freq, start, dur, type, gainVal, dest) {
-    if (!this.ctx) return;
-    const tgt = dest || this.sfxGain;
-    const o = this.ctx.createOscillator();
-    const g = this.ctx.createGain();
-    o.type = type || 'sine'; o.frequency.setValueAtTime(freq, this.ctx.currentTime + start);
-    g.gain.setValueAtTime(0.0001, this.ctx.currentTime + start);
-    g.gain.linearRampToValueAtTime(gainVal, this.ctx.currentTime + start + Math.min(0.025, dur * 0.15));
-    g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + start + dur);
-    o.connect(g); g.connect(tgt);
-    o.start(this.ctx.currentTime + start);
-    o.stop(this.ctx.currentTime + start + dur + 0.06);
+  init(){
+    if(this.initialized)return;
+    try{
+      this.ctx=new(window.AudioContext||window.webkitAudioContext)();
+      this.masterGain=this.ctx.createGain();this.masterGain.gain.value=0.85;this.masterGain.connect(this.ctx.destination);
+      this.bgGain=this.ctx.createGain();this.bgGain.gain.value=0.15;this.bgGain.connect(this.masterGain);
+      this.sfxGain=this.ctx.createGain();this.sfxGain.gain.value=0.65;this.sfxGain.connect(this.masterGain);
+      this.initialized=true;
+    }catch(e){console.warn('Web Audio unavailable');}
   },
 
-  correct() {
-    if (!this.sfxOn || !this.ctx) return;
-    [[523,0],[659,0.1],[784,0.2],[1047,0.32]].forEach(([f,t]) => this._n(f, t, 0.4, 'sine', 0.5));
-  },
-  wrong() {
-    if (!this.sfxOn || !this.ctx) return;
-    [[233,0,0.2,'sawtooth',0.35],[196,0.15,0.2,'sawtooth',0.3],[155,0.32,0.38,'sawtooth',0.22]].forEach(([f,t,d,tp,g]) => this._n(f,t,d,tp,g));
-  },
-  tick(urgent) {
-    if (!this.sfxOn || !this.ctx) return;
-    this._n(urgent ? 1320 : 880, 0, 0.04, 'square', urgent ? 0.28 : 0.14);
-  },
-  click() {
-    if (!this.sfxOn || !this.ctx) return;
-    this._n(660, 0, 0.05, 'sine', 0.2);
-  },
-  win() {
-    if (!this.sfxOn || !this.ctx) return;
-    [[523,0],[659,0.12],[784,0.24],[659,0.4],[784,0.52],[1047,0.68],[1047,0.85]].forEach(([f,t]) => this._n(f,t,0.35,'sine',0.5));
-  },
-  lifeline() {
-    if (!this.sfxOn || !this.ctx) return;
-    [440,554,659,880].forEach((f,i) => this._n(f, i*0.07, 0.25, 'triangle', 0.32));
-  },
-  newQ() {
-    if (!this.sfxOn || !this.ctx) return;
-    this._n(880, 0, 0.08, 'sine', 0.28);
-    this._n(1100, 0.07, 0.1, 'sine', 0.22);
+  resume(){if(this.ctx?.state==='suspended')this.ctx.resume();},
+
+  _n(freq,start,dur,type,gainVal,dest){
+    if(!this.ctx)return;
+    const tgt=dest||this.sfxGain;
+    const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type=type||'sine';o.frequency.setValueAtTime(freq,this.ctx.currentTime+start);
+    g.gain.setValueAtTime(0.0001,this.ctx.currentTime+start);
+    g.gain.linearRampToValueAtTime(gainVal,this.ctx.currentTime+start+Math.min(0.025,dur*0.15));
+    g.gain.exponentialRampToValueAtTime(0.0001,this.ctx.currentTime+start+dur);
+    o.connect(g);g.connect(tgt);
+    o.start(this.ctx.currentTime+start);
+    o.stop(this.ctx.currentTime+start+dur+0.06);
   },
 
-  // Background Music – looping ambient game-show style
-  startMusic() {
-    if (!this.initialized || !this.musicOn) return;
-    this.stopMusic();
-    this._loopStep = 0;
-    this._playBeat();
+  correct(){if(!this.sfxOn||!this.ctx)return;[[523,0],[659,0.1],[784,0.2],[1047,0.32]].forEach(([f,t])=>this._n(f,t,0.4,'sine',0.5));},
+  wrong(){if(!this.sfxOn||!this.ctx)return;[[233,0,0.2,'sawtooth',0.35],[196,0.15,0.2,'sawtooth',0.3],[155,0.32,0.38,'sawtooth',0.22]].forEach(([f,t,d,tp,g])=>this._n(f,t,d,tp,g));},
+  tick(urgent){if(!this.sfxOn||!this.ctx)return;this._n(urgent?1320:880,0,0.04,'square',urgent?0.28:0.14);},
+  click(){if(!this.sfxOn||!this.ctx)return;this._n(660,0,0.05,'sine',0.2);},
+  win(){if(!this.sfxOn||!this.ctx)return;[[523,0],[659,0.12],[784,0.24],[659,0.4],[784,0.52],[1047,0.68],[1047,0.85]].forEach(([f,t])=>this._n(f,t,0.35,'sine',0.5));},
+  lifeline(){if(!this.sfxOn||!this.ctx)return;[440,554,659,880].forEach((f,i)=>this._n(f,i*0.07,0.25,'triangle',0.32));},
+  newQ(){if(!this.sfxOn||!this.ctx)return;this._n(880,0,0.08,'sine',0.28);this._n(1100,0.07,0.1,'sine',0.22);},
+
+  startMusic(){
+    if(!this.initialized||!this.musicOn)return;
+    this.stopMusic();this._loopStep=0;this._playBeat();
   },
-  stopMusic() { clearTimeout(this._bgTimer); this._bgTimer = null; },
+  stopMusic(){clearTimeout(this._bgTimer);this._bgTimer=null;},
 
-  _playBeat() {
-    if (!this.musicOn || !this.ctx) return;
-    const BPM = 98, Q = 60000 / BPM;
-    const idx = this._loopStep % 16;
-    const qs = Q / 1000;
-    // Bass line – C minor / Phrygian feel
-    const BASS  = [65.4,65.4,73.4,65.4, 58.3,65.4,65.4,69.3, 65.4,65.4,73.4,61.7, 58.3,61.7,65.4,65.4];
-    // Pad frequencies (harmonics)
-    const PAD   = [196,207.6,233.1,196, 174.6,196,196,207.6, 196,207.6,233.1,185, 174.6,185,196,196];
-    // Melodic layer
-    const MEL   = [392,0,466.2,392, 349.2,0,392,415.3, 392,0,466.2,369.9, 349.2,369.9,392,0];
-
-    this._n(BASS[idx], 0, qs*0.9,  'sine',     0.28, this.bgGain);
-    this._n(PAD[idx],  0, qs*1.8,  'triangle', 0.09, this.bgGain);
-    if (idx % 2 === 0) this._n(PAD[idx]*1.5, 0, qs*1.8, 'triangle', 0.05, this.bgGain);
-    if (MEL[idx] > 0)  this._n(MEL[idx], 0, qs*0.7, 'triangle', 0.1, this.bgGain);
-    // Sub-kick on beats 0,4,8,12
-    if (idx % 4 === 0) this._n(65, 0, 0.12, 'sine', 0.35, this.bgGain);
-    // Hi-hat on every step
-    this._n(3200, 0, 0.025, 'square', 0.018, this.bgGain);
-
+  _playBeat(){
+    if(!this.musicOn||!this.ctx)return;
+    const BPM=98,Q=60000/BPM,qs=Q/1000,idx=this._loopStep%16;
+    const BASS=[65.4,65.4,73.4,65.4,58.3,65.4,65.4,69.3,65.4,65.4,73.4,61.7,58.3,61.7,65.4,65.4];
+    const PAD=[196,207.6,233.1,196,174.6,196,196,207.6,196,207.6,233.1,185,174.6,185,196,196];
+    const MEL=[392,0,466.2,392,349.2,0,392,415.3,392,0,466.2,369.9,349.2,369.9,392,0];
+    this._n(BASS[idx],0,qs*0.9,'sine',0.28,this.bgGain);
+    this._n(PAD[idx],0,qs*1.8,'triangle',0.09,this.bgGain);
+    if(idx%2===0)this._n(PAD[idx]*1.5,0,qs*1.8,'triangle',0.05,this.bgGain);
+    if(MEL[idx]>0)this._n(MEL[idx],0,qs*0.7,'triangle',0.1,this.bgGain);
+    if(idx%4===0)this._n(65,0,0.12,'sine',0.35,this.bgGain);
+    this._n(3200,0,0.025,'square',0.018,this.bgGain);
     this._loopStep++;
-    this._bgTimer = setTimeout(() => this._playBeat(), Q * 0.975);
+    this._bgTimer=setTimeout(()=>this._playBeat(),Q*0.975);
   }
 };
 
-function toggleMusic() {
-  AUDIO.init(); AUDIO.resume();
-  AUDIO.musicOn = !AUDIO.musicOn;
-  const btn = document.getElementById('btnMusic');
-  btn.classList.toggle('muted', !AUDIO.musicOn);
-  btn.textContent = AUDIO.musicOn ? '🎵' : '🔇';
-  if (AUDIO.musicOn) AUDIO.startMusic();
-  else AUDIO.stopMusic();
+function toggleMusic(){
+  AUDIO.init();AUDIO.resume();AUDIO.musicOn=!AUDIO.musicOn;
+  const btn=document.getElementById('btnMusic');
+  btn.classList.toggle('muted',!AUDIO.musicOn);btn.textContent=AUDIO.musicOn?'🎵':'🔇';
+  if(AUDIO.musicOn)AUDIO.startMusic();else AUDIO.stopMusic();
 }
-function toggleSfx() {
-  AUDIO.init(); AUDIO.resume();
-  AUDIO.sfxOn = !AUDIO.sfxOn;
-  const btn = document.getElementById('btnSound');
-  btn.classList.toggle('muted', !AUDIO.sfxOn);
-  btn.textContent = AUDIO.sfxOn ? '🔊' : '🔕';
+function toggleSfx(){
+  AUDIO.init();AUDIO.resume();AUDIO.sfxOn=!AUDIO.sfxOn;
+  const btn=document.getElementById('btnSound');
+  btn.classList.toggle('muted',!AUDIO.sfxOn);btn.textContent=AUDIO.sfxOn?'🔊':'🔕';
 }
-function sfxClick() { AUDIO.init(); AUDIO.resume(); AUDIO.click(); }
-
-// Init audio on first user gesture
-document.addEventListener('click', () => { AUDIO.init(); AUDIO.resume(); }, { once: true });
+function sfxClick(){AUDIO.init();AUDIO.resume();AUDIO.click();}
+document.addEventListener('click',()=>{AUDIO.init();AUDIO.resume();},{once:true});
 
 // ============================================================
-// QUESTION HISTORY (localStorage) — avoids repeats for ~3 games
+// AI LOADING OVERLAY
+// ============================================================
+const LOADING_MSGS = [
+  '🤖 AI is crafting Nepal questions…',
+  '🇳🇵 Thinking about Himalayan trivia…',
+  '📚 Mixing Nepal & World knowledge…',
+  '🎬 Writing movie & sports questions…',
+  '🏛️ Adding politics & current affairs…',
+  '✨ Almost ready, Crorepati awaits!',
+];
+let _loadMsgIdx=0,_loadMsgTmr=null;
+
+function showLoading(){
+  _loadMsgIdx=0;
+  document.getElementById('loadingMsg').textContent=LOADING_MSGS[0];
+  document.getElementById('loadingOverlay').classList.add('open');
+  clearInterval(_loadMsgTmr);
+  _loadMsgTmr=setInterval(()=>{
+    _loadMsgIdx=(_loadMsgIdx+1)%LOADING_MSGS.length;
+    const el=document.getElementById('loadingMsg');
+    el.style.opacity='0';
+    setTimeout(()=>{el.textContent=LOADING_MSGS[_loadMsgIdx];el.style.opacity='1';},200);
+  },2400);
+}
+function hideLoading(){
+  clearInterval(_loadMsgTmr);
+  document.getElementById('loadingOverlay').classList.remove('open');
+}
+
+// ============================================================
+// GEMINI AI QUESTION GENERATOR
+// ============================================================
+const CAT_DESCRIPTIONS = {
+  general:  'Nepal General Knowledge: history, geography, culture, festivals, landmarks, traditions, food',
+  movies:   'Nepali Cinema & Entertainment: films, actors, directors, popular songs, OTT shows',
+  sports:   'Nepal Sports: cricket, football, mountaineering, athletes, records, tournaments',
+  politics: 'Nepal Politics & Current Affairs: constitution, political parties, elections, PM, President, policies',
+  world:    'International General Knowledge: world geography, famous events, science, sports, pop culture, technology'
+};
+
+async function generateQuestions(cats, diff, count) {
+  // Check if Gemini key is configured
+  if (!GEMINI_KEY || GEMINI_KEY === 'YOUR_GEMINI_KEY') {
+    console.log('Gemini key not set — using fallback questions');
+    toast('⚠️ Add your Gemini key for AI questions! Using backup pool.', 5000);
+    return getFallbackQuestions(cats, diff, count);
+  }
+
+  const catLines = cats.map(c => `• ${CAT_DESCRIPTIONS[c]||c}`).join('\n');
+  const diffLine = diff==='mixed' ? 'Mix: ~30% easy (d:1), ~50% medium (d:2), ~20% hard (d:3)' :
+                   diff==='1' ? 'All easy (d:1)' : diff==='2' ? 'All medium (d:2)' : 'All hard (d:3)';
+
+  const prompt = `You are the question master for "Nepal Ko Crorepati" — a Nepali quiz show.
+
+Generate exactly ${count} multiple-choice trivia questions.
+Focus: 65% Nepal content, 35% international.
+
+Categories:
+${catLines}
+
+Difficulty: ${diffLine}
+
+RETURN ONLY a raw JSON array. No markdown. No explanation. No code blocks.
+
+Example format:
+[{"cat":"general","d":2,"q":"What is Nepal's national bird?","opts":["Eagle","Danphe","Crane","Peacock"],"a":1},{"cat":"world","d":1,"q":"Which country won the 2022 FIFA World Cup?","opts":["France","Brazil","Argentina","Germany"],"a":2}]
+
+Rules:
+- cat must be exactly one of: general, movies, sports, politics, world
+- d must be integer 1, 2, or 3
+- opts must have exactly 4 strings (no empty strings)
+- a is the integer index 0-3 of the ONLY correct answer in opts
+- All questions must be factually accurate
+- Nepal questions should reflect current facts up to 2024
+- Make wrong options realistic but clearly incorrect
+- No duplicate questions`;
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+        {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            contents:[{parts:[{text:prompt}]}],
+            generationConfig:{temperature:0.88,maxOutputTokens:8192}
+          })
+        }
+      );
+
+      if(!resp.ok){
+        const e=await resp.json().catch(()=>({}));
+        const msg=e?.error?.message||`HTTP ${resp.status}`;
+        console.warn(`Gemini attempt ${attempt+1} HTTP error:`,msg);
+        if(attempt===0){await sleep(2000);continue;}
+        throw new Error(msg);
+      }
+
+      const data=await resp.json();
+      let text=data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+
+      // Clean markdown wrappers
+      text=text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+
+      // Find outermost JSON array
+      const start=text.indexOf('[');
+      const end=text.lastIndexOf(']');
+      if(start===-1||end===-1)throw new Error('No JSON array in response');
+
+      const raw=JSON.parse(text.slice(start,end+1));
+
+      // Validate each question strictly
+      const valid=raw.filter(q=>
+        q && typeof q.q==='string' && q.q.length>5 &&
+        Array.isArray(q.opts) && q.opts.length===4 &&
+        q.opts.every(o=>typeof o==='string'&&o.length>0) &&
+        typeof q.a==='number' && q.a>=0 && q.a<=3 &&
+        typeof q.cat==='string' && typeof q.d==='number'
+      );
+
+      if(valid.length < Math.min(count,5)) throw new Error(`Only ${valid.length} valid questions`);
+
+      console.log(`✅ Gemini generated ${valid.length} questions`);
+      return valid.slice(0,count).map((q,i)=>({...q,id:`ai_${Date.now()}_${i}`}));
+
+    } catch(e) {
+      console.warn(`Gemini attempt ${attempt+1} failed:`,e.message||e);
+      if(attempt===0) await sleep(2500);
+    }
+  }
+
+  // Both attempts failed — use fallback
+  toast('⚠️ AI unavailable — using backup questions', 4000);
+  return getFallbackQuestions(cats, diff, count);
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ============================================================
+// QUESTION HISTORY (localStorage) — tracks used question IDs
 // ============================================================
 const QHistory = {
-  KEY: 'nkc_qhist', MAX: 90,
-  get() { try { return JSON.parse(localStorage.getItem(this.KEY)||'[]'); } catch { return []; } },
-  save(ids) {
-    const merged = [...new Set([...this.get(), ...ids])];
-    try { localStorage.setItem(this.KEY, JSON.stringify(merged.slice(-this.MAX))); } catch {}
-  },
-  clear() { try { localStorage.removeItem(this.KEY); } catch {} }
+  KEY:'nkc_qhist', MAX:120,
+  get(){try{return JSON.parse(localStorage.getItem(this.KEY)||'[]');}catch{return[];}},
+  save(ids){const m=[...new Set([...this.get(),...ids])];try{localStorage.setItem(this.KEY,JSON.stringify(m.slice(-this.MAX)));}catch{}},
+  clear(){try{localStorage.removeItem(this.KEY);}catch{}}
 };
+
+// ============================================================
+// FALLBACK QUESTION POOL (used when Gemini is unavailable)
+// ============================================================
+const FALLBACK_POOL = [
+  {id:1,cat:'general',d:1,q:"What is the capital city of Nepal?",opts:["Pokhara","Kathmandu","Bhaktapur","Lalitpur"],a:1},
+  {id:2,cat:'general',d:1,q:"Which is the highest mountain in the world, located in Nepal?",opts:["Kanchenjunga","Lhotse","Mount Everest","Makalu"],a:2},
+  {id:3,cat:'general',d:1,q:"What is the national animal of Nepal?",opts:["Tiger","Elephant","Snow Leopard","Cow"],a:3},
+  {id:4,cat:'general',d:1,q:"What is the national bird of Nepal?",opts:["Peacock","Danphe (Himalayan Monal)","Eagle","Crane"],a:1},
+  {id:5,cat:'general',d:1,q:"What is the national flower of Nepal?",opts:["Lotus","Rose","Rhododendron","Marigold"],a:2},
+  {id:6,cat:'general',d:1,q:"Nepal shares its borders with which two countries?",opts:["China and Bangladesh","India and Bhutan","China and India","India and Pakistan"],a:2},
+  {id:7,cat:'general',d:1,q:"Lumbini is the birthplace of whom?",opts:["Mahavira","Gautam Buddha","Guru Nanak","Confucius"],a:1},
+  {id:8,cat:'general',d:1,q:"Nepal's national flag is unique because it is the only national flag that is:",opts:["Circular","Non-rectangular","Triangular","Largest in Asia"],a:1},
+  {id:9,cat:'general',d:2,q:"Which river is the longest in Nepal?",opts:["Karnali","Gandaki","Koshi","Bagmati"],a:0},
+  {id:10,cat:'general',d:2,q:"What is the largest lake in Nepal?",opts:["Fewa Lake","Begnas Lake","Rara Lake","Shey Phoksundo"],a:2},
+  {id:11,cat:'general',d:2,q:"Who is considered the unifier of Nepal?",opts:["King Tribhuvan","Prithvi Narayan Shah","King Mahendra","King Birendra"],a:1},
+  {id:12,cat:'general',d:2,q:"In which year did Nepal become a Federal Democratic Republic?",opts:["2005","2006","2008","2010"],a:2},
+  {id:13,cat:'general',d:2,q:"Tenzing Norgay and Edmund Hillary first summited Everest in which year?",opts:["1950","1951","1952","1953"],a:3},
+  {id:14,cat:'general',d:2,q:"Which festival is known as the 'Festival of Lights' in Nepal?",opts:["Dashain","Tihar","Holi","Teej"],a:1},
+  {id:15,cat:'general',d:2,q:"How many UNESCO World Heritage Sites does Nepal have?",opts:["4","6","8","10"],a:2},
+  {id:16,cat:'general',d:2,q:"The official height of Mount Everest, confirmed after a 2020 survey, is:",opts:["8,844.43m","8,848.00m","8,848.86m","8,850.00m"],a:2},
+  {id:17,cat:'general',d:3,q:"Nirmal 'Nims' Purja climbed all 14 eight-thousanders in how many months?",opts:["6 months","7 months","8 months","12 months"],a:1},
+  {id:18,cat:'general',d:3,q:"Nepal became a member of the United Nations in which year?",opts:["1945","1950","1955","1960"],a:2},
+  {id:19,cat:'general',d:2,q:"Which sacred river flows through the Kathmandu Valley?",opts:["Trishuli","Gandaki","Bagmati","Narayani"],a:2},
+  {id:20,cat:'general',d:2,q:"Janakpur is revered as the birthplace of which figure?",opts:["Radha","Draupadi","Sita","Parvati"],a:2},
+  {id:21,cat:'movies',d:1,q:"Which superhit Nepali film features the chase dialogue 'Baburam timi bahira aau'?",opts:["Pashupati Prasad","Loot","Kabaddi","Sano Sansar"],a:1},
+  {id:22,cat:'movies',d:1,q:"'Loot' (2012) is widely considered Nepal's first what?",opts:["Horror film","Action-comedy blockbuster","Documentary","Animation film"],a:1},
+  {id:23,cat:'movies',d:1,q:"Who played the lead role in 'Pashupati Prasad'?",opts:["Paul Shah","Dayahang Rai","Saugat Malla","Bipin Karki"],a:2},
+  {id:24,cat:'movies',d:2,q:"Which Nepali film was Nepal's first official entry for the Academy Awards?",opts:["Kagbeni","Kabaddi","Caravan (Himalaya)","Numafung"],a:2},
+  {id:25,cat:'movies',d:2,q:"Rekha Thapa is often called:",opts:["Nepali film queen","Nepali action hero","Nepali singing star","Dance icon"],a:0},
+  {id:26,cat:'movies',d:2,q:"Which Nepali youth film actor is known for 'Jerry' and 'Hostel'?",opts:["Bipin Karki","Anmol KC","Paul Shah","Dayahang Rai"],a:1},
+  {id:27,cat:'movies',d:3,q:"Which Nepali director made the internationally acclaimed 'Kalo Pothi'?",opts:["Dipendra K. Khanal","Min Bahadur Bham","Nischal Basnet","Nabin Subba"],a:1},
+  {id:28,cat:'movies',d:3,q:"Which Nepali film was the first to win at the Busan International Film Festival?",opts:["Kabaddi","Loot","Kalo Pothi","Kagbeni"],a:2},
+  {id:29,cat:'movies',d:2,q:"'Chapali Height' (2012) is notable for being one of Nepal's first successful:",opts:["Animation films","Horror films","War films","Sports dramas"],a:1},
+  {id:30,cat:'movies',d:3,q:"The documentary 'Sherpa' (2015) by Jennifer Peedom focused on:",opts:["Hillary & Tenzing's 1953 climb","The 2014 Everest ice-fall avalanche","The life of Apa Sherpa","High-altitude culture"],a:1},
+  {id:31,cat:'sports',d:1,q:"What is Nepal's national sport?",opts:["Cricket","Football","Volleyball","Kabaddi"],a:2},
+  {id:32,cat:'sports',d:1,q:"Sandeep Lamichhane is known as Nepal's:",opts:["Fast bowler","Leg-spin bowler","Wicketkeeper","Opening batsman"],a:1},
+  {id:33,cat:'sports',d:2,q:"Dipendra Singh Airee broke the world record for the fastest ODI fifty in 2023, in how many balls?",opts:["7","8","9","10"],a:2},
+  {id:34,cat:'sports',d:2,q:"Pasang Lhamu Sherpa was the first Nepali woman to summit Everest in which year?",opts:["1985","1990","1993","1996"],a:2},
+  {id:35,cat:'sports',d:2,q:"Apa Sherpa is known for which record?",opts:["First solo Everest ascent","Most Everest summits","Fastest Everest ascent","First winter ascent"],a:1},
+  {id:36,cat:'sports',d:2,q:"Nepal's main cricket venue, TU International Cricket Ground, is located in:",opts:["Pokhara","Kirtipur, Kathmandu","Biratnagar","Chitwan"],a:1},
+  {id:37,cat:'sports',d:3,q:"Which Nepali cricketer was the first to be signed by an IPL franchise?",opts:["Rohit Chand","Kushal Bhurtel","Sandeep Lamichhane","Dipendra Airee"],a:2},
+  {id:38,cat:'sports',d:1,q:"Rohit Chand represents Nepal in which sport?",opts:["Cricket","Football","Volleyball","Athletics"],a:1},
+  {id:39,cat:'sports',d:3,q:"Nepal beat which team in the T20 World Cup 2024 to advance to the Super 8?",opts:["UAE","Oman","West Indies","Namibia"],a:1},
+  {id:40,cat:'sports',d:2,q:"The 13th South Asian Games 2019 were hosted by Nepal in which two cities?",opts:["Pokhara & Biratnagar","Kathmandu & Pokhara","Dharan & Chitwan","Butwal & Kathmandu"],a:1},
+  {id:41,cat:'politics',d:1,q:"Nepal's current constitution was promulgated in which year?",opts:["2006","2008","2015","2018"],a:2},
+  {id:42,cat:'politics',d:1,q:"Nepal is divided into how many provinces?",opts:["5","6","7","8"],a:2},
+  {id:43,cat:'politics',d:1,q:"Nepal is officially a:",opts:["Hindu Kingdom","Constitutional Monarchy","Federal Democratic Republic","People's Republic"],a:2},
+  {id:44,cat:'politics',d:2,q:"Nepal abolished its monarchy and became a republic in which year?",opts:["2006","2007","2008","2010"],a:2},
+  {id:45,cat:'politics',d:2,q:"Who was Nepal's first President after becoming a republic?",opts:["Bidhya Devi Bhandari","Ram Baran Yadav","Onsari Gharti Magar","Parmanand Jha"],a:1},
+  {id:46,cat:'politics',d:2,q:"The Maoist People's War in Nepal was led by:",opts:["KP Sharma Oli","Pushpa Kamal Dahal","Sher Bahadur Deuba","Madhav Nepal"],a:1},
+  {id:47,cat:'politics',d:3,q:"Which political party won the most seats in Nepal's 2022 general election?",opts:["Nepali Congress","CPN-UML","CPN Maoist Centre","Rastriya Swatantra Party"],a:0},
+  {id:48,cat:'politics',d:3,q:"The Rastriya Swatantra Party (RSP) was founded by:",opts:["KP Sharma Oli","Rabi Lamichhane","Upendra Yadav","Rajendra Lingden"],a:1},
+  {id:49,cat:'politics',d:2,q:"The 2015 Gorkha earthquake had a magnitude of approximately:",opts:["6.8","7.2","7.8","8.2"],a:2},
+  {id:50,cat:'politics',d:2,q:"Sher Bahadur Deuba belongs to which political party?",opts:["CPN-UML","Nepali Congress","CPN Maoist Centre","RPP"],a:1},
+  {id:51,cat:'world',d:1,q:"Which country won the 2022 FIFA World Cup in Qatar?",opts:["France","Brazil","Argentina","Germany"],a:2},
+  {id:52,cat:'world',d:1,q:"Who was the first human to walk on the Moon?",opts:["Buzz Aldrin","Yuri Gagarin","Neil Armstrong","John Glenn"],a:2},
+  {id:53,cat:'world',d:1,q:"Which is the largest ocean on Earth?",opts:["Atlantic","Indian","Arctic","Pacific"],a:3},
+  {id:54,cat:'world',d:1,q:"What is the capital of Australia?",opts:["Sydney","Melbourne","Brisbane","Canberra"],a:3},
+  {id:55,cat:'world',d:1,q:"Which country surpassed China to become the world's most populous in 2023?",opts:["USA","Indonesia","India","Bangladesh"],a:2},
+  {id:56,cat:'world',d:2,q:"Australia won the 2023 ICC Cricket World Cup by defeating which team in the final?",opts:["England","Pakistan","India","South Africa"],a:2},
+  {id:57,cat:'world',d:2,q:"COVID-19 was declared a global pandemic by WHO on:",opts:["January 30, 2020","March 11, 2020","April 1, 2020","May 15, 2020"],a:1},
+  {id:58,cat:'world',d:2,q:"The 2024 Summer Olympics were held in:",opts:["Los Angeles","Tokyo","Brisbane","Paris"],a:3},
+  {id:59,cat:'world',d:2,q:"Mount Kilimanjaro, Africa's highest peak, is in which country?",opts:["Kenya","Uganda","Tanzania","Ethiopia"],a:2},
+  {id:60,cat:'world',d:3,q:"The James Webb Space Telescope's first full-colour images were released in:",opts:["2021","2022","2023","2024"],a:1},
+];
+
+function getFallbackQuestions(cats, diff, count) {
+  let pool = FALLBACK_POOL.filter(q => cats.includes(q.cat));
+  if (diff !== 'mixed') pool = pool.filter(q => q.d === parseInt(diff));
+  if (pool.length < count) pool = [...FALLBACK_POOL];
+
+  const recent = QHistory.get();
+  const fresh = pool.filter(q => !recent.includes(q.id));
+  const stale = pool.filter(q => recent.includes(q.id));
+  const ordered = [...shuffle(fresh), ...shuffle(stale)];
+  const selected = ordered.slice(0, Math.min(count, ordered.length));
+  QHistory.save(selected.map(q => q.id));
+  return selected;
+}
 
 // ============================================================
 // PRIZES & META
@@ -702,200 +910,12 @@ const PRIZES = [
 ];
 const SAFE_HAVENS = [4, 10];
 const CAT_META = {
-  general:  { label:'🧠 General',   cls:'general'  },
-  movies:   { label:'🎬 Movies',    cls:'movies'   },
-  sports:   { label:'⚽ Sports',    cls:'sports'   },
-  politics: { label:'🏛️ Politics',  cls:'politics' },
-  world:    { label:'🌍 World',     cls:'world'    },
+  general:  {label:'🧠 General',  cls:'general'},
+  movies:   {label:'🎬 Movies',   cls:'movies'},
+  sports:   {label:'⚽ Sports',   cls:'sports'},
+  politics: {label:'🏛️ Politics', cls:'politics'},
+  world:    {label:'🌍 World',    cls:'world'},
 };
-
-// ============================================================
-// QUESTION POOL  (170+ questions, all with unique IDs)
-// ============================================================
-const POOL = [
-// ─── NEPAL GENERAL ──────────────────────────────────────────────────────────
-{id:1,  cat:'general',d:1,q:"What is the capital city of Nepal?",opts:["Pokhara","Kathmandu","Bhaktapur","Lalitpur"],a:1},
-{id:2,  cat:'general',d:1,q:"Which is the highest mountain in the world, located in Nepal?",opts:["Kanchenjunga","Lhotse","Mount Everest","Makalu"],a:2},
-{id:3,  cat:'general',d:1,q:"What is the national currency of Nepal?",opts:["Rupiah","Taka","Nepali Rupee","Dinar"],a:2},
-{id:4,  cat:'general',d:1,q:"What is the national animal of Nepal?",opts:["Tiger","Elephant","Snow Leopard","Cow"],a:3},
-{id:5,  cat:'general',d:1,q:"What is the national bird of Nepal?",opts:["Peacock","Danphe (Himalayan Monal)","Eagle","Crane"],a:1},
-{id:6,  cat:'general',d:1,q:"What is the national flower of Nepal?",opts:["Lotus","Rose","Rhododendron","Marigold"],a:2},
-{id:7,  cat:'general',d:1,q:"Which Nepali city is famous for its lakeside and adventure sports?",opts:["Biratnagar","Pokhara","Dharan","Butwal"],a:1},
-{id:8,  cat:'general',d:1,q:"What is the official language of Nepal?",opts:["Hindi","Sanskrit","Nepali","Maithili"],a:2},
-{id:9,  cat:'general',d:1,q:"Nepal shares its borders with which two countries?",opts:["China and Bangladesh","India and Bhutan","China and India","India and Pakistan"],a:2},
-{id:10, cat:'general',d:1,q:"Lumbini is famous as the birthplace of whom?",opts:["Mahavira","Gautam Buddha","Guru Nanak","Confucius"],a:1},
-{id:11, cat:'general',d:2,q:"Which river is the longest in Nepal?",opts:["Karnali","Gandaki","Koshi","Bagmati"],a:0},
-{id:12, cat:'general',d:2,q:"What is the largest lake in Nepal?",opts:["Fewa Lake","Begnas Lake","Rara Lake","Shey Phoksundo"],a:2},
-{id:13, cat:'general',d:2,q:"Who is considered the unifier of Nepal?",opts:["King Tribhuvan","Prithvi Narayan Shah","King Mahendra","King Birendra"],a:1},
-{id:14, cat:'general',d:2,q:"In which year did Nepal become a Federal Democratic Republic?",opts:["2005","2006","2008","2010"],a:2},
-{id:15, cat:'general',d:2,q:"The Pashupatinath Temple is dedicated to which deity?",opts:["Vishnu","Brahma","Shiva","Indra"],a:2},
-{id:16, cat:'general',d:2,q:"Tenzing Norgay and Edmund Hillary first summited Everest in which year?",opts:["1950","1951","1952","1953"],a:3},
-{id:17, cat:'general',d:2,q:"Which festival is known as the 'Festival of Lights' in Nepal?",opts:["Dashain","Tihar","Holi","Teej"],a:1},
-{id:18, cat:'general',d:2,q:"How many UNESCO World Heritage Sites does Nepal have?",opts:["4","6","8","10"],a:2},
-{id:19, cat:'general',d:2,q:"Chitwan National Park is famous for which animal?",opts:["Snow Leopard","One-horned Rhinoceros","Red Panda","Himalayan Bear"],a:1},
-{id:20, cat:'general',d:2,q:"The 'Living Goddess' tradition in Nepal is called:",opts:["Devi Puja","Kumari","Shakti","Durga Puja"],a:1},
-{id:21, cat:'general',d:3,q:"Nepal's first multiparty democracy was restored in which year?",opts:["1988","1990","1992","1995"],a:1},
-{id:22, cat:'general',d:3,q:"The Annapurna Circuit trek is famous for which high mountain pass?",opts:["Thorong La","Renjo La","Cho La","Kongma La"],a:0},
-{id:23, cat:'general',d:3,q:"Nirmal 'Nims' Purja climbed all 14 eight-thousanders in how many months?",opts:["6 months","7 months","8 months","12 months"],a:1},
-{id:24, cat:'general',d:2,q:"Mount Annapurna in Sanskrit roughly means:",opts:["Goddess of Snow","Full of Food / Nourishment","Queen of Peaks","Eternal Mountain"],a:1},
-{id:25, cat:'general',d:1,q:"Nepal's national flag is unique because it is:",opts:["Circular","The only non-rectangular national flag","Triangular","The largest national flag"],a:1},
-{id:26, cat:'general',d:2,q:"The devastating earthquake that struck Nepal in April 2015 had a magnitude of approximately:",opts:["6.8","7.2","7.8","8.1"],a:2},
-{id:27, cat:'general',d:1,q:"Which sacred river flows through Kathmandu Valley?",opts:["Trishuli","Gandaki","Bagmati","Narayani"],a:2},
-{id:28, cat:'general',d:3,q:"The Treaty of Sugauli (1816) defined Nepal's borders with:",opts:["China","British East India Company","Tibet","Mughal Empire"],a:1},
-{id:29, cat:'general',d:2,q:"Nepal's parliament is officially known as:",opts:["National Assembly","Rashtriya Sabha","Federal Parliament (Sanghiya Sansad)","People's Congress"],a:2},
-{id:30, cat:'general',d:1,q:"Janakpur is revered as the birthplace of which deity/figure?",opts:["Radha","Draupadi","Sita","Parvati"],a:2},
-{id:31, cat:'general',d:2,q:"Which mountain near Pokhara is nicknamed 'Fish Tail' for its twin summit shape?",opts:["Annapurna I","Machhapuchhre","Dhaulagiri","Manaslu"],a:1},
-{id:32, cat:'general',d:3,q:"Annapurna (8,091m) was the first 8,000-metre peak ever climbed, in which year?",opts:["1948","1950","1952","1955"],a:1},
-{id:33, cat:'general',d:2,q:"Nepal has how many peaks above 8,000 metres (eight-thousanders)?",opts:["6","7","8","9"],a:2},
-{id:34, cat:'general',d:2,q:"Thamel is the famous tourist hub in which city?",opts:["Pokhara","Bhaktapur","Kathmandu","Biratnagar"],a:2},
-{id:35, cat:'general',d:2,q:"Chitwan National Park was established in which year?",opts:["1963","1967","1973","1982"],a:2},
-{id:36, cat:'general',d:3,q:"Nepal became a member of the United Nations in which year?",opts:["1945","1950","1955","1960"],a:2},
-{id:37, cat:'general',d:2,q:"Nepal's Dashain festival celebrates the victory of which goddess?",opts:["Lakshmi","Saraswati","Durga","Parvati"],a:2},
-{id:38, cat:'general',d:2,q:"Boudhanath Stupa in Kathmandu is one of the largest of which type of structure?",opts:["Hindu temples","Buddhist stupas","Mosques","Pagodas"],a:1},
-{id:39, cat:'general',d:3,q:"Upper Mustang was opened to tourists only in which year?",opts:["1985","1990","1992","2000"],a:2},
-{id:40, cat:'general',d:3,q:"Nepal's Sagarmatha National Park was designated a UNESCO World Heritage Site in:",opts:["1976","1979","1984","1990"],a:1},
-{id:41, cat:'general',d:1,q:"Pokhara's new international airport, which opened in January 2023, is named after which river?",opts:["Seti","Kali Gandaki","Gandaki","Trishuli"],a:2},
-{id:42, cat:'general',d:2,q:"Nepal's Terai (southern plains) shares a border with which country?",opts:["China","Bhutan","Bangladesh","India"],a:3},
-{id:43, cat:'general',d:3,q:"The official height of Mount Everest, updated after a 2020 survey by Nepal and China, is:",opts:["8,844.43m","8,848.00m","8,848.86m","8,850.00m"],a:2},
-{id:44, cat:'general',d:2,q:"The historic Bhaktapur Durbar Square is a living museum of which architectural style?",opts:["Mughal","Newar medieval","Buddhist Tibetan","Colonial British"],a:1},
-{id:45, cat:'general',d:3,q:"Which Nepali district is famous for the village of Chhomrong, a gateway to Annapurna Base Camp?",opts:["Kaski","Myagdi","Gorkha","Mustang"],a:0},
-
-// ─── NEPALI MOVIES ──────────────────────────────────────────────────────────
-{id:46, cat:'movies',d:1,q:"Which superhit Nepali film features the iconic chase dialogue 'Baburam timi bahira aau'?",opts:["Pashupati Prasad","Loot","Kabaddi","Sano Sansar"],a:1},
-{id:47, cat:'movies',d:1,q:"Who directed 'Pashupati Prasad' (2016)?",opts:["Dipendra K. Khanal","Dinesh Rajan DC","Nischal Basnet","Diwas Sapkota"],a:0},
-{id:48, cat:'movies',d:1,q:"'Loot' (2012) is widely considered Nepal's first:",opts:["Horror film","Action-comedy blockbuster","Documentary","Animation film"],a:1},
-{id:49, cat:'movies',d:1,q:"Who played the lead role in 'Pashupati Prasad'?",opts:["Paul Shah","Dayahang Rai","Saugat Malla","Bipin Karki"],a:2},
-{id:50, cat:'movies',d:1,q:"The Nepali film 'Kabaddi' (2014) was directed by:",opts:["Nischal Basnet","Dipendra K. Khanal","Rambabu Gurung","Nabin Subba"],a:0},
-{id:51, cat:'movies',d:2,q:"Which Nepali film was Nepal's first official entry for the Academy Awards?",opts:["Kagbeni","Kabaddi","Caravan (Himalaya)","Numafung"],a:2},
-{id:52, cat:'movies',d:2,q:"'Talakjung vs Tulke' (2014) stars which pairing?",opts:["Bipin Karki & Dayahang Rai","Saugat Malla & Neer Shah","Paul Shah & Pooja Sharma","Salon Basnet & Reecha Sharma"],a:0},
-{id:53, cat:'movies',d:2,q:"The Nepali film 'Seto Surya' (White Sun, 2016) is set against the backdrop of:",opts:["A folk tale","The 2015 earthquake","The Maoist conflict","A love story"],a:2},
-{id:54, cat:'movies',d:2,q:"Dayahang Rai won the National Film Award for Best Actor for:",opts:["Loot","Kalo Pothi","Jhola","White Sun"],a:2},
-{id:55, cat:'movies',d:2,q:"Rekha Thapa is often referred to as:",opts:["Nepali film queen","Nepali action hero","Nepali singing star","Dance icon"],a:0},
-{id:56, cat:'movies',d:2,q:"'Bulbul' (2006) was directed by which acclaimed Nepali director?",opts:["Nabin Subba","Tulasi Ghimire","Nischal Basnet","Rambabu Gurung"],a:1},
-{id:57, cat:'movies',d:3,q:"'Kagbeni' (2008) is a Nepali thriller inspired by which classic Bollywood film?",opts:["Don","Sholay","Veer-Zaara","Andaz Apna Apna"],a:0},
-{id:58, cat:'movies',d:3,q:"'Numafung' (2004) draws from the folk traditions of which community?",opts:["Gurung","Rai / Limbu","Sherpa","Tamang"],a:1},
-{id:59, cat:'movies',d:3,q:"Which Nepali director made the internationally acclaimed film 'Kalo Pothi' (The Black Hen)?",opts:["Dipendra K. Khanal","Min Bahadur Bham","Nischal Basnet","Nabin Subba"],a:1},
-{id:60, cat:'movies',d:3,q:"'Jhola' (2016) addresses which social issue?",opts:["Child marriage","Widow remarriage","Drug addiction","Caste discrimination"],a:1},
-{id:61, cat:'movies',d:3,q:"Which Nepali film was the first to win at the prestigious Busan International Film Festival?",opts:["Kabaddi","Loot","Kalo Pothi","Kagbeni"],a:2},
-{id:62, cat:'movies',d:2,q:"'Chapali Height' (2012) is notable for being one of Nepal's first commercially successful:",opts:["Animation films","Horror films","War films","Sports dramas"],a:1},
-{id:63, cat:'movies',d:1,q:"Which young leading actor is known for youth-oriented Nepali films like 'Jerry' and 'Hostel'?",opts:["Bipin Karki","Anmol KC","Paul Shah","Dayahang Rai"],a:1},
-{id:64, cat:'movies',d:2,q:"Namrata Shrestha is a popular Nepali actress who is also known for being a:",opts:["Politician","Model and beauty queen","Classical dancer","Singer"],a:1},
-{id:65, cat:'movies',d:3,q:"The documentary 'Sherpa' (2015) by Jennifer Peedom focused on:",opts:["Hillary & Tenzing's 1953 climb","The 2014 Everest ice-fall avalanche tragedy","The life of Apa Sherpa","High-altitude Sherpa culture generally"],a:1},
-
-// ─── NEPALI SPORTS ──────────────────────────────────────────────────────────
-{id:66, cat:'sports',d:1,q:"What is Nepal's national sport?",opts:["Cricket","Football","Volleyball","Kabaddi"],a:2},
-{id:67, cat:'sports',d:1,q:"Sandeep Lamichhane is known as Nepal's:",opts:["Cricket captain only","Legendary leg-spin bowler","Fast bowling sensation","Wicketkeeper-batsman"],a:1},
-{id:68, cat:'sports',d:2,q:"Nepal qualified for the ICC Cricket World Cup 2023 Super League. Which team did they upset to qualify?",opts:["UAE","West Indies","Zimbabwe","Ireland"],a:1},
-{id:69, cat:'sports',d:1,q:"Dipendra Singh Airee broke the world record for the fastest ODI fifty in 2023, in how many balls?",opts:["7","8","9","10"],a:2},
-{id:70, cat:'sports',d:2,q:"Which Nepali footballer played professionally in the Indian I-League and is known as 'Magic'?",opts:["Bharat Khawas","Anjan Bista","Rohit Chand","Nawayug Shrestha"],a:2},
-{id:71, cat:'sports',d:2,q:"The 13th South Asian Games in 2019 were hosted by Nepal in which two cities?",opts:["Pokhara & Biratnagar","Kathmandu & Pokhara","Dharan & Chitwan","Butwal & Kathmandu"],a:1},
-{id:72, cat:'sports',d:2,q:"Nirmal 'Nims' Purja broke which mountaineer's record for climbing all 14 eight-thousanders?",opts:["Reinhold Messner","Edmund Hillary","Tenzing Norgay","Ueli Steck"],a:0},
-{id:73, cat:'sports',d:2,q:"Pasang Lhamu Sherpa became the first Nepali woman to summit Everest in which year?",opts:["1985","1990","1993","1996"],a:2},
-{id:74, cat:'sports',d:2,q:"Apa Sherpa held the record for:",opts:["First solo Everest ascent","Most times summiting Everest (21)","Fastest Everest ascent","First winter Everest ascent"],a:1},
-{id:75, cat:'sports',d:3,q:"Kushal Malla became the youngest ODI centurion, scoring a century at age:",opts:["16","17","18","19"],a:2},
-{id:76, cat:'sports',d:3,q:"Which Nepali cricketer was the first to be picked in the IPL?",opts:["Rohit Chand","Kushal Bhurtel","Sandeep Lamichhane","Dipendra Airee"],a:2},
-{id:77, cat:'sports',d:3,q:"Nepal beat which team in the T20 World Cup 2024 to make the Super 8?",opts:["UAE","Oman","Papua New Guinea","Namibia"],a:1},
-{id:78, cat:'sports',d:2,q:"Nepal's national football team is governed by:",opts:["NFA","ANFA","NSA","NFAB"],a:1},
-{id:79, cat:'sports',d:3,q:"In the 2023 ACC Men's Premier Cup, Nepal clinched the title by defeating:",opts:["UAE","Oman","Kuwait","Bahrain"],a:0},
-{id:80, cat:'sports',d:2,q:"Which Nepali MMA fighter gained international recognition competing in Asia?",opts:["Jit Bikram Singh","Bibek Giri","Sagar Khadka","Deepak Bista"],a:1},
-{id:81, cat:'sports',d:1,q:"Rohit Chand represents Nepal in which sport?",opts:["Cricket","Football","Volleyball","Athletics"],a:1},
-{id:82, cat:'sports',d:2,q:"Nepal's premier cricket venue, Tribhuvan University (TU) International Cricket Ground, is located in:",opts:["Pokhara","Kirtipur, Kathmandu","Biratnagar","Chitwan"],a:1},
-{id:83, cat:'sports',d:3,q:"Which Nepali climber became the first to summit all 14 eight-thousanders in a single season (spring 2023)?",opts:["Nirmal Purja","Kami Rita Sherpa","Sanu Sherpa","Mingma Sherpa"],a:2},
-{id:84, cat:'sports',d:2,q:"Nepal's cricket team played its first T20 International match against which country?",opts:["Afghanistan","UAE","Hong Kong","Singapore"],a:0},
-{id:85, cat:'sports',d:3,q:"The ANFA (All Nepal Football Association) was founded in which year?",opts:["1951","1976","1985","1990"],a:0},
-
-// ─── NEPAL POLITICS ─────────────────────────────────────────────────────────
-{id:86, cat:'politics',d:1,q:"Who was Nepal's Prime Minister as of mid-2024?",opts:["KP Sharma Oli","Pushpa Kamal Dahal","Sher Bahadur Deuba","Madhav Kumar Nepal"],a:0},
-{id:87, cat:'politics',d:1,q:"Nepal's current constitution was promulgated in which year?",opts:["2006","2008","2015","2018"],a:2},
-{id:88, cat:'politics',d:1,q:"Nepal is divided into how many provinces?",opts:["5","6","7","8"],a:2},
-{id:89, cat:'politics',d:1,q:"The Maoist People's War in Nepal was led by:",opts:["KP Sharma Oli","Pushpa Kamal Dahal","Sher Bahadur Deuba","Madhav Nepal"],a:1},
-{id:90, cat:'politics',d:2,q:"Nepal abolished its monarchy and became a republic in which year?",opts:["2006","2007","2008","2010"],a:2},
-{id:91, cat:'politics',d:2,q:"The Comprehensive Peace Accord (CPA) in Nepal was signed in:",opts:["2004","2005","2006","2007"],a:2},
-{id:92, cat:'politics',d:2,q:"Who was Nepal's first President after becoming a republic?",opts:["Bidhya Devi Bhandari","Ram Baran Yadav","Onsari Gharti Magar","Parmanand Jha"],a:1},
-{id:93, cat:'politics',d:2,q:"Nepal's 'Jana Andolan II' (People's Movement II) took place in:",opts:["2004","2005","2006","2007"],a:2},
-{id:94, cat:'politics',d:2,q:"Who is Nepal's President as of 2024?",opts:["Bidhya Devi Bhandari","Ram Baran Yadav","Ram Chandra Paudel","Onsari Gharti Magar"],a:2},
-{id:95, cat:'politics',d:2,q:"The Nepal Communist Party (NCP) was formed by merging which two parties?",opts:["NC and UML","UML and Maoist Centre","Maoist and NC","RPP and UML"],a:1},
-{id:96, cat:'politics',d:2,q:"The 2015 Gorkha earthquake had a magnitude of approximately:",opts:["6.8","7.2","7.8","8.2"],a:2},
-{id:97, cat:'politics',d:3,q:"Prachanda became Prime Minister of Nepal for the third time in:",opts:["2020","2021","2022","2023"],a:2},
-{id:98, cat:'politics',d:3,q:"Which political party won the most seats in Nepal's 2022 general election?",opts:["Nepali Congress","CPN-UML","CPN Maoist Centre","Rastriya Swatantra Party"],a:0},
-{id:99, cat:'politics',d:3,q:"The Rastriya Swatantra Party (RSP) was founded by:",opts:["KP Sharma Oli","Rabi Lamichhane","Upendra Yadav","Rajendra Lingden"],a:1},
-{id:100,cat:'politics',d:2,q:"Sher Bahadur Deuba belongs to which political party?",opts:["CPN-UML","Nepali Congress","CPN Maoist Centre","RPP"],a:1},
-{id:101,cat:'politics',d:3,q:"The MCC (Millennium Challenge Corporation) compact with the USA was approved by Nepal's parliament in:",opts:["2020","2021","2022","2023"],a:2},
-{id:102,cat:'politics',d:2,q:"The '12-point agreement' (2005) was between the political parties and:",opts:["The Indian government","The Maoist rebels","The Royal Palace","The United Nations"],a:1},
-{id:103,cat:'politics',d:1,q:"Nepal is officially a:",opts:["Hindu Kingdom","Constitutional Monarchy","Federal Democratic Republic","People's Republic"],a:2},
-{id:104,cat:'politics',d:3,q:"B.P. Koirala became Nepal's first democratically elected Prime Minister in:",opts:["1950","1955","1959","1963"],a:2},
-{id:105,cat:'politics',d:3,q:"Nepal's controversial Gorkhaland/sovereignty protests of 2017 were related to which region?",opts:["Terai / Madhesh","Darjeeling hills (India, not Nepal)","Upper Mustang","Limbuwan"],a:1},
-
-// ─── WORLD / INTERNATIONAL ──────────────────────────────────────────────────
-{id:106,cat:'world',d:1,q:"Which country won the 2022 FIFA World Cup in Qatar?",opts:["France","Brazil","Argentina","Germany"],a:2},
-{id:107,cat:'world',d:1,q:"Who was the first human to walk on the Moon?",opts:["Buzz Aldrin","Yuri Gagarin","Neil Armstrong","John Glenn"],a:2},
-{id:108,cat:'world',d:1,q:"The 2020 Tokyo Olympics were actually held in which year due to COVID-19?",opts:["2020","2021","2022","2023"],a:1},
-{id:109,cat:'world',d:1,q:"Usain Bolt holds the 100m world record with a time of:",opts:["9.58 sec","9.63 sec","9.69 sec","9.72 sec"],a:0},
-{id:110,cat:'world',d:1,q:"Which is the largest ocean on Earth?",opts:["Atlantic","Indian","Arctic","Pacific"],a:3},
-{id:111,cat:'world',d:1,q:"The Eiffel Tower was built for the World's Fair of:",opts:["1876","1885","1889","1900"],a:2},
-{id:112,cat:'world',d:1,q:"The first artificial satellite launched into space was:",opts:["Explorer 1","Vostok 1","Sputnik 1","Apollo 1"],a:2},
-{id:113,cat:'world',d:1,q:"India gained independence from British rule in which year?",opts:["1945","1946","1947","1948"],a:2},
-{id:114,cat:'world',d:1,q:"The Titanic sank in which year?",opts:["1910","1912","1914","1916"],a:1},
-{id:115,cat:'world',d:1,q:"Which is the largest country in the world by land area?",opts:["Canada","China","USA","Russia"],a:3},
-{id:116,cat:'world',d:1,q:"As of 2023, which country surpassed China to become the world's most populous?",opts:["USA","Indonesia","India","Bangladesh"],a:2},
-{id:117,cat:'world',d:1,q:"The fastest land animal is the:",opts:["Lion","Cheetah","Pronghorn","Peregrine Falcon"],a:1},
-{id:118,cat:'world',d:1,q:"What is the capital of Australia?",opts:["Sydney","Melbourne","Brisbane","Canberra"],a:3},
-{id:119,cat:'world',d:2,q:"Australia won the 2023 ICC Cricket World Cup by defeating which team in the final?",opts:["England","Pakistan","India","South Africa"],a:2},
-{id:120,cat:'world',d:2,q:"The Great Wall of China was mainly constructed during which dynasty?",opts:["Han","Tang","Song","Ming"],a:3},
-{id:121,cat:'world',d:2,q:"COVID-19 was declared a global pandemic by the WHO on:",opts:["January 30, 2020","March 11, 2020","April 1, 2020","May 15, 2020"],a:1},
-{id:122,cat:'world',d:2,q:"As of 2024, which planet has the most confirmed natural moons?",opts:["Jupiter","Uranus","Neptune","Saturn"],a:3},
-{id:123,cat:'world',d:2,q:"The 2024 Summer Olympics were held in:",opts:["Los Angeles","Tokyo","Brisbane","Paris"],a:3},
-{id:124,cat:'world',d:2,q:"Mount Kilimanjaro, Africa's highest peak, is located in:",opts:["Kenya","Uganda","Tanzania","Ethiopia"],a:2},
-{id:125,cat:'world',d:2,q:"Which country won the FIFA World Cup 2018 held in Russia?",opts:["Germany","Croatia","France","Belgium"],a:2},
-{id:126,cat:'world',d:2,q:"Yuri Gagarin became the first human in space in which year?",opts:["1957","1959","1961","1963"],a:2},
-{id:127,cat:'world',d:2,q:"The world's tallest building, the Burj Khalifa, is located in:",opts:["Saudi Arabia","Qatar","Bahrain","UAE (Dubai)"],a:3},
-{id:128,cat:'world',d:2,q:"The Amazon River, the world's largest by discharge, flows through:",opts:["Colombia","Peru","Brazil","Venezuela"],a:2},
-{id:129,cat:'world',d:3,q:"ChatGPT was launched publicly by OpenAI in:",opts:["January 2022","July 2022","November 2022","March 2023"],a:2},
-{id:130,cat:'world',d:3,q:"Which country was awarded the Nobel Peace Prize in 2023 through which activist?",opts:["Liu Xiaobo – China","Greta Thunberg – Sweden","Narges Mohammadi – Iran","Malala Yousafzai – Pakistan"],a:2},
-{id:131,cat:'world',d:2,q:"The United Nations was founded in which year?",opts:["1943","1944","1945","1946"],a:2},
-{id:132,cat:'world',d:1,q:"What is the currency of Japan?",opts:["Won","Yuan","Baht","Yen"],a:3},
-{id:133,cat:'world',d:3,q:"The BRICS group added new members in 2024. Which of these newly joined BRICS?",opts:["Nigeria","Turkey","Egypt","Pakistan"],a:2},
-{id:134,cat:'world',d:3,q:"SpaceX's first crewed NASA mission (Crew Dragon Demo-2) launched in:",opts:["2019","2020","2021","2022"],a:1},
-{id:135,cat:'world',d:2,q:"The Amazon Rainforest covers most of which country?",opts:["Colombia","Peru","Venezuela","Brazil"],a:3},
-
-// ─── EXTRA NEPAL GENERAL (harder / niche) ───────────────────────────────────
-{id:136,cat:'general',d:3,q:"Which Nepali district has the lowest Human Development Index (HDI)?",opts:["Rautahat","Bajura","Humla","Achham"],a:1},
-{id:137,cat:'general',d:2,q:"Tilicho Lake, one of the world's highest lakes, is located in which district?",opts:["Mustang","Manang","Dolpa","Humla"],a:1},
-{id:138,cat:'general',d:2,q:"Nepal's 'Bisket Jatra' new year festival is celebrated in which ancient city?",opts:["Kathmandu","Patan","Bhaktapur","Kirtipur"],a:2},
-{id:139,cat:'general',d:3,q:"Which Nepali ethnic group is renowned for their skills as high-altitude porters and climbers?",opts:["Gurung","Tamang","Sherpa","Rai"],a:2},
-{id:140,cat:'general',d:2,q:"Bardia National Park in Nepal is famous for its population of:",opts:["One-horned rhinos","Wild elephants","Bengal tigers","Red pandas"],a:2},
-{id:141,cat:'general',d:3,q:"Nepal's Karnali Province was formerly known as:",opts:["Bheri Province","Seti Province","Mid-Western Province","Karnali Province"],a:2},
-{id:142,cat:'general',d:2,q:"The Pashupatinath temple complex sits on the banks of which river?",opts:["Bagmati","Bishnumati","Balkhu","Manohara"],a:0},
-{id:143,cat:'general',d:1,q:"Nepal's Dashain festival lasts for how many days?",opts:["7","10","15","21"],a:2},
-{id:144,cat:'general',d:3,q:"Kami Rita Sherpa holds the record for the most Everest summits. How many times has he summited (as of 2024)?",opts:["25","27","28","29"],a:2},
-{id:145,cat:'general',d:2,q:"Swayambhunath Stupa in Kathmandu is also popularly known as:",opts:["Golden Temple","Monkey Temple","Dragon Temple","Sky Temple"],a:1},
-
-// ─── EXTRA NEPAL SPORTS ───────────────────────────────────────────────────
-{id:146,cat:'sports',d:2,q:"Nepal's Gyan Bahadur Shrestha won a bronze medal at the 2023 Asian Shooting Championships in which event?",opts:["10m Air Rifle","25m Rapid Fire Pistol","50m Rifle 3 Positions","Skeet"],a:0},
-{id:147,cat:'sports',d:2,q:"Sunil Chhetri, who plays for India, was born in Nepal in which city?",opts:["Pokhara","Kathmandu","Biratnagar","Bhaktapur"],a:0},
-{id:148,cat:'sports',d:3,q:"Nepal's first international cricket ODI was played against which country in 2018?",opts:["UAE","Namibia","Singapore","USA"],a:0},
-{id:149,cat:'sports',d:2,q:"Which Nepali para-athlete has represented Nepal in international powerlifting?",opts:["Bikash Shrestha","Purnima Shrestha","Bhim Bahadur Gurung","Surendra Tamang"],a:2},
-{id:150,cat:'sports',d:1,q:"Nepal's cricket team color (jersey) is predominantly:",opts:["Green","Red","Blue","White"],a:0},
-
-// ─── EXTRA NEPALI MOVIES ──────────────────────────────────────────────────
-{id:151,cat:'movies',d:2,q:"'Mission Paisa' (2021) is the sequel to which Nepali blockbuster?",opts:["Pashupati Prasad","Loot","Kabaddi","Seto Surya"],a:1},
-{id:152,cat:'movies',d:3,q:"The Nepali film 'Prem Geet 3' (2021) was notable for featuring a song by which Indian singer?",opts:["Arijit Singh","Sonu Nigam","Kumar Sanu","Udit Narayan"],a:1},
-{id:153,cat:'movies',d:2,q:"Which Nepali actress starred in both 'Prem Geet' and 'Prem Geet 2'?",opts:["Pooja Sharma","Benisha Hamal","Priyanka Karki","Swastima Khadka"],a:0},
-{id:154,cat:'movies',d:3,q:"'Loot' (2012) featured the hit song 'Yo Mann Ta Mero' sung by:",opts:["Sugam Pokhrel","Sushant KC","Bhim Birag","Aruna Lama"],a:0},
-
-// ─── EXTRA WORLD ─────────────────────────────────────────────────────────
-{id:155,cat:'world',d:2,q:"The 2026 FIFA World Cup will be jointly hosted by:",opts:["USA, Canada, Mexico","Brazil, Argentina, Chile","UK, Spain, Portugal","Germany, France, Italy"],a:0},
-{id:156,cat:'world',d:3,q:"Which country launched the world's first commercial quantum communication satellite?",opts:["USA","Russia","Japan","China"],a:3},
-{id:157,cat:'world',d:1,q:"Who wrote the famous play 'Romeo and Juliet'?",opts:["Charles Dickens","William Shakespeare","Jane Austen","Leo Tolstoy"],a:1},
-{id:158,cat:'world',d:2,q:"The 'Arab Spring' protest movements began in which year?",opts:["2009","2010","2011","2012"],a:2},
-{id:159,cat:'world',d:2,q:"Which country's exit from the European Union is known as 'Brexit'?",opts:["France","Germany","United Kingdom","Italy"],a:2},
-{id:160,cat:'world',d:3,q:"The James Webb Space Telescope's first full-colour images were released in which year?",opts:["2021","2022","2023","2024"],a:1},
-{id:161,cat:'world',d:1,q:"What is the tallest mountain in Africa?",opts:["Mount Kenya","Mount Kilimanjaro","Ras Dashen","Mount Elgon"],a:1},
-{id:162,cat:'world',d:2,q:"Which country has won the most FIFA World Cup titles?",opts:["Germany","Argentina","Italy","Brazil"],a:3},
-{id:163,cat:'world',d:3,q:"The Ukraine-Russia war (full-scale invasion) began on:",opts:["February 14, 2022","February 24, 2022","March 1, 2022","April 4, 2022"],a:1},
-{id:164,cat:'world',d:2,q:"Mahatma Gandhi was assassinated in which year?",opts:["1945","1946","1947","1948"],a:3},
-{id:165,cat:'world',d:1,q:"What does 'AI' stand for in the context of modern computing?",opts:["Automated Interface","Artificial Intelligence","Advanced Integration","Autonomous Internet"],a:1},
-];
 
 // ============================================================
 // GAME STATE
@@ -906,15 +926,17 @@ const G = {
   timer:null, timeLeft:30, answered:false,
   lifelines:{'5050':true,phone:true,audience:true},
   roomRef:null, fbOk:false, safeAmount:'Rs. 0',
+  selectedCats:['general','movies','sports','politics','world'],
+  totalQCount:15,
 };
 
 // ============================================================
 // NAVIGATION
 // ============================================================
 function go(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id !== 'gameScreen') { AUDIO.stopMusic(); }
+  if (id !== 'gameScreen') AUDIO.stopMusic();
 }
 
 // ============================================================
@@ -922,64 +944,50 @@ function go(id) {
 // ============================================================
 function toggleCat(btn) { sfxClick(); btn.classList.toggle('active'); }
 function getSelectedCats(container) {
-  const cats=[];
-  container.querySelectorAll('.cat-check-btn.active').forEach(b=>cats.push(b.dataset.cat));
-  return cats.length>0?cats:['general','movies','sports','politics','world'];
+  const cats = [];
+  container.querySelectorAll('.cat-check-btn.active').forEach(b => cats.push(b.dataset.cat));
+  return cats.length > 0 ? cats : ['general','movies','sports','politics','world'];
 }
 
 // ============================================================
-// TOAST
+// TOAST & OVERLAYS
 // ============================================================
 let _toastTmr;
-function toast(msg,dur=3000){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(_toastTmr); _toastTmr=setTimeout(()=>t.classList.remove('show'),dur);
+function toast(msg, dur=3000) {
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(_toastTmr);_toastTmr=setTimeout(()=>t.classList.remove('show'),dur);
 }
-
-// ============================================================
-// OVERLAYS
-// ============================================================
-function showOverlay(id){document.getElementById(id).classList.add('open');}
-function closeOverlay(id){document.getElementById(id).classList.remove('open');}
+function showOverlay(id) { document.getElementById(id).classList.add('open'); }
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
 
 // ============================================================
 // UTILS
 // ============================================================
-function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-function genUid(){return '_'+Math.random().toString(36).substr(2,9);}
-function genRoomCode(){return Math.random().toString(36).substr(2,6).toUpperCase();}
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-
-function pickQuestions(cats,diff,count){
-  let pool=POOL.filter(q=>cats.includes(q.cat));
-  if(diff!=='mixed') pool=pool.filter(q=>q.d===parseInt(diff));
-  if(pool.length<count) pool=POOL.filter(q=>cats.includes(q.cat));
-  if(pool.length<count) pool=[...POOL];
-
-  // Prefer questions not recently used
-  const recent=QHistory.get();
-  const fresh=pool.filter(q=>!recent.includes(q.id));
-  const stale=pool.filter(q=>recent.includes(q.id));
-  const ordered=[...shuffle(fresh),...shuffle(stale)];
-  const selected=ordered.slice(0,Math.min(count,ordered.length));
-  QHistory.save(selected.map(q=>q.id));
-  return selected;
+function shuffle(a) {
+  const b=[...a];
+  for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
+  return b;
 }
+function genUid() { return '_'+Math.random().toString(36).substr(2,9); }
+function genRoomCode() { return Math.random().toString(36).substr(2,6).toUpperCase(); }
+function esc(s) { const d=document.createElement('div');d.textContent=s;return d.innerHTML; }
 
 // ============================================================
 // FIREBASE
 // ============================================================
-function initFb(){
-  if(G.fbOk)return true;
-  if(!FIREBASE_CONFIG.apiKey||FIREBASE_CONFIG.apiKey==='YOUR_API_KEY')return false;
-  try{if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);G.fbOk=true;return true;}
-  catch(e){console.error(e);return false;}
+function initFb() {
+  if (G.fbOk) return true;
+  if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey==='YOUR_API_KEY') return false;
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    G.fbOk=true; return true;
+  } catch(e) { console.error(e); return false; }
 }
 
 // ============================================================
 // PRIZE LADDER
 // ============================================================
-function buildLadder(){
+function buildLadder() {
   const el=document.getElementById('prizeLadder');
   el.innerHTML='<div class="prize-ladder-title">Prize</div>';
   [...PRIZES].reverse().forEach((p,i)=>{
@@ -991,7 +999,7 @@ function buildLadder(){
     el.appendChild(div);
   });
 }
-function updateLadder(idx){
+function updateLadder(idx) {
   document.querySelectorAll('.prize-item').forEach(el=>el.classList.remove('current','done'));
   const cur=document.getElementById('pi_'+idx);
   if(cur){cur.classList.add('current');cur.scrollIntoView({behavior:'smooth',block:'center'});}
@@ -1001,65 +1009,97 @@ function updateLadder(idx){
 // ============================================================
 // SOLO MODE
 // ============================================================
-function startSolo(){
+async function startSolo() {
   const n=document.getElementById('soloName').value.trim();
   if(!n){toast('Please enter your name!');return;}
   const diff=document.getElementById('soloDiff').value;
   const cats=getSelectedCats(document.getElementById('soloSetupScreen'));
+
+  showLoading();
+  const qs = await generateQuestions(cats, diff, 15);
+  hideLoading();
+
   G.mode='solo'; G.name=n; G.uid=genUid();
-  G.questions=pickQuestions(cats,diff,15);
-  G.qIdx=0; G.score=0; G.answered=false;
+  G.questions=qs; G.qIdx=0; G.score=0; G.answered=false;
+  G.selectedCats=cats; G.totalQCount=15;
   G.lifelines={'5050':true,phone:true,audience:true};
-  setupGame(false); go('gameScreen');
+  setupGame(false);
+  go('gameScreen');
   AUDIO.init(); AUDIO.resume(); AUDIO.startMusic();
   loadQ();
 }
 
 // ============================================================
-// MULTIPLAYER — CREATE
+// MULTIPLAYER — CREATE ROOM
 // ============================================================
-function createRoom(){
+async function createRoom() {
   const n=document.getElementById('hostName').value.trim();
   if(!n){toast('Please enter your name!');return;}
   if(!initFb()){showOverlay('firebaseOverlay');return;}
-  const code=genRoomCode(), pid=genUid();
+
   const cats=getSelectedCats(document.getElementById('createRoomScreen'));
   const qCount=parseInt(document.getElementById('hostQCount').value);
-  const qs=pickQuestions(cats,'mixed',qCount);
-  G.name=n;G.uid=pid;G.roomCode=code;G.isHost=true;G.mode='multi';G.questions=qs;
-  const ref=firebase.database().ref('rooms/'+code);G.roomRef=ref;
-  ref.set({host:n,hostId:pid,status:'waiting',currentQ:0,questions:qs,ts:Date.now(),
+
+  showLoading();
+  const qs = await generateQuestions(cats, 'mixed', qCount);
+  hideLoading();
+
+  const code=genRoomCode(), pid=genUid();
+  G.name=n; G.uid=pid; G.roomCode=code; G.isHost=true; G.mode='multi';
+  G.questions=qs; G.selectedCats=cats; G.totalQCount=qCount;
+
+  const ref=firebase.database().ref('rooms/'+code);
+  G.roomRef=ref;
+
+  // Auto-cleanup on disconnect
+  ref.child('players/'+pid).onDisconnect().remove();
+
+  ref.set({
+    host:n, hostId:pid, status:'waiting',
+    currentQ:0, questions:qs, ts:Date.now(),
+    cats:cats, qCount:qCount,
     players:{[pid]:{name:n,score:0,answered:false}}
   }).then(()=>{
     document.getElementById('displayCode').textContent=code;
     document.getElementById('hostCtrl').style.display='block';
     document.getElementById('guestCtrl').style.display='none';
-    go('waitingScreen'); listenWaiting();
+    go('waitingScreen');
+    listenWaiting();
   }).catch(err=>{console.error(err);toast('Error creating room. Check Firebase config.');});
 }
 
 // ============================================================
-// MULTIPLAYER — JOIN
+// MULTIPLAYER — JOIN ROOM
 // ============================================================
-function joinRoom(){
+function joinRoom() {
   const n=document.getElementById('guestName').value.trim();
   const code=document.getElementById('joinCode').value.trim().toUpperCase();
   if(!n){toast('Please enter your name!');return;}
   if(code.length<6){toast('Enter a valid 6-digit room code!');return;}
   if(!initFb()){showOverlay('firebaseOverlay');return;}
+
   const pid=genUid();
-  G.name=n;G.uid=pid;G.roomCode=code;G.isHost=false;G.mode='multi';
-  const ref=firebase.database().ref('rooms/'+code);G.roomRef=ref;
+  G.name=n; G.uid=pid; G.roomCode=code; G.isHost=false; G.mode='multi';
+
+  const ref=firebase.database().ref('rooms/'+code);
+  G.roomRef=ref;
+
   ref.once('value').then(snap=>{
     const room=snap.val();
     if(!room){toast('Room not found! Check the code.');return;}
-    if(room.status!=='waiting'){toast('Game already started!');return;}
+    if(room.status==='abandoned'){toast('This room has been closed.');return;}
+    if(room.status==='playing'){toast('Game already in progress!');return;}
     G.questions=room.questions;
+    G.selectedCats=room.cats||['general','movies','sports','politics','world'];
+    G.totalQCount=room.qCount||15;
+
+    ref.child('players/'+pid).onDisconnect().remove();
     ref.child('players/'+pid).set({name:n,score:0,answered:false}).then(()=>{
       document.getElementById('displayCode').textContent=code;
       document.getElementById('hostCtrl').style.display='none';
       document.getElementById('guestCtrl').style.display='block';
-      go('waitingScreen'); listenWaiting();
+      go('waitingScreen');
+      listenWaiting();
     });
   }).catch(()=>toast('Error joining. Try again.'));
 }
@@ -1069,42 +1109,50 @@ function copyCode(){if(navigator.clipboard)navigator.clipboard.writeText(G.roomC
 // ============================================================
 // WAITING ROOM LISTENERS
 // ============================================================
-function listenWaiting(){
+function listenWaiting() {
   const emojis=['😊','😎','🤩','🥳','😄','🦁','🐯','🦊','🐻','🦅','🦋','🐉'];
+
   G.roomRef.child('players').on('value',snap=>{
     const players=snap.val()||{};
     const arr=Object.entries(players);
     document.getElementById('playerCount').textContent=arr.length;
-    const grid=document.getElementById('waitingGrid');
-    grid.innerHTML='';
+    const grid=document.getElementById('waitingGrid');grid.innerHTML='';
     arr.forEach(([id,p],i)=>{
-      const d=document.createElement('div');
-      d.className='waiting-player-card';
+      const d=document.createElement('div');d.className='waiting-player-card';
       const isH=G.isHost&&id===G.uid;
       d.innerHTML=`<span class="wp-avatar">${emojis[i%emojis.length]}</span><div class="wp-name">${esc(p.name)}</div>${isH?'<span class="wp-badge">👑 Host</span>':''}`;
       grid.appendChild(d);
     });
   });
+
   G.roomRef.child('status').on('value',snap=>{
-    if(snap.val()==='playing'){
+    const s=snap.val();
+    if(s==='playing'){
       G.roomRef.off();
-      G.roomRef.once('value').then(s=>{
-        const room=s.val();
+      G.roomRef.once('value').then(r=>{
+        const room=r.val();if(!room)return;
         G.questions=room.questions; G.qIdx=0; G.score=0; G.answered=false;
         setupGame(true); go('gameScreen');
-        AUDIO.init(); AUDIO.resume(); AUDIO.startMusic();
+        AUDIO.init();AUDIO.resume();AUDIO.startMusic();
         listenGame(); loadQ();
       });
     }
-    if(snap.val()==='abandoned'){toast('Host left the room.');G.roomRef.off();G.roomRef=null;go('multiScreen');}
+    if(s==='abandoned'){
+      toast('Host closed the room.'); G.roomRef.off(); G.roomRef=null; go('multiScreen');
+    }
   });
 }
-function hostStartGame(){if(!G.isHost)return;G.roomRef.update({status:'playing',currentQ:0});}
-function leaveRoom(){
+
+function hostStartGame() {
+  if(!G.isHost)return;
+  G.roomRef.update({status:'playing',currentQ:0});
+}
+
+function leaveRoom() {
   if(G.roomRef){
     G.roomRef.child('players/'+G.uid).remove();
-    if(G.isHost)G.roomRef.update({status:'abandoned'});
-    G.roomRef.off();G.roomRef=null;
+    if(G.isHost) G.roomRef.update({status:'abandoned'});
+    G.roomRef.off(); G.roomRef=null;
   }
   go('multiScreen');
 }
@@ -1112,12 +1160,12 @@ function leaveRoom(){
 // ============================================================
 // QUIT GAME (mid-game)
 // ============================================================
-function confirmQuit(){
+function confirmQuit() {
   closeOverlay('quitOverlay'); stopTimer(); AUDIO.stopMusic();
   if(G.mode==='multi'&&G.roomRef){
     G.roomRef.child('players/'+G.uid).remove();
-    if(G.isHost)G.roomRef.update({status:'abandoned'});
-    G.roomRef.off();G.roomRef=null;
+    if(G.isHost) G.roomRef.update({status:'abandoned'});
+    G.roomRef.off(); G.roomRef=null;
   }
   go('homeScreen');
 }
@@ -1125,7 +1173,7 @@ function confirmQuit(){
 // ============================================================
 // GAME UI SETUP
 // ============================================================
-function setupGame(isMulti){
+function setupGame(isMulti) {
   document.getElementById('prizeLadder').style.display=isMulti?'none':'flex';
   document.getElementById('playersPanel').style.display=isMulti?'flex':'none';
   document.getElementById('lifelinesRow').style.display=isMulti?'none':'flex';
@@ -1142,12 +1190,14 @@ function setupGame(isMulti){
 // ============================================================
 // MULTIPLAYER GAME LISTENERS
 // ============================================================
-function listenGame(){
+function listenGame() {
   const ref=G.roomRef;
+
   ref.child('currentQ').on('value',snap=>{
     const idx=snap.val();
     if(idx!==null&&idx!==G.qIdx){G.qIdx=idx;G.answered=false;loadQ();}
   });
+
   ref.child('players').on('value',snap=>{
     const players=snap.val()||{};
     renderPlayers(players);
@@ -1156,12 +1206,22 @@ function listenGame(){
       if(all&&G.answered)setTimeout(()=>advanceQ(),2200);
     }
   });
+
   ref.child('status').on('value',snap=>{
-    if(snap.val()==='finished')endMulti();
-    if(snap.val()==='abandoned'){toast('Host ended the game.');G.roomRef&&G.roomRef.off();AUDIO.stopMusic();go('homeScreen');}
+    const s=snap.val();
+    if(s==='finished')  { endMulti(); }
+    // Host triggered play again → route everyone back to waiting
+    if(s==='waiting')   { handleRoomReset(); }
+    if(s==='abandoned') {
+      toast('Host ended the game.');
+      stopTimer();AUDIO.stopMusic();
+      G.roomRef&&G.roomRef.off();G.roomRef=null;
+      go('homeScreen');
+    }
   });
 }
-function renderPlayers(players){
+
+function renderPlayers(players) {
   const sorted=Object.entries(players).sort((a,b)=>b[1].score-a[1].score);
   const list=document.getElementById('playersList');list.innerHTML='';
   const colors=['#1a3a8a','#4a1a8a','#8a1a4a','#1a8a4a','#8a4a1a','#2a5a2a'];
@@ -1171,11 +1231,12 @@ function renderPlayers(players){
     d.innerHTML=`<div class="p-avatar" style="background:linear-gradient(135deg,${colors[i%colors.length]},#0a0a1a)">${esc(p.name[0]).toUpperCase()}</div>
       <div class="p-info"><div class="p-name">${esc(p.name)}${me?' <span style="font-size:.7rem;color:rgba(255,215,0,.5)">(you)</span>':''}</div>
       <div class="p-score">${p.score} pts</div></div>
-      <div class="p-dot ${p.answered?'answered':''}"></div>`;
+      <div class="p-dot${p.answered?' answered':''}"></div>`;
     list.appendChild(d);
   });
 }
-function advanceQ(){
+
+function advanceQ() {
   if(!G.isHost)return;
   const next=G.qIdx+1;
   if(next>=G.questions.length){G.roomRef.update({status:'finished'});return;}
@@ -1186,28 +1247,126 @@ function advanceQ(){
     G.roomRef.update(upd);
   });
 }
-function endMulti(){
+
+// ─── END OF GAME (keep listeners alive so play again works) ───
+function endMulti() {
   stopTimer(); AUDIO.stopMusic();
+  // ⚠️ Do NOT call G.roomRef.off() — keep listeners alive for play again
   if(G.roomRef){
-    G.roomRef.off();
-    G.roomRef.child('players').once('value').then(snap=>showMultiResult(snap.val()||{}));
+    G.roomRef.child('players').once('value').then(snap=>{
+      showMultiResult(snap.val()||{});
+    });
   }
+}
+
+// ─── HOST PLAY AGAIN ───
+async function hostPlayAgain() {
+  showLoading();
+  try {
+    const newQs = await generateQuestions(G.selectedCats, 'mixed', G.totalQCount);
+    const pSnap = await G.roomRef.child('players').once('value');
+    const players = pSnap.val()||{};
+    const upd = { questions:newQs, currentQ:0, status:'waiting', ts:Date.now() };
+    Object.keys(players).forEach(id=>{
+      upd[`players/${id}/score`]=0;
+      upd[`players/${id}/answered`]=false;
+    });
+    await G.roomRef.update(upd);
+    hideLoading();
+    // The status listener (still active) will detect 'waiting' and call handleRoomReset()
+  } catch(e) {
+    hideLoading();
+    console.error(e);
+    toast('Error generating new questions. Try again.');
+  }
+}
+
+// ─── RESET BACK TO WAITING ROOM (all clients) ───
+function handleRoomReset() {
+  stopTimer(); AUDIO.stopMusic();
+  G.roomRef.off(); // Remove all existing game listeners
+  G.roomRef.once('value').then(snap=>{
+    const room=snap.val();if(!room)return;
+    G.questions=room.questions; G.qIdx=0; G.score=0; G.answered=false;
+    document.getElementById('displayCode').textContent=G.roomCode;
+    document.getElementById('hostCtrl').style.display=G.isHost?'block':'none';
+    document.getElementById('guestCtrl').style.display=G.isHost?'none':'block';
+    go('waitingScreen');
+    listenWaiting(); // Re-attach waiting listeners
+  });
+}
+
+// ─── GUEST: LEAVE FROM RESULT SCREEN ───
+function leaveRoomFromResult() {
+  if(G.roomRef){
+    G.roomRef.child('players/'+G.uid).remove();
+    G.roomRef.off(); G.roomRef=null;
+  }
+  go('homeScreen');
+}
+
+// ─── HOST: CLOSE ROOM FROM RESULT SCREEN ───
+function closeRoom() {
+  if(G.roomRef){
+    G.roomRef.update({status:'abandoned'});
+    setTimeout(()=>{G.roomRef&&G.roomRef.off();G.roomRef=null;},500);
+  }
+  go('homeScreen');
+}
+
+// ============================================================
+// SHOW MULTIPLAYER RESULTS
+// ============================================================
+function showMultiResult(players) {
+  const sorted=Object.entries(players).sort((a,b)=>b[1].score-a[1].score);
+  const myRank=sorted.findIndex(([id])=>id===G.uid)+1;
+  const me=players[G.uid];
+
+  if(myRank===1) AUDIO.win();
+
+  document.getElementById('resultEmoji').textContent=myRank===1?'🏆':myRank===2?'🥈':'🎮';
+  document.getElementById('resultHeading').textContent=myRank===1?'You Won! 🎉':`You Finished #${myRank}`;
+  document.getElementById('resultSub').textContent=`Your score: ${me?me.score:0} points`;
+
+  const lb=document.getElementById('leaderboard');lb.style.display='block';
+  lb.innerHTML='<div class="lb-header">🏆 Final Leaderboard</div>';
+  const medals=['🥇','🥈','🥉'];
+  sorted.forEach(([id,p],i)=>{
+    const isMe=id===G.uid;
+    const row=document.createElement('div');row.className='lb-row'+(isMe?' lb-me':'');
+    row.innerHTML=`<span class="lb-rank">${medals[i]||(i+1)}</span>
+      <span class="lb-name">${esc(p.name)}${isMe?' <span style="color:rgba(255,215,0,.5);font-size:.75rem">(you)</span>':''}</span>
+      <span class="lb-pts">${p.score} pts</span>`;
+    lb.appendChild(row);
+  });
+
+  // Dynamic action buttons for host vs guest
+  const actions=document.getElementById('resultActions');
+  if(G.isHost){
+    actions.innerHTML=`
+      <button class="btn btn-primary" onclick="sfxClick();hostPlayAgain()">🔄 Play Again</button>
+      <button class="btn btn-danger" onclick="sfxClick();closeRoom()">✕ Close Room</button>`;
+  } else {
+    actions.innerHTML=`
+      <div style="color:var(--text-dim);font-size:0.85rem;margin-bottom:10px;font-family:'Cinzel',serif;letter-spacing:1px">⏳ Waiting for host to start new round…</div>
+      <button class="btn btn-danger" onclick="sfxClick();leaveRoomFromResult()">🚪 Leave Room</button>`;
+  }
+
+  go('resultScreen');
 }
 
 // ============================================================
 // LOAD QUESTION
 // ============================================================
-function loadQ(){
-  const q=G.questions[G.qIdx];
-  if(!q)return;
-  G.answered=false;
-  AUDIO.newQ();
+function loadQ() {
+  const q=G.questions[G.qIdx];if(!q)return;
+  G.answered=false; AUDIO.newQ();
   document.getElementById('qNum').textContent=`Question ${G.qIdx+1} of ${G.questions.length}`;
   document.getElementById('qChip').textContent=`Q ${G.qIdx+1}/${G.questions.length}`;
   document.getElementById('qText').textContent=q.q;
   const meta=CAT_META[q.cat]||CAT_META.general;
   const chip=document.getElementById('qCatChip');
-  chip.textContent=meta.label; chip.className='cat-chip '+meta.cls;
+  chip.textContent=meta.label;chip.className='cat-chip '+meta.cls;
   const lbls=['A','B','C','D'];
   for(let i=0;i<4;i++){
     const btn=document.getElementById('o'+i);
@@ -1223,34 +1382,36 @@ function loadQ(){
 // TIMER
 // ============================================================
 const CIRC=2*Math.PI*33;
-function startTimer(){
+function startTimer() {
   stopTimer(); G.timeLeft=30; tickTimer(true);
-  G.timer=setInterval(()=>{G.timeLeft--;tickTimer();if(G.timeLeft<=0){stopTimer();if(!G.answered)onTimeout();}},1000);
+  G.timer=setInterval(()=>{
+    G.timeLeft--;tickTimer();
+    if(G.timeLeft<=0){stopTimer();if(!G.answered)onTimeout();}
+  },1000);
 }
 function stopTimer(){clearInterval(G.timer);G.timer=null;}
-function tickTimer(silent=false){
+function tickTimer(silent=false) {
   const t=G.timeLeft;
   const ring=document.getElementById('timerRing'),num=document.getElementById('timerNum');
   ring.style.strokeDasharray=CIRC;
   ring.style.strokeDashoffset=CIRC-(t/30)*CIRC;
   num.textContent=t;
   const color=t>15?'#FFD700':t>8?'#FFA500':'#FF4444';
-  ring.style.stroke=color; num.style.color=color;
+  ring.style.stroke=color;num.style.color=color;
   if(!silent&&!G.answered&&t>0) AUDIO.tick(t<=5);
 }
-function onTimeout(){
+function onTimeout() {
   G.answered=true;
   if(G.mode==='solo'){revealAnswer(-1);setTimeout(()=>triggerWrong(-1),1500);}
-  else{submitMulti(-1);}
+  else submitMulti(-1);
 }
 
 // ============================================================
-// OPTION SELECTION
+// ANSWER SELECTION
 // ============================================================
-function pick(i){
+function pick(i) {
   if(G.answered)return;
-  G.answered=true; stopTimer();
-  AUDIO.click();
+  G.answered=true;stopTimer();AUDIO.click();
   const btn=document.getElementById('o'+i);btn.classList.add('selected');
   for(let j=0;j<4;j++)document.getElementById('o'+j).disabled=true;
   if(G.mode==='solo'){
@@ -1260,9 +1421,10 @@ function pick(i){
       if(correct)AUDIO.correct();else AUDIO.wrong();
       setTimeout(()=>correct?onCorrect():triggerWrong(i),1500);
     },500);
-  }else{submitMulti(i);}
+  } else submitMulti(i);
 }
-function revealAnswer(chosen){
+
+function revealAnswer(chosen) {
   const q=G.questions[G.qIdx];
   for(let i=0;i<4;i++){
     const btn=document.getElementById('o'+i);btn.disabled=true;
@@ -1274,44 +1436,53 @@ function revealAnswer(chosen){
 // ============================================================
 // SOLO LOGIC
 // ============================================================
-function onCorrect(){
+function onCorrect() {
   G.score++;
   if(G.qIdx+1>=G.questions.length){soloWin();return;}
   G.qIdx++;
   setTimeout(loadQ,600);
 }
-function computeSafeAmount(){
+function computeSafeAmount() {
   for(let i=G.qIdx-1;i>=0;i--)if(SAFE_HAVENS.includes(i))return PRIZES[i];
   return'Rs. 0';
 }
-function triggerWrong(chosen){
+function triggerWrong(chosen) {
   G.safeAmount=computeSafeAmount();
   const q=G.questions[G.qIdx];const lbls=['A','B','C','D'];
   const reason=chosen===-1?"⏱ Time's up! You ran out of time.":`You chose ${lbls[chosen]}) ${q.opts[chosen]}, which was incorrect.`;
-  document.getElementById('wrongMsg').innerHTML=`${reason}<br><br><span style="color:var(--correct)">Correct answer: ${lbls[q.a]}) ${q.opts[q.a]}</span><br><br><span style="color:rgba(255,255,255,.5)">You go home with <strong style="color:var(--gold)">${G.safeAmount}</strong>.</span>`;
+  document.getElementById('wrongMsg').innerHTML=
+    `${reason}<br><br><span style="color:var(--correct)">Correct answer: ${lbls[q.a]}) ${q.opts[q.a]}</span><br><br>
+    <span style="color:rgba(255,255,255,.5)">You go home with <strong style="color:var(--gold)">${G.safeAmount}</strong>.</span>`;
   showOverlay('wrongOverlay');
 }
-function finalizeWrong(){
+function finalizeWrong() {
   closeOverlay('wrongOverlay'); stopTimer(); AUDIO.stopMusic();
-  go('resultScreen');
   document.getElementById('resultEmoji').textContent='😔';
   document.getElementById('resultHeading').textContent='Better Luck Next Time!';
   document.getElementById('resultSub').textContent='You go home with '+G.safeAmount;
   document.getElementById('leaderboard').style.display='none';
-}
-function soloWin(){
-  stopTimer(); AUDIO.stopMusic(); AUDIO.win();
+  document.getElementById('resultActions').innerHTML=`
+    <button class="btn btn-primary" onclick="sfxClick();soloPlayAgain()">🔄 Play Again</button>
+    <button class="btn" onclick="sfxClick();go('homeScreen')">🏠 Home</button>`;
   go('resultScreen');
+}
+function soloWin() {
+  stopTimer(); AUDIO.stopMusic(); AUDIO.win();
   document.getElementById('resultEmoji').textContent='🏆';
   document.getElementById('resultHeading').textContent='CROREPATI!';
   document.getElementById('resultSub').textContent='You won '+PRIZES[PRIZES.length-1]+'! 🎉';
   document.getElementById('leaderboard').style.display='none';
+  document.getElementById('resultActions').innerHTML=`
+    <button class="btn btn-primary" onclick="sfxClick();soloPlayAgain()">🔄 Play Again</button>
+    <button class="btn" onclick="sfxClick();go('homeScreen')">🏠 Home</button>`;
+  go('resultScreen');
 }
+function soloPlayAgain() { go('soloSetupScreen'); }
 
 // ============================================================
-// MULTIPLAYER SUBMIT
+// MULTIPLAYER ANSWER SUBMIT
 // ============================================================
-function submitMulti(chosen){
+function submitMulti(chosen) {
   const q=G.questions[G.qIdx];
   const correct=chosen===q.a;
   const timeBonus=Math.floor(G.timeLeft*12);
@@ -1321,7 +1492,7 @@ function submitMulti(chosen){
   else if(chosen>=0){AUDIO.wrong();toast('❌ Wrong answer!');}
   else toast('⏱ Time up!');
   document.getElementById('scoreChip').textContent='Score: '+G.score;
-  if(G.roomRef)G.roomRef.child(`players/${G.uid}`).update({answered:true,score:G.score});
+  if(G.roomRef) G.roomRef.child(`players/${G.uid}`).update({answered:true,score:G.score});
   if(G.isHost){
     setTimeout(()=>{
       G.roomRef&&G.roomRef.child('players').once('value').then(snap=>{
@@ -1331,34 +1502,15 @@ function submitMulti(chosen){
     },800);
   }
 }
-function showMultiResult(players){
-  const sorted=Object.entries(players).sort((a,b)=>b[1].score-a[1].score);
-  const myRank=sorted.findIndex(([id])=>id===G.uid)+1;
-  const me=players[G.uid];
-  if(myRank===1)AUDIO.win();
-  document.getElementById('resultEmoji').textContent=myRank===1?'🏆':myRank===2?'🥈':'🎮';
-  document.getElementById('resultHeading').textContent=myRank===1?'You Won! 🎉':`You Finished #${myRank}`;
-  document.getElementById('resultSub').textContent=`Your score: ${me?me.score:0} points`;
-  const lb=document.getElementById('leaderboard');lb.style.display='block';
-  lb.innerHTML='<div class="lb-header">🏆 Final Leaderboard</div>';
-  const medals=['🥇','🥈','🥉'];
-  sorted.forEach(([id,p],i)=>{
-    const isMe=id===G.uid;
-    const row=document.createElement('div');row.className='lb-row'+(isMe?' lb-me':'');
-    row.innerHTML=`<span class="lb-rank">${medals[i]||(i+1)}</span><span class="lb-name">${esc(p.name)}${isMe?' <span style="color:rgba(255,215,0,.5);font-size:.75rem">(you)</span>':''}</span><span class="lb-pts">${p.score} pts</span>`;
-    lb.appendChild(row);
-  });
-  go('resultScreen');
-}
 
 // ============================================================
 // LIFELINES (SOLO)
 // ============================================================
-function useLl(type){
+function useLl(type) {
   if(!G.lifelines[type])return;
-  G.lifelines[type]=false;
-  AUDIO.lifeline();
+  G.lifelines[type]=false; AUDIO.lifeline();
   const q=G.questions[G.qIdx];const lbls=['A','B','C','D'];
+
   if(type==='5050'){
     document.getElementById('ll5050').disabled=true;
     const wrong=shuffle([0,1,2,3].filter(i=>i!==q.a));
@@ -1370,7 +1522,10 @@ function useLl(type){
     const confident=Math.random()>0.28;
     let advice;
     if(confident){advice=`"Hey! I'm pretty sure the answer is ${lbls[q.a]}) ${q.opts[q.a]}. Go for it!"`;}
-    else{const wrong=[0,1,2,3].filter(i=>i!==q.a),wi=wrong[Math.floor(Math.random()*wrong.length)];advice=`"Hmm, I think it might be ${lbls[wi]}) ${q.opts[wi]}… but honestly I'm not 100% sure."`;}
+    else{
+      const wrong=[0,1,2,3].filter(i=>i!==q.a),wi=wrong[Math.floor(Math.random()*wrong.length)];
+      advice=`"Hmm, I think it might be ${lbls[wi]}) ${q.opts[wi]}… but honestly I'm not 100% sure."`;
+    }
     document.getElementById('phoneMsg').textContent=advice;showOverlay('phoneOverlay');
   }
   if(type==='audience'){
@@ -1391,21 +1546,21 @@ function useLl(type){
 }
 
 // ============================================================
-// PLAY AGAIN
-// ============================================================
-function playAgain(){
-  stopTimer(); AUDIO.stopMusic();
-  if(G.roomRef){G.roomRef.off();G.roomRef=null;}
-  go(G.mode==='solo'?'soloSetupScreen':'multiScreen');
-}
-
-// ============================================================
 // KEY BINDINGS
 // ============================================================
 document.addEventListener('DOMContentLoaded',()=>{
-  const km={'soloName':startSolo,'hostName':createRoom,'joinCode':joinRoom,'guestName':()=>document.getElementById('joinCode').focus()};
-  Object.entries(km).forEach(([id,fn])=>{const el=document.getElementById(id);if(el)el.addEventListener('keypress',e=>{if(e.key==='Enter')fn();});});
-  const jc=document.getElementById('joinCode');if(jc)jc.addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
+  const km={
+    'soloName': startSolo,
+    'hostName': createRoom,
+    'joinCode': joinRoom,
+    'guestName': ()=>document.getElementById('joinCode').focus()
+  };
+  Object.entries(km).forEach(([id,fn])=>{
+    const el=document.getElementById(id);
+    if(el)el.addEventListener('keypress',e=>{if(e.key==='Enter')fn();});
+  });
+  const jc=document.getElementById('joinCode');
+  if(jc)jc.addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
 });
 </script>
 </body>
